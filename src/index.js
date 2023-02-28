@@ -1,143 +1,56 @@
+import { ProductManager } from './mocks/ProductManager.js'
+import colors from 'colors'
+
 /* eslint space-before-function-paren: 0 */
+const pm = new ProductManager('./src/storage/products.json')
 
-import fs from 'fs/promises'
-import { validateInputs, searchMatch } from './logic/validations.js'
+pm.reset()
 
-const ERRORS = {
-  NOT_FOUND: '[ERROR 404]: Product not found'
+const p1 = {
+  title: 'producto prueba',
+  description: 'Este es un producto prueba',
+  price: 200,
+  thumbnail: 'Sin imagen',
+  code: 'abc123',
+  stock: 1
 }
 
-const SUCCESS = {
-  CREATED: '[STATUS 201]: Item created successfully',
-  UPDATED: '[STATUS 200]: Item updated successfully',
-  DELETED: '[STATUS 200]: Item removed successfully',
-  GET: '[STATUS 200]: Item found successfully'
+const p2 = {
+  title: 'producto prueba 2',
+  description: 'Este es un producto prueba 2',
+  price: 300,
+  thumbnail: 'Sin imagen',
+  code: 'abc456',
+  stock: 2
 }
 
-function* idFactory() {
-  let id = 0
-  while (true) { yield ++id }
-}
+const updateExample = { title: '123', price: 'abc' }
 
-const makeProductId = idFactory()
+console.log(colors.green('------ getProducts -----'))
 
-class Products {
-  constructor({
-    title,
-    description,
-    price,
-    thumbnail,
-    code,
-    stock = 0,
-    id = null
-  }) {
-    this.id = id ?? makeProductId.next().value
-    this.title = title
-    this.description = description
-    this.price = price
-    this.thumbnail = thumbnail
-    this.stock = stock
-    this.code = code ?? `product-${this.id}`
-  }
-}
+console.log(await pm.getProducts())
 
-class ProductManager {
-  #path
-  constructor(path) {
-    this.#path = path
-    this.productsList = []
-  }
+console.log(colors.blue('------ addProduct -----'))
 
-  async addProduct(fields) {
-    const validate = validateInputs(fields)
-    if (validate.error) return { msg: validate.msg }
+console.log(await pm.addProduct(p1))
+// console.log(await pm.addProduct(p1))
 
-    const { id, code } = fields
-    const matches = searchMatch({ id, code }, this.productsList)
-    if (matches.error) return { msg: matches.msg }
+console.log(await pm.addProduct(p2))
 
-    const newProduct = new Products(fields)
-    this.productsList.push(newProduct)
+// console.log(colors.red('------ getProducts -----'))
 
-    await this.#writeData()
+// console.log(await pm.getProducts())
 
-    return {
-      msg: SUCCESS.CREATED,
-      productAdded: newProduct
-    }
-  }
+// console.log(colors.cyan('------ getProductById -----'))
 
-  async #writeData() {
-    const json = JSON.stringify(this.productsList, null, 2)
-    await fs.writeFile(this.#path, json)
-  }
+const products = await pm.getProducts()
+// const p5 = await pm.getProductById(products[0].id)
+// console.log(p5)
 
-  async #loadData() {
-    const raw = await fs.readFile(this.#path, 'utf-8')
-    if (raw === '') return []
-    return JSON.parse(raw)
-  }
+console.log(colors.red('------ updateProduct -----'))
 
-  async getProducts() {
-    const data = await this.#loadData()
-    this.productsList = [...data]
-    return this.productsList
-  }
+// console.log(await pm.updateProduct(products[0].id, updateExample))
 
-  async getProductById(productId) {
-    await this.getProducts()
-    const product = this.productsList.find((item) => item.id === productId)
-    if (product === undefined) {
-      return {
-        msg: ERRORS.NOT_FOUND,
-        error: true
-      }
-    }
-    return {
-      msg: SUCCESS.GET,
-      item: product
-    }
-  }
+console.log('------ deleteProduct -----')
 
-  async updateProduct(productId, fields) {
-    const product = await this.getProductById(productId)
-    if (product.error) return { msg: product.msg }
-
-    const validate = validateInputs(fields)
-    if (validate.error) return { msg: validate.msg }
-
-    const {
-      title,
-      description,
-      price,
-      thumbnail,
-      stock
-    } = fields
-
-    product.item.description = description ?? product.item.description
-    product.item.thumbnail = thumbnail ?? product.item.thumbnail
-    product.item.title = title ?? product.item.title
-    product.item.price = price ?? product.item.price
-    product.item.stock = stock ?? product.item.stock
-
-    await this.#writeData()
-    return {
-      msg: SUCCESS.UPDATED,
-      itemUpdated: product.item
-    }
-  }
-
-  async deleteProduct(productId) {
-    await this.getProducts()
-    const productIndex = this.productsList.findIndex((item) => item.id === productId)
-    if (productIndex === -1) return { msg: ERRORS.NOT_FOUND }
-
-    const itemDeleted = this.productsList.splice(productIndex, 1)
-    await this.#writeData()
-
-    return {
-      msg: SUCCESS.DELETED,
-      itemDeleted
-    }
-  }
-}
+console.log(await pm.deleteProduct(2))

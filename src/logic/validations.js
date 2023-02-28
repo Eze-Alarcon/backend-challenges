@@ -1,26 +1,5 @@
 /* eslint space-before-function-paren: 0 */
-
-const ERRORS = {
-  REQUIRED_OBJECT: '[ERROR 400]: Expected object.',
-  REQUIRED_FIELDS: '[ERROR 400]: Expected object with properties: title, description, thumbnail, price and stock',
-  UPDATE_MORE_FIELDS: '[ERROR 400]: expected object with one or more properties to change (title, description, thumbnail, price, stock)',
-  EMPTY_DESCRIPTION: '[ERROR 400]: The field "description" is missing, null or undefined.',
-  EMPTY_THUMBNAIL: '[ERROR 400]: The field "thumbnail" is missing, null or undefined.',
-  EMPTY_TITLE: '[ERROR 400]: The field "title" is missing, null or undefined.',
-  EMPTY_PRICE: '[ERROR 400]: The field "price" is missing, null or undefined.',
-  DESCRIPTION: '[ERROR 400]: The field "description" must be a string.',
-  THUMBNAIL: '[ERROR 400]: The field "thumbnail" must be a string.',
-  TITLE: '[ERROR 400]: The field "title" must be a string.',
-  PRICE: '[ERROR 400]: The field "price" must be a number.',
-  STOCK: '[ERROR 400]: The field "stock" must be a number.',
-  CODE: '[ERROR 400]: The field "code" must be a string.',
-  FIELD_EXIST: '[ERROR 400]: There is a product with the same'
-}
-
-const SUCCESS = {
-  FIELDS: '[STATUS 200]: Fields ok',
-  FIELD: '[STATUS 200]: Field ok'
-}
+import { ERRORS, SUCCESS } from '../mocks/messages.js'
 
 function validateObject(fields, strict) {
   if (fields === null || fields === undefined || typeof (fields) !== 'object') {
@@ -28,9 +7,8 @@ function validateObject(fields, strict) {
       throw new Error(ERRORS.UPDATE_MORE_FIELDS)
     }
     throw new Error(ERRORS.REQUIRED_FIELDS)
-  } else {
-    return { error: false }
   }
+  return { msg: SUCCESS.OBJECT_RECEIVED }
 }
 
 function estrictInputs(fields) {
@@ -119,46 +97,35 @@ function looseInputs(fields) {
   }
 }
 
-export function validateInputs(fields, strict = true) {
+export async function validateInputs(fields, options) {
   try {
-    validateObject(fields, strict)
+    validateObject(fields, options.strict)
 
-    if (strict) return estrictInputs(fields)
-    if (!strict) return looseInputs(fields)
-
-    return {
-      msg: SUCCESS.FIELDS,
-      error: false
-    }
+    if (options.strict) estrictInputs(fields)
+    if (!options.strict) looseInputs(fields)
   } catch (e) {
     return {
       msg: e,
       error: true
     }
   }
+
+  return {
+    msg: SUCCESS.FIELDS,
+    error: false
+  }
 }
 
-function idMatch(evalId, arr) {
-  const matchId = arr.some((el) => el.id === evalId)
-  if (matchId) throw new Error(`${ERRORS.FIELD_EXIST} Id.`)
-  return false
-}
-
-function codeMatch(evalCode, arr) {
-  const matchId = arr.some((el) => el.id === evalCode)
-  if (matchId) throw new Error(`${ERRORS.FIELD_EXIST} Code.`)
-  return false
-}
-
-export function searchMatch(evalValues, arr) {
+export function searchMatch(evalCode, arr) {
   try {
-    idMatch(evalValues.id, arr)
-    codeMatch(evalValues.id, arr)
+    const matchId = arr.some((el) => el.code === evalCode)
+    if (matchId) throw new Error(`${ERRORS.FIELD_EXIST} Code.`)
   } catch (e) {
     return { msg: e, error: true }
   }
 
   return {
-    msg: SUCCESS.FIELD
+    msg: SUCCESS.FIELD,
+    error: false
   }
 }

@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "desafios",
   "version": "1.0.0",
   "description": "desafios de coderhouse",
@@ -23,6 +24,7 @@
   },
   "homepage": "https://github.com/Eze-Alarcon/backend-desafios#readme",
   "devDependencies": {
+    "colors": "^1.4.0",
     "standard": "17.0.0"
   },
   "eslintConfig": {
