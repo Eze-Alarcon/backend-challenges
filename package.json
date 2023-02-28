@@ -1,0 +1,31 @@
+{
+  "name": "desafios",
+  "version": "1.0.0",
+  "description": "desafios de coderhouse",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node .",
+    "dev": "nodemon -e 'js' ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eze-Alarcon/backend-desafios.git"
+  },
+  "keywords": [
+    "backend",
+    "node",
+    "javascript"
+  ],
+  "author": "ezequiel",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Eze-Alarcon/backend-desafios/issues"
+  },
+  "homepage": "https://github.com/Eze-Alarcon/backend-desafios#readme",
+  "devDependencies": {
+    "standard": "17.0.0"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json"
+  }
+}
