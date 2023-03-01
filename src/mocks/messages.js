@@ -16,7 +16,8 @@ const ERRORS = {
   CODE: '[ERROR 400]: The field "code" must be a string.',
   FIELD_EXIST: '[ERROR 400]: There is a product with the same',
   NOT_FOUND: '[ERROR 404]: Product not found',
-  QUERY_NOT_NUMBER: '[ERROR 400]: Limit and page must be a number'
+  QUERY_NOT_NUMBER: '[ERROR 400]: Limit and page must be a number',
+  QUERY_ID: '[ERROR 400]: Searched id must be a number'
 }
 
 const SUCCESS = {

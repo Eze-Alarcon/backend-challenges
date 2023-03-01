@@ -1,7 +1,8 @@
 /* eslint space-before-function-paren: 0 */
-import { createID, genCode } from '../logic/cripto.js'
+import { encryptId, genCode } from '../logic/cripto.js'
 
 export class Products {
+  #generateCode = `${genCode()}`
   constructor({
     title,
     description,
@@ -10,12 +11,12 @@ export class Products {
     code,
     stock = 0
   }) {
-    this.id = createID()
+    this.id = encryptId(this.#generateCode)
     this.title = title
     this.description = description
     this.price = price
     this.thumbnail = thumbnail
     this.stock = stock
-    this.code = code ?? `product-${genCode()}`
+    this.code = code ?? `code-${this.#generateCode}`
   }
 }

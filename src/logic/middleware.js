@@ -8,8 +8,8 @@ export function sanitise(x) {
 }
 
 export function limitProducts(arr, queryLimit = 5, queryPage = 1) {
-  const limit = parseInt(queryLimit)
-  const page = parseInt(queryPage)
+  const limit = sanitise(queryLimit)
+  const page = sanitise(queryPage)
 
   let sliceArr = []
   if (page === 1) sliceArr = arr.splice(0, limit)

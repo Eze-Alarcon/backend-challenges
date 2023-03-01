@@ -3,6 +3,7 @@ import fs from 'fs/promises'
 import { validateInputs, searchMatch } from '../logic/validations.js'
 import { ERRORS, SUCCESS } from '../mocks/messages.js'
 import { Products } from '../mocks/Products.js'
+import { encryptId } from '../logic/cripto.js'
 
 class ProductManager {
   #path
@@ -38,7 +39,8 @@ class ProductManager {
 
   async getProductById(productId) {
     await this.getProducts()
-    const product = this.productsList.find((item) => item.id === productId)
+    const idToCompare = encryptId(productId)
+    const product = this.productsList.find((item) => item.id === idToCompare)
     if (product === undefined) {
       return {
         msg: ERRORS.NOT_FOUND,
@@ -115,5 +117,20 @@ class ProductManager {
 }
 
 const PM = new ProductManager('./src/storage/products.json')
+
+// En caso de que sea necesario generar de nuevo los productos
+
+// PM.reset()
+
+// for (let i = 1; i <= 10; i++) {
+//   await PM.addProduct({
+//     title: `producto ${i}`,
+//     description: 'Este es un producto de prueba',
+//     price: i * 100,
+//     thumbnail: `Imagen ${i}`,
+//     code: `abc${i}`,
+//     stock: i
+//   })
+// }
 
 export { PM }
