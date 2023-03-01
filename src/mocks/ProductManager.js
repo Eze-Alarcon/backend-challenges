@@ -114,4 +114,6 @@ class ProductManager {
   }
 }
 
-export { ProductManager }
+const PM = new ProductManager('./src/storage/products.json')
+
+export { PM }
