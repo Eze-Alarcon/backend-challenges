@@ -42,25 +42,22 @@ class ProductManager {
     const idToCompare = encryptId(productId)
     const product = this.productsList.find((item) => item.id === idToCompare)
     if (product === undefined) {
-      return {
-        msg: ERRORS.NOT_FOUND,
-        error: true
-      }
+      throw new Error(ERRORS.NOT_FOUND.code)
     }
     return {
-      msg: SUCCESS.GET,
+      log: SUCCESS.GET,
       item: product
     }
   }
 
   async addProduct(fields) {
     const validate = await validateInputs(fields, { strict: true })
-    if (validate.error) return { msg: validate.msg }
+    if (validate.error) return validate
 
     await this.getProducts()
 
     const match = searchMatch(fields.code, this.productsList)
-    if (match.error) return { msg: match.msg }
+    if (match.error) return match.log
 
     const newProduct = new Products(fields)
     this.productsList.push(newProduct)
@@ -68,17 +65,17 @@ class ProductManager {
     await this.#writeData()
 
     return {
-      msg: SUCCESS.CREATED,
+      log: SUCCESS.CREATED,
       productAdded: newProduct
     }
   }
 
   async updateProduct(productId, fields) {
     const product = await this.getProductById(productId)
-    if (product.error) return { msg: product.msg }
+    if (product.error) return product.log
 
     const validate = await validateInputs(fields, { strict: false })
-    if (validate.error) return { msg: validate.msg }
+    if (validate.error) return validate.log
 
     const {
       title,
@@ -96,7 +93,7 @@ class ProductManager {
 
     await this.#writeData()
     return {
-      msg: SUCCESS.UPDATED,
+      log: SUCCESS.UPDATED,
       itemUpdated: product.item
     }
   }
@@ -104,13 +101,13 @@ class ProductManager {
   async deleteProduct(productId) {
     await this.getProducts()
     const productIndex = this.productsList.findIndex((item) => item.id === productId)
-    if (productIndex === -1) return { msg: ERRORS.NOT_FOUND }
+    if (productIndex === -1) return ERRORS.NOT_FOUND
 
     const itemDeleted = this.productsList.splice(productIndex, 1)
     await this.#writeData()
 
     return {
-      msg: SUCCESS.DELETED,
+      log: SUCCESS.DELETED,
       itemDeleted
     }
   }

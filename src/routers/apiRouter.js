@@ -6,11 +6,12 @@ export const apiRouter = Router()
 
 apiRouter
   .route('/products/:id')
-  .get(async (req, res) => {
-    const product = await PM.getProductById(req.params.id)
-    if (product.error) res.json({ error: product.msg })
-    else {
+  .get(async (req, res, next) => {
+    try {
+      const product = await PM.getProductById(req.params.id)
       res.json(product)
+    } catch (error) {
+      return next(error.message)
     }
   })
 
@@ -21,16 +22,14 @@ apiRouter
     if (limit === undefined && page === undefined) return next()
     try {
       const allProducts = await PM.getProducts()
-      const arr = await limitProducts(allProducts, limit, page)
+      const list = await limitProducts(allProducts, limit, page)
       res.json({
         limit: limit ?? '5',
         page: page ?? '1',
-        arr
+        list
       })
-    } catch (e) {
-      res.json({
-        Error: e.message
-      })
+    } catch (error) {
+      return next(error)
     }
   })
   .get(async (req, res) => {

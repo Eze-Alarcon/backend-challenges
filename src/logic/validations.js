@@ -8,7 +8,7 @@ function validateObject(fields, strict) {
     }
     throw new Error(ERRORS.REQUIRED_FIELDS)
   }
-  return { msg: SUCCESS.OBJECT_RECEIVED }
+  return SUCCESS.OBJECT_RECEIVED
 }
 
 function estrictInputs(fields) {
@@ -105,13 +105,13 @@ export async function validateInputs(fields, options) {
     if (!options.strict) looseInputs(fields)
   } catch (e) {
     return {
-      msg: e,
+      log: e,
       error: true
     }
   }
 
   return {
-    msg: SUCCESS.FIELDS,
+    log: SUCCESS.FIELDS,
     error: false
   }
 }
@@ -119,13 +119,13 @@ export async function validateInputs(fields, options) {
 export function searchMatch(evalCode, arr) {
   try {
     const matchId = arr.some((el) => el.code === evalCode)
-    if (matchId) throw new Error(`${ERRORS.FIELD_EXIST} Code.`)
+    if (matchId) throw new Error(ERRORS.FIELD_EXIST)
   } catch (e) {
-    return { msg: e, error: true }
+    return { log: e, error: true }
   }
 
   return {
-    msg: SUCCESS.FIELD,
+    log: SUCCESS.FIELD,
     error: false
   }
 }
