@@ -7,34 +7,34 @@ export const apiRouter = Router()
 apiRouter.use(express.json())
 
 apiRouter
-  .route('/products/:pid')
+  .route('/:pid')
   .get(async (req, res, next) => {
     try {
-      const product = await PM.getProductById(req.params.pid)
-      res.status(product.status_code).json(product)
+      const response = await PM.getProductById(req.params.pid)
+      res.status(response.status_code).json(response.item)
     } catch (error) {
       return next(error.message)
     }
   })
   .put(async (req, res, next) => {
     try {
-      const product = await PM.updateProduct(req.params.pid, req.body)
-      res.status(product.status_code).json(product)
+      const response = await PM.updateProduct(req.params.pid, req.body)
+      res.status(response.status_code).json(response.itemUpdated)
     } catch (error) {
       return next(error.message)
     }
   })
   .delete(async (req, res, next) => {
     try {
-      const product = await PM.deleteProduct(req.params.pid)
-      res.status(product.status_code).json(product)
+      const response = await PM.deleteProduct(req.params.pid)
+      res.status(response.status_code).json(response.itemDeleted)
     } catch (error) {
       return next(error.message)
     }
   })
 
 apiRouter
-  .route('/products')
+  .route('/')
   .get(async (req, res, next) => {
     if (req.query.limit === undefined &&
       req.query.page === undefined
@@ -52,10 +52,10 @@ apiRouter
     }
   })
   .get(async (req, res) => {
-    const products = await PM.getProducts()
+    const response = await PM.getProducts()
     res.json({
-      lenght: products.length,
-      products
+      lenght: response.length,
+      products: response
     })
   })
   .post(async (req, res, next) => {
@@ -63,7 +63,7 @@ apiRouter
       const response = await PM.addProduct(req.body)
       res.status(response.status_code).json(response.productAdded)
     } catch (error) {
-      next(error.message)
+      return next(error.message)
     }
   })
 

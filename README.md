@@ -10,7 +10,7 @@ Se desarrollará un servidor que contenga los endpoints y servicios necesarios p
 
 ## Aspectos a incluir
 
-Desarrollar el servidor basado en Node.JS y express, que escuche en el puerto 8080 y disponga de dos grupos de rutas:
+✅ Desarrollar el servidor basado en Node.JS y express, que escuche en el puerto 8080 y disponga de dos grupos de rutas:
 
 - /products y
 - /carts.
@@ -23,9 +23,9 @@ Para el manejo de productos, el cual tendrá su router en /api/products/ , confi
 
 ✅ La ruta GET /:pid deberá traer sólo el producto con el id proporcionado
 
-La ruta raíz POST / deberá agregar un nuevo producto con los campos:
+✅ La ruta raíz POST / deberá agregar un nuevo producto con los campos:
 
-✅ id: Number/String (A tu elección), el id NO se manda desde body, se autogenera como lo hemos visto desde los primeros entregables, asegurando que NUNCA se repetirán los ids en el archivo.
+- id: Number/String (A tu elección), el id NO se manda desde body, se autogenera como lo hemos visto desde los primeros entregables, asegurando que NUNCA se repetirán los ids en el archivo.
 
 - title: String,
 
@@ -53,30 +53,20 @@ La ruta raíz POST / deberá agregar un nuevo producto con los campos:
 
 ---
 
-**RUTA /api/carts/**
-
 Para el carrito, el cual tendrá su router en /api/carts/, configurar dos rutas:
 
-**-----ruta raíz POST /api/carts-----**
-
-La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura:
+✅ La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura:
 
 - Id: Number/String.
 
 - products: Array que contendrá objetos que representen cada producto
 
-**------GET /:cid------**
+✅ La ruta GET /:cid deberá listar los productos que pertenezcan al carrito con el parámetro cid proporcionados.
 
-La ruta GET /:cid deberá listar los productos que pertenezcan al carrito con el parámetro cid proporcionados.
-
-**-----POST /:cid/product/:pid------**
-
-La ruta POST /:cid/product/:pid deberá agregar el producto al arreglo “products” del carrito seleccionado, agregándose como un objeto bajo el siguiente formato:
+✅ La ruta POST /:cid/product/:pid deberá agregar el producto al arreglo “products” del carrito seleccionado, agregándose como un objeto bajo el siguiente formato:
 
 - product: SÓLO DEBE CONTENER EL ID DEL PRODUCTO (Es crucial que no agregues el producto completo).
 
 - quantity: debe contener el número de ejemplares de dicho producto. El producto, de momento, se agregará de uno en uno.
 
-**-----Extra-----**
-
-Además, si un producto ya existente intenta agregarse al producto, incrementar el campo quantity de dicho producto.
+✅ Además, si un producto ya existente intenta agregarse al producto, incrementar el campo quantity de dicho producto.

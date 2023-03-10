@@ -1,10 +1,10 @@
 /* eslint space-before-function-paren: 0 */
 import fs from 'fs/promises'
-import { encryptID } from '../logic/cripto'
-import { ERRORS, SUCCESS } from './messages'
-import { PM } from './ProductManager'
-import { getMax } from '../logic/helpers'
-import { CartProducts, Carts } from './Cart'
+import { encryptID } from '../logic/cripto.js'
+import { ERRORS, SUCCESS } from './messages.js'
+import { PM } from './ProductManager.js'
+import { getMax } from '../logic/helpers.js'
+import { CartProducts, Carts } from './Cart.js'
 
 class CartManager {
   #path
@@ -36,7 +36,7 @@ class CartManager {
   }
 
   async #getIndex(cartID) {
-    await this.getCarts()
+    await this.#getCarts()
 
     const idToCompare = encryptID(cartID)
     const cartIndex = this.cartsList.findIndex((item) => item.id === idToCompare)
@@ -58,6 +58,8 @@ class CartManager {
 
     const newCart = new Carts(++this.#lastID)
     this.cartsList.push(newCart)
+
+    this.#writeData()
 
     return {
       status_code: SUCCESS.CART_CREATED.STATUS,
@@ -100,36 +102,38 @@ class CartManager {
 
     const productIndex = cart.products.findIndex((el) => el.productRef === item.id)
 
-    if (productIndex === -1) {
-      cart.products[productIndex].quantity += 1
+    if (productIndex !== -1) {
+      ++cart.products[productIndex].quantity
+
+      await this.#writeData()
 
       return {
         status_code: SUCCESS.INCREASE_QUANTITY.STATUS,
-        productUpdated: cart.products[productIndex]
+        productAdded: cart.products[productIndex]
       }
     }
 
-    const newCartProduct = CartProducts({ id: item.productID, quantity: 1 })
+    const newCartProduct = new CartProducts({ id: item.id })
 
     cart.products.push(newCartProduct)
 
     await this.#writeData()
 
     return {
-      status_code: SUCCESS.PRODUCT_ADD_TO_CART.STATUS,
-      productAdded: cart.products // puede fallar y mostrar [], revisar!
+      status_code: SUCCESS.CART_PRODUCT.STATUS,
+      productAdded: cart
     }
   }
 
   async deleteCart(cartID) {
     const cartIndex = await this.#getIndex(cartID)
 
-    const cartDeleted = this.productsList.splice(cartIndex, 1)
+    const cartDeleted = this.cartsList.splice(cartIndex, 1)
     await this.#writeData()
 
     return {
       status_code: SUCCESS.DELETED.STATUS,
-      cartDeleted
+      deleted: cartDeleted
     }
   }
 }

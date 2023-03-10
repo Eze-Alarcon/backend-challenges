@@ -137,9 +137,9 @@ const PRODUCTS_SUCCESS = {
 
 const CARTS_ERROR = {
   CART_NOT_FOUND: {
-    MESSAGE: "[ERROR]: List not found",
+    MESSAGE: "[ERROR]: Cart not found",
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
-    ERROR_CODE: "NOT_FOUND"
+    ERROR_CODE: "CART_NOT_FOUND"
   }
 }
 
@@ -154,6 +154,10 @@ const CARTS_SUCCESS = {
   },
   INCREASE_QUANTITY: {
     MESSAGE: "Quantity increased by one",
+    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
+  },
+  CART_PRODUCT: {
+    MESSAGE: "Product added to cart successfully",
     STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
   }
 }

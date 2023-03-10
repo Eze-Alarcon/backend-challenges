@@ -23,6 +23,9 @@ export function limitProducts(arr, queryLimit = 5, queryPage = 1) {
 }
 
 export function getMax(arr) {
-  const nums = arr.map(item => item.ref)
-  return Math.max(...nums)
+  if (Array.isArray(arr)) {
+    if (arr.length === 0) return 0
+    const nums = arr.map(item => item.ref)
+    return Math.max(...nums)
+  }
 }

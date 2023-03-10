@@ -1,11 +1,11 @@
 /* eslint space-before-function-paren: 0 */
-import { encryptID } from '../logic/cripto'
+import { encryptID } from '../logic/cripto.js'
 
 export class CartProducts {
   constructor({ id, quantity }
   ) {
     this.productRef = id
-    this.quantity = quantity
+    this.quantity = quantity ?? 1
   }
 }
 
