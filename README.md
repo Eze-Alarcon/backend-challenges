@@ -49,7 +49,7 @@ La ruta raíz POST / deberá agregar un nuevo producto con los campos:
 
 ✅ La ruta PUT /:pid deberá tomar un producto y actualizarlo por los campos enviados desde body. NUNCA se debe actualizar o eliminar el id al momento de hacer dicha actualización.
 
-La ruta DELETE /:pid deberá eliminar el producto con el pid indicado.
+✅ La ruta DELETE /:pid deberá eliminar el producto con el pid indicado.
 
 ---
 

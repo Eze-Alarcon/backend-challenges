@@ -96,7 +96,7 @@
     "description": "Este es un producto de prueba",
     "price": 1000,
     "thumbnail": "Imagen 10",
-    "stock": 10,
+    "stock": 1000,
     "code": "abc10"
   }
 ]

@@ -40,6 +40,17 @@ class ProductManager {
     return this.productsList
   }
 
+  async #getProductIndex(productId) {
+    await this.getProducts()
+
+    const idToCompare = encryptId(productId)
+    const productIndex = this.productsList.findIndex((item) => item.id === idToCompare)
+
+    if (productIndex === -1) throw new Error(ERRORS.NOT_FOUND.ERROR_CODE)
+
+    return productIndex
+  }
+
   async getProductById(productId) {
     await this.getProducts()
     const idToCompare = encryptId(productId)
@@ -74,37 +85,27 @@ class ProductManager {
   }
 
   async updateProduct(productId, fields) {
-    const product = await this.getProductById(productId)
-    if (product.error) throw new Error(product.status_code)
+    const productIndex = await this.#getProductIndex(productId)
+    const product = this.productsList[productIndex]
 
     const validate = await validateInputs(fields, { strict: false })
     if (validate.error) throw new Error(validate.status_code)
 
-    const {
-      title,
-      description,
-      price,
-      thumbnail,
-      stock
-    } = fields
-
-    product.item.description ??= description
-    product.item.thumbnail ??= thumbnail
-    product.item.title ??= title
-    product.item.price ??= price
-    product.item.stock ??= stock
+    product.description = fields.description ?? product.description
+    product.thumbnail = fields.thumbnail ?? product.thumbnail
+    product.title = fields.title ?? product.title
+    product.price = fields.price ?? product.price
+    product.stock = fields.stock ?? product.stock
 
     await this.#writeData()
     return {
       status_code: SUCCESS.UPDATED.STATUS,
-      itemUpdated: product.item
+      itemUpdated: product
     }
   }
 
   async deleteProduct(productId) {
-    await this.getProducts()
-    const productIndex = this.productsList.findIndex((item) => item.id === productId)
-    if (productIndex === -1) throw new Error(ERRORS.NOT_FOUND.ERROR_CODE)
+    const productIndex = await this.#getProductIndex(productId)
 
     const itemDeleted = this.productsList.splice(productIndex, 1)
     await this.#writeData()
