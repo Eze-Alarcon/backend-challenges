@@ -2,8 +2,9 @@
 import { ERRORS } from '../mocks/messages.js'
 
 export function sanitise(x) {
-  const num = parseInt(x)
-  if (isNaN(num)) throw new Error(ERRORS.QUERY_NOT_NUMBER)
+  const num = parseInt(Number(x))
+  if (isNaN(num)) throw new Error(ERRORS.QUERY_NOT_NUMBER.ERROR_CODE)
+  if (num === 0) return num + 1
   return num
 }
 
@@ -14,5 +15,9 @@ export function limitProducts(arr, queryLimit = 5, queryPage = 1) {
   let sliceArr = []
   if (page === 1) sliceArr = arr.splice(0, limit)
   if (page !== 1) sliceArr = arr.splice(limit * (page - 1), limit)
-  return sliceArr
+  return {
+    sliceArr,
+    parsedLimit: limit,
+    parsedPage: page
+  }
 }

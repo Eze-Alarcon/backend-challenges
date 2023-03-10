@@ -10,11 +10,11 @@ const app = express()
 app.use('/api', apiRouter)
 
 app.use((error, req, res, next) => {
-  const { status, message } = ERRORS[error]
+  const { STATUS, MESSAGE } = ERRORS[error]
 
-  return res.status(status).json({
-    message,
-    status
+  return res.status(STATUS).json({
+    message: MESSAGE,
+    status: STATUS
   })
 })
 

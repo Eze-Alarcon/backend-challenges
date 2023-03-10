@@ -41,23 +41,21 @@ class ProductManager {
     await this.getProducts()
     const idToCompare = encryptId(productId)
     const product = this.productsList.find((item) => item.id === idToCompare)
-    if (product === undefined) {
-      throw new Error(ERRORS.NOT_FOUND.code)
-    }
+    if (product === undefined) throw new Error(ERRORS.NOT_FOUND.ERROR_CODE)
     return {
-      log: SUCCESS.GET,
+      status_code: SUCCESS.GET.STATUS,
       item: product
     }
   }
 
   async addProduct(fields) {
     const validate = await validateInputs(fields, { strict: true })
-    if (validate.error) return validate
+    if (validate.error) throw new Error(validate.status_code)
 
     await this.getProducts()
 
     const match = searchMatch(fields.code, this.productsList)
-    if (match.error) return match.log
+    if (match.error) throw new Error(match.status_code)
 
     const newProduct = new Products(fields)
     this.productsList.push(newProduct)
@@ -65,17 +63,17 @@ class ProductManager {
     await this.#writeData()
 
     return {
-      log: SUCCESS.CREATED,
+      status_code: SUCCESS.CREATED.STATUS,
       productAdded: newProduct
     }
   }
 
   async updateProduct(productId, fields) {
     const product = await this.getProductById(productId)
-    if (product.error) return product.log
+    if (product.error) throw new Error(product.status_code)
 
     const validate = await validateInputs(fields, { strict: false })
-    if (validate.error) return validate.log
+    if (validate.error) throw new Error(validate.status_code)
 
     const {
       title,
@@ -85,15 +83,15 @@ class ProductManager {
       stock
     } = fields
 
-    product.item.description = description ?? product.item.description
-    product.item.thumbnail = thumbnail ?? product.item.thumbnail
-    product.item.title = title ?? product.item.title
-    product.item.price = price ?? product.item.price
-    product.item.stock = stock ?? product.item.stock
+    product.item.description ??= description
+    product.item.thumbnail ??= thumbnail
+    product.item.title ??= title
+    product.item.price ??= price
+    product.item.stock ??= stock
 
     await this.#writeData()
     return {
-      log: SUCCESS.UPDATED,
+      status_code: SUCCESS.UPDATED.STATUS,
       itemUpdated: product.item
     }
   }
@@ -101,13 +99,13 @@ class ProductManager {
   async deleteProduct(productId) {
     await this.getProducts()
     const productIndex = this.productsList.findIndex((item) => item.id === productId)
-    if (productIndex === -1) return ERRORS.NOT_FOUND
+    if (productIndex === -1) throw new Error(ERRORS.NOT_FOUND.ERROR_CODE)
 
     const itemDeleted = this.productsList.splice(productIndex, 1)
     await this.#writeData()
 
     return {
-      log: SUCCESS.DELETED,
+      status_code: SUCCESS.DELETED.STATUS,
       itemDeleted
     }
   }

@@ -4,9 +4,9 @@ import { ERRORS, SUCCESS } from '../mocks/messages.js'
 function validateObject(fields, strict) {
   if (fields === null || fields === undefined || typeof (fields) !== 'object') {
     if (!strict) {
-      throw new Error(ERRORS.UPDATE_MORE_FIELDS)
+      throw new Error(ERRORS.UPDATE_MORE_FIELDS.ERROR_CODE)
     }
-    throw new Error(ERRORS.REQUIRED_FIELDS)
+    throw new Error(ERRORS.REQUIRED_FIELDS.ERROR_CODE)
   }
   return SUCCESS.OBJECT_RECEIVED
 }
@@ -22,44 +22,44 @@ function estrictInputs(fields) {
   } = fields
 
   if (description === undefined || description === null) {
-    throw new Error(ERRORS.EMPTY_DESCRIPTION)
+    throw new Error(ERRORS.EMPTY_DESCRIPTION.ERROR_CODE)
   }
   if (typeof (description) !== 'string') {
-    throw new Error(ERRORS.DESCRIPTION)
+    throw new Error(ERRORS.DESCRIPTION.ERROR_CODE)
   }
 
   if (thumbnail === undefined || thumbnail === null) {
-    throw new Error(ERRORS.EMPTY_THUMBNAIL)
+    throw new Error(ERRORS.EMPTY_THUMBNAIL.ERROR_CODE)
   }
   if (typeof (thumbnail) !== 'string') {
-    throw new Error(ERRORS.THUMBNAIL)
+    throw new Error(ERRORS.THUMBNAIL.ERROR_CODE)
   }
 
   if (title === undefined || title === null) {
-    throw new Error(ERRORS.EMPTY_TITLE)
+    throw new Error(ERRORS.EMPTY_TITLE.ERROR_CODE)
   }
   if (typeof (title) !== 'string') {
-    throw new Error(ERRORS.TITLE)
+    throw new Error(ERRORS.TITLE.ERROR_CODE)
   }
 
   if (price === undefined || price === null) {
-    throw new Error(ERRORS.EMPTY_PRICE)
+    throw new Error(ERRORS.EMPTY_PRICE.ERROR_CODE)
   }
   if (typeof (price) !== 'number') {
-    throw new Error(ERRORS.PRICE)
+    throw new Error(ERRORS.PRICE.ERROR_CODE)
   }
 
   // This fields could be empty, null or undefined
 
   if (stock !== undefined && stock !== null) {
     if (typeof (stock) !== 'number') {
-      throw new Error(ERRORS.STOCK)
+      throw new Error(ERRORS.STOCK.ERROR_CODE)
     }
   }
 
   if (code !== undefined && code !== null) {
     if (typeof (code) !== 'string') {
-      throw new Error(ERRORS.CODE)
+      throw new Error(ERRORS.FIELD_CODE_EXIST.ERROR_CODE)
     }
   }
 }
@@ -68,31 +68,31 @@ function estrictInputs(fields) {
 function looseInputs(fields) {
   if (fields.description !== undefined && fields.description !== null) {
     if (typeof (fields.description) !== 'string') {
-      throw new Error(ERRORS.DESCRIPTION)
+      throw new Error(ERRORS.DESCRIPTION.ERROR_CODE)
     }
   }
 
   if (fields.thumbnail !== undefined && fields.thumbnail !== null) {
     if (typeof (fields.thumbnail) !== 'string') {
-      throw new Error(ERRORS.THUMBNAIL)
+      throw new Error(ERRORS.THUMBNAIL.ERROR_CODE)
     }
   }
 
   if (fields.title !== undefined && fields.title !== null) {
     if (typeof (fields.title) !== 'string') {
-      throw new Error(ERRORS.TITLE)
+      throw new Error(ERRORS.TITLE.ERROR_CODE)
     }
   }
 
   if (fields.price !== undefined && fields.price !== null) {
     if (typeof (fields.price) !== 'number') {
-      throw new Error(ERRORS.PRICE)
+      throw new Error(ERRORS.PRICE.ERROR_CODE)
     }
   }
 
   if (fields.stock !== undefined && fields.stock !== null) {
     if (typeof (fields.stock) !== 'number') {
-      throw new Error(ERRORS.STOCK)
+      throw new Error(ERRORS.STOCK.ERROR_CODE)
     }
   }
 }
@@ -103,15 +103,15 @@ export async function validateInputs(fields, options) {
 
     if (options.strict) estrictInputs(fields)
     if (!options.strict) looseInputs(fields)
-  } catch (e) {
+  } catch (err) {
     return {
-      log: e,
+      status_code: err,
       error: true
     }
   }
 
   return {
-    log: SUCCESS.FIELDS,
+    status_code: SUCCESS.FIELDS.SUCCESS_CODE,
     error: false
   }
 }
@@ -119,13 +119,13 @@ export async function validateInputs(fields, options) {
 export function searchMatch(evalCode, arr) {
   try {
     const matchId = arr.some((el) => el.code === evalCode)
-    if (matchId) throw new Error(ERRORS.FIELD_EXIST)
-  } catch (e) {
-    return { log: e, error: true }
+    if (matchId) throw new Error(ERRORS.FIELD_EXIST.ERROR_CODE)
+  } catch (err) {
+    return { status_code: err, error: true }
   }
 
   return {
-    log: SUCCESS.FIELD,
+    status_code: SUCCESS.FIELD.SUCCESS_CODE,
     error: false
   }
 }

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { PM } from '../mocks/ProductManager.js'
-import { limitProducts } from '../logic/middleware.js'
+import { limitProducts } from '../logic/helpers.js'
 
 export const apiRouter = Router()
 
@@ -9,7 +9,7 @@ apiRouter
   .get(async (req, res, next) => {
     try {
       const product = await PM.getProductById(req.params.id)
-      res.json(product)
+      res.status(product.status_code).json(product)
     } catch (error) {
       return next(error.message)
     }
@@ -18,24 +18,25 @@ apiRouter
 apiRouter
   .route('/products')
   .get(async (req, res, next) => {
-    const { limit, page } = req.query
-    if (limit === undefined && page === undefined) return next()
+    if (req.query.limit === undefined &&
+      req.query.page === undefined
+    ) return next()
     try {
       const allProducts = await PM.getProducts()
-      const list = await limitProducts(allProducts, limit, page)
+      const list = limitProducts(allProducts, req.query.limit, req.query.page)
       res.json({
-        limit: limit ?? '5',
-        page: page ?? '1',
+        limit: list.parsedLimit,
+        page: list.parsedPage,
         list
       })
     } catch (error) {
-      return next(error)
+      return next(error.message)
     }
   })
   .get(async (req, res) => {
     const products = await PM.getProducts()
     res.json({
-      totalProducts: products.length,
+      lenght: products.length,
       products
     })
   })
