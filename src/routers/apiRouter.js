@@ -1,14 +1,32 @@
-import { Router } from 'express'
+import express, { Router } from 'express'
 import { PM } from '../mocks/ProductManager.js'
 import { limitProducts } from '../logic/helpers.js'
 
 export const apiRouter = Router()
 
+apiRouter.use(express.json())
+
 apiRouter
-  .route('/products/:id')
+  .route('/products/:pid')
   .get(async (req, res, next) => {
     try {
-      const product = await PM.getProductById(req.params.id)
+      const product = await PM.getProductById(req.params.pid)
+      res.status(product.status_code).json(product)
+    } catch (error) {
+      return next(error.message)
+    }
+  })
+  .put(async (req, res, next) => {
+    try {
+      const product = await PM.updateProduct(req.params.pid, req.body)
+      res.status(product.status_code).json(product)
+    } catch (error) {
+      return next(error.message)
+    }
+  })
+  .delete(async (req, res, next) => {
+    try {
+      const product = await PM.deleteProduct(req.params.pid)
       res.status(product.status_code).json(product)
     } catch (error) {
       return next(error.message)
@@ -40,3 +58,15 @@ apiRouter
       products
     })
   })
+  .post(async (req, res, next) => {
+    try {
+      const response = await PM.addProduct(req.body)
+      res.status(response.status_code).json(response.productAdded)
+    } catch (error) {
+      next(error.message)
+    }
+  })
+
+/*
+
+*/

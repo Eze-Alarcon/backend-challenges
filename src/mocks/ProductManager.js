@@ -4,12 +4,15 @@ import { validateInputs, searchMatch } from '../logic/validations.js'
 import { ERRORS, SUCCESS } from '../mocks/messages.js'
 import { Products } from '../mocks/Products.js'
 import { encryptId } from '../logic/cripto.js'
+import { getMax } from '../logic/helpers.js'
 
 class ProductManager {
   #path
+  #lastID
   constructor(path) {
     this.#path = path
     this.productsList = []
+    this.#lastID = 0
   }
 
   async reset() {
@@ -57,7 +60,9 @@ class ProductManager {
     const match = searchMatch(fields.code, this.productsList)
     if (match.error) throw new Error(match.status_code)
 
-    const newProduct = new Products(fields)
+    this.#lastID = getMax(this.productsList)
+
+    const newProduct = new Products(++this.#lastID, fields)
     this.productsList.push(newProduct)
 
     await this.#writeData()

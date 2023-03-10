@@ -7,13 +7,6 @@ export function encryptId(id) {
   return newId
 }
 
-function codeFactory() {
-  let id = 0
-  return () => ++id
-}
-
-export const genCode = codeFactory()
-
 export function encrypt(unencrypted, salt) {
   const encrypted = crypto.createHmac('sha256', salt).update(unencrypted).digest('hex')
   return encrypted

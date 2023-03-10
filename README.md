@@ -19,13 +19,13 @@ Dichos endpoints estarán implementados con el router de express, con las siguie
 
 Para el manejo de productos, el cual tendrá su router en /api/products/ , configurar las siguientes rutas:
 
-- La ruta raíz GET / deberá listar todos los productos de la base. (Incluyendo la limitación ?limit del desafío anterior)
+✅ La ruta raíz GET / deberá listar todos los productos de la base. (Incluyendo la limitación ?limit del desafío anterior)
 
-- La ruta GET /:pid deberá traer sólo el producto con el id proporcionado
+✅ La ruta GET /:pid deberá traer sólo el producto con el id proporcionado
 
 La ruta raíz POST / deberá agregar un nuevo producto con los campos:
 
-- id: Number/String (A tu elección), el id NO se manda desde body, se autogenera como lo hemos visto desde los primeros entregables, asegurando que NUNCA se repetirán los ids en el archivo.
+✅ id: Number/String (A tu elección), el id NO se manda desde body, se autogenera como lo hemos visto desde los primeros entregables, asegurando que NUNCA se repetirán los ids en el archivo.
 
 - title: String,
 
@@ -47,7 +47,7 @@ La ruta raíz POST / deberá agregar un nuevo producto con los campos:
 
 **Todos los campos son obligatorios, a excepción de thumbnails**
 
-La ruta PUT /:pid deberá tomar un producto y actualizarlo por los campos enviados desde body. NUNCA se debe actualizar o eliminar el id al momento de hacer dicha actualización.
+✅ La ruta PUT /:pid deberá tomar un producto y actualizarlo por los campos enviados desde body. NUNCA se debe actualizar o eliminar el id al momento de hacer dicha actualización.
 
 La ruta DELETE /:pid deberá eliminar el producto con el pid indicado.
 
@@ -68,6 +68,8 @@ La ruta POST /:cid/product/:pid deberá agregar el producto al arreglo “produc
 - product: SÓLO DEBE CONTENER EL ID DEL PRODUCTO (Es crucial que no agregues el producto completo).
 
 - quantity: debe contener el número de ejemplares de dicho producto. El producto, de momento, se agregará de uno en uno.
+
+**To do**
 
 Además, si un producto ya existente intenta agregarse al producto, incrementar el campo quantity de dicho producto.
 

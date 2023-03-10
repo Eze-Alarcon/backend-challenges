@@ -21,3 +21,8 @@ export function limitProducts(arr, queryLimit = 5, queryPage = 1) {
     parsedPage: page
   }
 }
+
+export function getMax(arr) {
+  const nums = arr.map(item => item.ref)
+  return Math.max(...nums)
+}

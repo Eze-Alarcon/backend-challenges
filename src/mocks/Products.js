@@ -1,22 +1,26 @@
 /* eslint space-before-function-paren: 0 */
-import { encryptId, genCode } from '../logic/cripto.js'
+import { encryptId } from '../logic/cripto.js'
 
 export class Products {
-  #generateCode = `${genCode()}`
-  constructor({
-    title,
-    description,
-    price,
-    thumbnail,
-    code,
-    stock = 0
-  }) {
-    this.id = encryptId(this.#generateCode)
+  #idValue
+  constructor(
+    lastID,
+    {
+      title,
+      description,
+      price,
+      thumbnail,
+      code,
+      stock = 0
+    }
+  ) {
+    this.ref = lastID
+    this.id = encryptId(lastID)
     this.title = title
     this.description = description
     this.price = price
     this.thumbnail = thumbnail
     this.stock = stock
-    this.code = code ?? `code-${this.#generateCode}`
+    this.code = code ?? `code-${this.lastID}`
   }
 }

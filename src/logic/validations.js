@@ -8,7 +8,7 @@ function validateObject(fields, strict) {
     }
     throw new Error(ERRORS.REQUIRED_FIELDS.ERROR_CODE)
   }
-  return SUCCESS.OBJECT_RECEIVED
+  return SUCCESS.OBJECT_RECEIVED.STATUS
 }
 
 function estrictInputs(fields) {
@@ -105,13 +105,13 @@ export async function validateInputs(fields, options) {
     if (!options.strict) looseInputs(fields)
   } catch (err) {
     return {
-      status_code: err,
+      status_code: err.message,
       error: true
     }
   }
 
   return {
-    status_code: SUCCESS.FIELDS.SUCCESS_CODE,
+    status_code: SUCCESS.FIELDS.STATUS,
     error: false
   }
 }
@@ -121,11 +121,11 @@ export function searchMatch(evalCode, arr) {
     const matchId = arr.some((el) => el.code === evalCode)
     if (matchId) throw new Error(ERRORS.FIELD_EXIST.ERROR_CODE)
   } catch (err) {
-    return { status_code: err, error: true }
+    return { status_code: err.message, error: true }
   }
 
   return {
-    status_code: SUCCESS.FIELD.SUCCESS_CODE,
+    status_code: SUCCESS.FIELD.STATUS,
     error: false
   }
 }
