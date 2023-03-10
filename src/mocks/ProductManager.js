@@ -3,7 +3,7 @@ import fs from 'fs/promises'
 import { validateInputs, searchMatch } from '../logic/validations.js'
 import { ERRORS, SUCCESS } from '../mocks/messages.js'
 import { Products } from '../mocks/Products.js'
-import { encryptId } from '../logic/cripto.js'
+import { encryptID } from '../logic/cripto.js'
 import { getMax } from '../logic/helpers.js'
 
 class ProductManager {
@@ -35,27 +35,25 @@ class ProductManager {
     this.productsList = [...data]
   }
 
+  async #getIndex(productId) {
+    await this.getProducts()
+
+    const idToCompare = encryptID(productId)
+    const productIndex = this.productsList.findIndex((item) => item.id === idToCompare)
+
+    if (productIndex === -1) throw new Error(ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+
+    return productIndex
+  }
+
   async getProducts() {
     await this.#loadData()
     return this.productsList
   }
 
-  async #getProductIndex(productId) {
-    await this.getProducts()
-
-    const idToCompare = encryptId(productId)
-    const productIndex = this.productsList.findIndex((item) => item.id === idToCompare)
-
-    if (productIndex === -1) throw new Error(ERRORS.NOT_FOUND.ERROR_CODE)
-
-    return productIndex
-  }
-
-  async getProductById(productId) {
-    await this.getProducts()
-    const idToCompare = encryptId(productId)
-    const product = this.productsList.find((item) => item.id === idToCompare)
-    if (product === undefined) throw new Error(ERRORS.NOT_FOUND.ERROR_CODE)
+  async getProductById(productID) {
+    const productIndex = await this.#getIndex(productID)
+    const product = this.productsList[productIndex]
     return {
       status_code: SUCCESS.GET.STATUS,
       item: product
@@ -85,7 +83,7 @@ class ProductManager {
   }
 
   async updateProduct(productId, fields) {
-    const productIndex = await this.#getProductIndex(productId)
+    const productIndex = await this.#getIndex(productId)
     const product = this.productsList[productIndex]
 
     const validate = await validateInputs(fields, { strict: false })
@@ -105,7 +103,7 @@ class ProductManager {
   }
 
   async deleteProduct(productId) {
-    const productIndex = await this.#getProductIndex(productId)
+    const productIndex = await this.#getIndex(productId)
 
     const itemDeleted = this.productsList.splice(productIndex, 1)
     await this.#writeData()

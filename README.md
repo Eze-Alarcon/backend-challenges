@@ -53,15 +53,23 @@ La ruta raíz POST / deberá agregar un nuevo producto con los campos:
 
 ---
 
+**RUTA /api/carts/**
+
 Para el carrito, el cual tendrá su router en /api/carts/, configurar dos rutas:
+
+**-----ruta raíz POST /api/carts-----**
 
 La ruta raíz POST / deberá crear un nuevo carrito con la siguiente estructura:
 
-- Id: Number/String (A tu elección, de igual manera como con los productos, debes asegurar que nunca se dupliquen los ids y que este se autogenere).
+- Id: Number/String.
 
 - products: Array que contendrá objetos que representen cada producto
 
+**------GET /:cid------**
+
 La ruta GET /:cid deberá listar los productos que pertenezcan al carrito con el parámetro cid proporcionados.
+
+**-----POST /:cid/product/:pid------**
 
 La ruta POST /:cid/product/:pid deberá agregar el producto al arreglo “products” del carrito seleccionado, agregándose como un objeto bajo el siguiente formato:
 
@@ -69,30 +77,6 @@ La ruta POST /:cid/product/:pid deberá agregar el producto al arreglo “produc
 
 - quantity: debe contener el número de ejemplares de dicho producto. El producto, de momento, se agregará de uno en uno.
 
-**To do**
+**-----Extra-----**
 
 Además, si un producto ya existente intenta agregarse al producto, incrementar el campo quantity de dicho producto.
-
-La persistencia de la información se implementará utilizando el file system, donde los archivos “productos,json” y “carrito.json”, respaldan la información.
-
-No es necesario realizar ninguna implementación visual, todo el flujo se puede realizar por Postman o por el cliente de tu preferencia.
-
-## Testing (old)
-
-Desarrollar un servidor basado en express donde podamos hacer consultas a nuestro archivo de productos.
-
-- Se instalarán las dependencias a partir del comando npm install
-
-- Se echará a andar el servidor
-
-- Se revisará que el archivo YA CUENTE CON AL MENOS DIEZ PRODUCTOS CREADOS al momento de su entrega, es importante para que los tutores no tengan que crear los productos por sí mismos, y así agilizar el proceso de tu evaluación.
-
-- Se corroborará que el servidor esté corriendo en el puerto 8080.
-
-- Se mandará a llamar desde el navegador a la url http://localhost:8080/products sin query, eso debe devolver todos los 10 productos.
-
-- Se mandará a llamar desde el navegador a la url http://localhost:8080/products?limit=5 , eso debe devolver sólo los primeros 5 de los 10 productos.
-
-- Se mandará a llamar desde el navegador a la url http://localhost:8080/products/2, eso debe devolver sólo el producto con id=2.
-
-- Se mandará a llamar desde el navegador a la url http://localhost:8080/products/34123123, al no existir el id del producto, debe devolver un objeto con un error indicando que el producto no existe.

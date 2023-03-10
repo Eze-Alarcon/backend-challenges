@@ -1,8 +1,7 @@
 /* eslint space-before-function-paren: 0 */
-import { encryptId } from '../logic/cripto.js'
+import { encryptID } from '../logic/cripto.js'
 
 export class Products {
-  #idValue
   constructor(
     lastID,
     {
@@ -15,7 +14,7 @@ export class Products {
     }
   ) {
     this.ref = lastID
-    this.id = encryptId(lastID)
+    this.id = encryptID(lastID)
     this.title = title
     this.description = description
     this.price = price

@@ -16,7 +16,7 @@ const STATUS_CODE = {
   }
 }
 
-const ERRORS = {
+const PRODUCTS_ERRORS = {
   REQUIRED_OBJECT: {
     MESSAGE: "[ERROR]: Expected object.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
@@ -87,10 +87,10 @@ const ERRORS = {
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
     ERROR_CODE: "FIELD_EXIST"
   },
-  NOT_FOUND: {
+  PRODUCT_NOT_FOUND: {
     MESSAGE: "[ERROR]: Product not found",
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
-    ERROR_CODE: "NOT_FOUND"
+    ERROR_CODE: "PRODUCT_NOT_FOUND"
   },
   QUERY_NOT_NUMBER: {
     MESSAGE: "[ERROR]: Limit and page must be a number",
@@ -104,7 +104,7 @@ const ERRORS = {
   }
 }
 
-const SUCCESS = {
+const PRODUCTS_SUCCESS = {
   FIELDS: {
     MESSAGE: "Fields ok",
     STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
@@ -133,6 +133,39 @@ const SUCCESS = {
     MESSAGE: "Item found successfully",
     STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
   }
+}
+
+const CARTS_ERROR = {
+  CART_NOT_FOUND: {
+    MESSAGE: "[ERROR]: List not found",
+    STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
+    ERROR_CODE: "NOT_FOUND"
+  }
+}
+
+const CARTS_SUCCESS = {
+  GET_CART: {
+    MESSAGE: "Cart found successfully",
+    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
+  },
+  CART_CREATED: {
+    MESSAGE: "Cart created successfully",
+    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
+  },
+  INCREASE_QUANTITY: {
+    MESSAGE: "Quantity increased by one",
+    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
+  }
+}
+
+const ERRORS = {
+  ...PRODUCTS_ERRORS,
+  ...CARTS_ERROR
+}
+
+const SUCCESS = {
+  ...PRODUCTS_SUCCESS,
+  ...CARTS_SUCCESS
 }
 
 export { ERRORS, SUCCESS }
