@@ -1,5 +1,8 @@
+'use strict'
+
 import express, { Router } from 'express'
 import { CM } from '../mocks/CartManager.js'
+import { ERRORS } from '../mocks/messages.js'
 
 export const cartRouter = Router()
 
@@ -33,7 +36,7 @@ cartRouter
   .delete(async (req, res, next) => {
     try {
       const response = await CM.deleteCart(req.params.cid)
-      res.status(response.status_code).json(response.deleted)
+      res.status(response.status_code).json({ cart_deleted: response.deleted })
     } catch (error) {
       return next(error.message)
     }
@@ -47,5 +50,12 @@ cartRouter
       res.status(response.status_code).json(response.cart)
     } catch (error) {
       return next(error.message)
+    }
+  })
+  .get(async (req, res, next) => {
+    try {
+      throw new Error(ERRORS.FEATURE_NOT_IMPLEMENTED.ERROR_CODE)
+    } catch (error) {
+      next(error.message)
     }
   })

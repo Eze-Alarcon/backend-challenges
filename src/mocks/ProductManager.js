@@ -1,3 +1,5 @@
+'use strict'
+
 /* eslint space-before-function-paren: 0 */
 import fs from 'fs/promises'
 import { validateInputs, searchMatch } from '../logic/validations.js'

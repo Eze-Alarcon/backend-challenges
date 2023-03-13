@@ -1,3 +1,5 @@
+'use strict'
+
 /* eslint space-before-function-paren: 0 */
 import { encryptID } from '../logic/cripto.js'
 

@@ -1,3 +1,5 @@
+"use strict"
+
 /* eslint space-before-function-paren: 0 */
 /* eslint quotes: ["error", "double"] */
 
@@ -52,30 +54,35 @@ const PRODUCTS_ERRORS = {
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
     ERROR_CODE: "EMPTY_PRICE"
   },
-  DESCRIPTION: {
+  FIELD_DESCRIPTION: {
     MESSAGE: "[ERROR]: The field 'description' must be a string.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "DESCRIPTION"
+    ERROR_CODE: "FIELD_DESCRIPTION"
   },
-  THUMBNAIL: {
+  FIELD_THUMBNAIL: {
     MESSAGE: "[ERROR]: The field 'thumbnail' must be a string.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "THUMBNAIL"
+    ERROR_CODE: "FIELD_THUMBNAIL"
   },
-  TITLE: {
+  FIELD_TITLE: {
     MESSAGE: "[ERROR]: The field 'title' must be a string.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "TITLE"
+    ERROR_CODE: "FIELD_TITLE"
   },
-  PRICE: {
+  FIELD_PRICE: {
     MESSAGE: "[ERROR]: The field 'price' must be a number.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "PRICE"
+    ERROR_CODE: "FIELD_PRICE"
   },
-  STOCK: {
+  FIELD_STOCK: {
     MESSAGE: "[ERROR]: The field 'stock' must be a number.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "STOCK"
+    ERROR_CODE: "FIELD_STOCK"
+  },
+  FIELD_STATUS: {
+    MESSAGE: "[ERROR]: The field 'stock' must be a boolean.",
+    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
+    ERROR_CODE: "FIELD_STATUS"
   },
   FIELD_CODE_EXIST: {
     MESSAGE: "[ERROR]: The field 'code' must be a string.",
@@ -143,6 +150,19 @@ const CARTS_ERROR = {
   }
 }
 
+const SERVER_ERROR = {
+  FEATURE_NOT_IMPLEMENTED: {
+    MESSAGE: "Feature not available at the moment, available in future releases.",
+    STATUS: STATUS_CODE.SERVER_ERROR.NOT_IMPLEMENTED,
+    ERROR_CODE: "FEATURE_NOT_IMPLEMENTED"
+  },
+  SERVER_ERROR: {
+    MESSAGE: "Something has happened, contact maintenance.",
+    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
+    ERROR_CODE: "SERVER_ERROR"
+  }
+}
+
 const CARTS_SUCCESS = {
   GET_CART: {
     MESSAGE: "Cart found successfully",
@@ -164,7 +184,8 @@ const CARTS_SUCCESS = {
 
 const ERRORS = {
   ...PRODUCTS_ERRORS,
-  ...CARTS_ERROR
+  ...CARTS_ERROR,
+  ...SERVER_ERROR
 }
 
 const SUCCESS = {

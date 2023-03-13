@@ -1,3 +1,5 @@
+'use strict'
+
 import express, { Router } from 'express'
 import { PM } from '../mocks/ProductManager.js'
 import { limitProducts } from '../logic/helpers.js'
@@ -27,7 +29,7 @@ apiRouter
   .delete(async (req, res, next) => {
     try {
       const response = await PM.deleteProduct(req.params.pid)
-      res.status(response.status_code).json(response.itemDeleted)
+      res.status(response.status_code).json({ product_deleted: response.itemDeleted })
     } catch (error) {
       return next(error.message)
     }
@@ -42,11 +44,7 @@ apiRouter
     try {
       const allProducts = await PM.getProducts()
       const list = limitProducts(allProducts, req.query.limit, req.query.page)
-      res.json({
-        limit: list.parsedLimit,
-        page: list.parsedPage,
-        list
-      })
+      res.json({ ...list })
     } catch (error) {
       return next(error.message)
     }
@@ -66,7 +64,3 @@ apiRouter
       return next(error.message)
     }
   })
-
-/*
-
-*/

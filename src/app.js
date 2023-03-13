@@ -1,3 +1,4 @@
+'use strict'
 /* eslint space-before-function-paren: 0 */
 import express from 'express'
 import { apiRouter } from './routers/apiRouter.js'
@@ -12,12 +13,15 @@ app.use('/api/products', apiRouter)
 app.use('/api/cart', cartRouter)
 
 app.use((error, req, res, next) => {
-  const { STATUS, MESSAGE } = ERRORS[error]
+  try {
+    const { STATUS, MESSAGE } = ERRORS[error]
 
-  return res.status(STATUS).json({
-    message: MESSAGE,
-    status: STATUS
-  })
+    return res.status(STATUS).json({ message: MESSAGE })
+  } catch (error) {
+    const { STATUS, MESSAGE } = ERRORS.SERVER_ERROR
+
+    return res.status(STATUS).json({ message: MESSAGE })
+  }
 })
 
 app.listen(PORT, () => {
