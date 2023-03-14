@@ -3,9 +3,11 @@
 import express from 'express'
 import { apiRouter } from './routers/apiRouter.js'
 import { cartRouter } from './routers/cartRouter.js'
-import { homeRouter } from './routers/homeRouter.js'
+import { viewsRouter } from './routers/viewsRouter.js'
+import { PM } from './mocks/ProductManager.js'
 import { ERRORS } from './mocks/messages.js'
 import { engine } from 'express-handlebars'
+import { Server } from 'socket.io'
 
 const PORT = 8080
 
@@ -22,18 +24,7 @@ app.set('views', './views')
 
 app.use('/api/products', apiRouter)
 app.use('/api/cart', cartRouter)
-app.use(homeRouter)
-
-// TO DO with web sockets
-
-app.get('/realtimeproducts', async (req, res, next) => {
-  try {
-    res.render('home.handlebars', { titulo: 'Inicio', encabezado: 'Inicio' })
-  } catch (error) {
-    console.log(error)
-    next(error.message)
-  }
-})
+app.use('/', viewsRouter)
 
 app.use((error, req, res, next) => {
   try {
@@ -47,7 +38,20 @@ app.use((error, req, res, next) => {
   }
 })
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
-  console.log('Path: ', 'http://localhost:8080/api/products')
+  console.log('Path to API: ', 'http://localhost:8080/api/products')
+  console.log('Path to views: ', 'http://localhost:8080/')
+})
+
+const io = new Server(server)
+
+io.on('connection', async clientSocket => {
+  console.log(`Nuevo cliente conectado: ${clientSocket.id}`)
+
+  const products = await PM.getProducts()
+  io.emit('firstLog', {
+    list: products,
+    showList: products.length > 0
+  })
 })

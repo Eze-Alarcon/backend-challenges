@@ -12,7 +12,7 @@ Configurar nuestro proyecto para que trabaje con Handlebars y websocket.
 
 ✅ 1. Configurar el servidor para integrar el motor de plantillas Handlebars e instalar un servidor de socket.io al mismo.
 
-2. Crear una vista “home.handlebars” la cual contenga una lista de todos los productos agregados hasta el momento
+✅ 2. Crear una vista “home.handlebars” la cual contenga una lista de todos los productos agregados hasta el momento
 
 3. Además, crear una vista “realTimeProducts.handlebars”, la cual vivirá en el endpoint “/realtimeproducts” en nuestro views router, ésta contendrá la misma lista de productos, sin embargo, ésta trabajará con websockets.
 
