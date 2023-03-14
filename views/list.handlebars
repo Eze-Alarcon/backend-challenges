@@ -1,0 +1,17 @@
+<h1>{{mainTitle}}</h1>
+{{#if listExist}}
+  <h2>Products:</h2>
+  <article>
+    {{#each list}}
+      <div>
+        <p>item {{this.ref}}</p>
+        <h4>{{this.title}}</h4>
+        <p>{{this.description}}</p>
+        <p>Price {{this.price}}</p>
+        <p>Stock {{this.stock}}</p>
+      </div>
+    {{/each}}
+  </article>
+{{else}}
+  <p class=''>Sin Products...</p>
+{{/if}}
