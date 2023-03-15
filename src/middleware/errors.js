@@ -3,7 +3,6 @@
 import { ERRORS } from '../mocks/messages.js'
 
 export function handleError(error, req, res, next) {
-  console.log(error)
   try {
     const { STATUS, MESSAGE } = ERRORS[error]
 

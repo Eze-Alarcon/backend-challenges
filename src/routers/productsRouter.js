@@ -5,11 +5,11 @@ import { PM } from '../mocks/ProductManager.js'
 import { limitProducts } from '../logic/helpers.js'
 import { socketHandle } from '../middleware/socket.js'
 
-export const apiRouter = Router()
+export const productsRouter = Router()
 
-apiRouter.use(express.json())
+productsRouter.use(express.json())
 
-apiRouter
+productsRouter
   .route('/:pid')
   .get(async (req, res, next) => {
     try {
@@ -40,7 +40,7 @@ apiRouter
     }
   })
 
-apiRouter
+productsRouter
   .route('/')
   .get(async (req, res, next) => {
     if (req.query.limit === undefined &&

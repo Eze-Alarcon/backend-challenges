@@ -60,8 +60,8 @@ function estrictInputs(fields) {
     }
   }
 
-  if (status !== undefined && stock !== null) {
-    if (typeof (stock) !== 'boolean') {
+  if (status !== undefined && status !== null) {
+    if (typeof (status) !== 'boolean') {
       throw new Error(ERRORS.FIELD_STATUS.ERROR_CODE)
     }
   }
@@ -106,7 +106,7 @@ function looseInputs(fields) {
   }
 
   if (fields.status !== undefined && fields.status !== null) {
-    if (typeof (fields.status) !== 'number') {
+    if (typeof (fields.status) !== 'boolean') {
       throw new Error(ERRORS.FIELD_STATUS.ERROR_CODE)
     }
   }

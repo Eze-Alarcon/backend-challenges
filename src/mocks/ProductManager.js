@@ -121,17 +121,17 @@ const PM = new ProductManager('./src/storage/products.json')
 
 // En caso de que sea necesario generar de nuevo los productos
 
-// PM.reset()
+PM.reset()
 
-// for (let i = 1; i <= 10; i++) {
-//   await PM.addProduct({
-//     title: `producto ${i}`,
-//     description: 'Este es un producto de prueba',
-//     price: i * 100,
-//     thumbnail: `Imagen ${i}`,
-//     code: `abc${i}`,
-//     stock: i
-//   })
-// }
+for (let i = 1; i <= 10; i++) {
+  await PM.addProduct({
+    title: `producto ${i}`,
+    description: `Este es el producto de prueba n°${i}`,
+    price: i * 100,
+    thumbnail: `Imagen ${i}`,
+    code: `abc${i}`,
+    stock: i
+  })
+}
 
 export { PM }

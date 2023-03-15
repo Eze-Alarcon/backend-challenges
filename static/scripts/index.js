@@ -6,7 +6,7 @@ const container = document.getElementById('container') ?? null
 const template = `
 
 {{#if showList}}
-  <h2>Products:</h2>
+  <h4>Products:</h4>
   <div class='container text-center mb-5'>
     <div class='row row-gap-5'>
       {{#each list}}
@@ -27,7 +27,7 @@ const template = `
     </div>
   </div>
 {{else}}
-  <p class=''>Sin Products...</p>
+  <p>Sin Products...</p>
 {{/if}}
 `
 

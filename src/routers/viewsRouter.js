@@ -4,7 +4,7 @@ import { Router } from 'express'
 import { PM } from '../mocks/ProductManager.js'
 
 const RENDER_PATH = {
-  STATIC: 'list.handlebars',
+  STATIC: 'index.handlebars',
   DINAMIC: 'realTimeProducts.handlebars'
 }
 
@@ -25,7 +25,7 @@ viewsRouter
       return next(error.message)
     }
   })
-  .get('/realTimeProducts', async (req, res, next) => {
+  .get('/realtimeproducts', async (req, res, next) => {
     try {
       const productList = await PM.getProducts()
 
