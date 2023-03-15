@@ -33,7 +33,7 @@ viewsRouter
         headerTitle: 'Home | Products',
         mainTitle: 'List of products in Real Time',
         list: [...productList],
-        listExist: productList.length > 0
+        showList: productList.length > 0
       })
     } catch (error) {
       return next(error.message)

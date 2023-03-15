@@ -1,17 +1,26 @@
 <h1>{{mainTitle}}</h1>
+
 {{#if listExist}}
   <h2>Products:</h2>
-  <article>
-    {{#each list}}
-      <div>
-        <p>item {{this.ref}}</p>
-        <h4>{{this.title}}</h4>
-        <p>{{this.description}}</p>
-        <p>Price {{this.price}}</p>
-        <p>Stock {{this.stock}}</p>
-      </div>
-    {{/each}}
-  </article>
+  <div class='container text-center mb-5'>
+    <div class='row row-gap-5'>
+      {{#each list}}
+        <div class='col-3'>
+          <div class='card'>
+            <div class='card-body'>
+              <h5 class='card-title'>{{this.title}}</h5>
+              <p class='card-text'>{{this.description}}</p>
+            </div>
+            <ul class='list-group list-group-flush'>
+              <li class='list-group-item'>Item {{this.ref}}</li>
+              <li class='list-group-item'>Price: ${{this.price}}</li>
+              <li class='list-group-item'>Stock: {{this.stock}}</li>
+            </ul>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
 {{else}}
   <p class=''>Sin Products...</p>
 {{/if}}
