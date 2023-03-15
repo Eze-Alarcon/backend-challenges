@@ -14,7 +14,7 @@ Configurar nuestro proyecto para que trabaje con Handlebars y websocket.
 
 ✅ 2. Crear una vista “home.handlebars” la cual contenga una lista de todos los productos agregados hasta el momento
 
-3. Además, crear una vista “realTimeProducts.handlebars”, la cual vivirá en el endpoint “/realtimeproducts” en nuestro views router, ésta contendrá la misma lista de productos, sin embargo, ésta trabajará con websockets.
+✅ 3. Además, crear una vista “realTimeProducts.handlebars”, la cual vivirá en el endpoint “/realtimeproducts” en nuestro views router, ésta contendrá la misma lista de productos, sin embargo, ésta trabajará con websockets.
 
 **Al trabajar con websockets, cada vez que creemos un producto nuevo, o bien cada vez que eliminemos un producto, se debe actualizar automáticamente en dicha vista la lista.**
 

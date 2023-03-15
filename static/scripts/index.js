@@ -23,7 +23,7 @@ const template = `
 
 const compileTemplate = Handlebars.compile(template)
 
-serverSocket.on('firstLog', data => {
+serverSocket.on('updateList', data => {
   if (container !== null) {
     container.innerHTML = compileTemplate({
       headerTitle: 'Home | Products',

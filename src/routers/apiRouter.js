@@ -1,8 +1,9 @@
 'use strict'
-
+/* eslint space-before-function-paren: 0 */
 import express, { Router } from 'express'
 import { PM } from '../mocks/ProductManager.js'
 import { limitProducts } from '../logic/helpers.js'
+import { socketHandle } from '../middleware/socket.js'
 
 export const apiRouter = Router()
 
@@ -21,6 +22,8 @@ apiRouter
   .put(async (req, res, next) => {
     try {
       const response = await PM.updateProduct(req.params.pid, req.body)
+      await socketHandle()
+
       res.status(response.status_code).json(response.itemUpdated)
     } catch (error) {
       return next(error.message)
@@ -29,6 +32,8 @@ apiRouter
   .delete(async (req, res, next) => {
     try {
       const response = await PM.deleteProduct(req.params.pid)
+      await socketHandle()
+
       res.status(response.status_code).json({ product_deleted: response.itemDeleted })
     } catch (error) {
       return next(error.message)
@@ -59,6 +64,7 @@ apiRouter
   .post(async (req, res, next) => {
     try {
       const response = await PM.addProduct(req.body)
+      await socketHandle()
       res.status(response.status_code).json(response.productAdded)
     } catch (error) {
       return next(error.message)
