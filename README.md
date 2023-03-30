@@ -6,21 +6,35 @@ Desafios del curso de coderhouse
 
 ## Consigna
 
-Configurar nuestro proyecto para que trabaje con Handlebars y websocket.
+Pratica Integradora
 
 ## Aspectos a incluir
 
-✅ 1. Configurar el servidor para integrar el motor de plantillas Handlebars e instalar un servidor de socket.io al mismo.
+- Agregar el modelo de persistencia de Mongo y mongoose a tu proyecto.
 
-✅ 2. Crear una vista “home.handlebars” la cual contenga una lista de todos los productos agregados hasta el momento
+✅ Crear una base de datos llamada 'ecommerce' dentro de tu Atlas.
 
-✅ 3. Además, crear una vista “realTimeProducts.handlebars”, la cual vivirá en el endpoint “/realtimeproducts” en nuestro views router, ésta contendrá la misma lista de productos, sin embargo, ésta trabajará con websockets.
+✅ Crear sus colecciones 'carts', 'messages', 'products'
 
-**Al trabajar con websockets, cada vez que creemos un producto nuevo, o bien cada vez que eliminemos un producto, se debe actualizar automáticamente en dicha vista la lista.**
+✅ Crear sus respectivos schemas.
 
-✅ 4. Ya que la conexión entre una consulta HTTP y websocket no está contemplada dentro de la clase. Se recomienda que, para la creación y eliminación de un producto, Se cree un formulario simple en la vista realTimeProducts.handlebars. Para que el contenido se envíe desde websockets y no HTTP. Sin embargo, esta no es la mejor solución, leer el siguiente punto.
+- Separar los Managers de fileSystem de los managers de MongoDb en una sola carpeta 'dao'.
 
-✅ 5. Si se desea hacer la conexión de socket emits con HTTP, deberás buscar la forma de utilizar el servidor io de Sockets dentro de la petición POST. ¿Cómo utilizarás un emit dentro del POST?
+  ✅ Dentro de dao, agregar también una carpeta 'models' donde vivirán los esquemas de MongoDB.
+  **La estructura deberá ser igual a la vista en esta clase**
+
+- Contener todos los Managers (FileSystem y DB) en una carpeta llamada 'Dao'
+
+- Reajustar los servicios con el fin de que puedan funcionar con Mongoose en lugar de FileSystem
+
+- NO ELIMINAR FileSystem de tu proyecto.
+
+- Implementar una vista nueva en handlebars llamada chat.handlebars, la cual permita implementar un chat como el visto en clase.
+
+  - Los mensajes deberán guardarse en una colección 'messages' en mongo (no es necesario implementarlo en FileSystem).
+  - El formato es: {user:correoDelUsuario, message: mensaje del usuario}
+
+- Corroborar la integridad del proyecto.
 
 ## Testing
 
@@ -33,7 +47,7 @@ Se abrirá la ruta raíz
 - Debe visualizarse el contenido de la vista index.handlebars
 - No se debe activar el websocket aún.
 
-Se buscará en la url del navegador la ruta “/realtimeproducts”.
+Se buscará en la url del navegador la ruta '/realtimeproducts'.
 
-- Se corroborará que el servidor haya conectado con el cliente, en la consola del servidor deberá mostrarse un mensaje de “cliente conectado”.
+- Se corroborará que el servidor haya conectado con el cliente, en la consola del servidor deberá mostrarse un mensaje de 'cliente conectado'.
 - Se debe mostrar la lista de productos y se corroborará que se esté enviando desde websocket.

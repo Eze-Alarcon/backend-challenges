@@ -1,40 +1,19 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import fs from 'fs/promises'
-import { validateInputs, searchMatch } from '../logic/validations.js'
-import { ERRORS, SUCCESS } from '../mocks/messages.js'
-import { Products } from '../mocks/Products.js'
-import { encryptID } from '../logic/cripto.js'
-import { getMax } from '../logic/helpers.js'
+import { validateInputs, searchMatch } from '../../logic/validations.js'
+import { ERRORS, SUCCESS } from '../../mocks/messages.js'
+import { Products } from './Products.js'
+import { encryptID } from '../../logic/cripto.js'
+import { getMax } from '../../logic/helpers.js'
+import { fileSystemManager } from './fileSystemManager.js'
 
-class ProductManager {
-  #path
+class ProductManager extends fileSystemManager {
   #lastID
   constructor(path) {
-    this.#path = path
-    this.productsList = []
+    super(path)
     this.#lastID = 0
-  }
-
-  async reset() {
-    await fs.writeFile(this.#path, '[]')
     this.productsList = []
-  }
-
-  async #writeData() {
-    const json = JSON.stringify(this.productsList, null, 2)
-    await fs.writeFile(this.#path, json)
-  }
-
-  async #loadData() {
-    const rawData = await fs.readFile(this.#path, 'utf-8')
-    if (rawData === '') {
-      this.productsList = []
-      return
-    }
-    const data = JSON.parse(rawData)
-    this.productsList = [...data]
   }
 
   async #getIndex(productId) {
@@ -49,7 +28,8 @@ class ProductManager {
   }
 
   async getProducts() {
-    await this.#loadData()
+    const products = await this.loadDataFile()
+    this.productsList = products
     return this.productsList
   }
 
@@ -76,7 +56,7 @@ class ProductManager {
     const newProduct = new Products(++this.#lastID, fields)
     this.productsList.push(newProduct)
 
-    await this.#writeData()
+    await super.writeDataFile(this.productsList)
 
     return {
       status_code: SUCCESS.CREATED.STATUS,
@@ -97,7 +77,7 @@ class ProductManager {
     product.price = fields.price ?? product.price
     product.stock = fields.stock ?? product.stock
 
-    await this.#writeData()
+    await super.writeDataFile(this.productsList)
     return {
       status_code: SUCCESS.UPDATED.STATUS,
       itemUpdated: product
@@ -108,7 +88,7 @@ class ProductManager {
     const productIndex = await this.#getIndex(productId)
 
     const itemDeleted = this.productsList.splice(productIndex, 1)
-    await this.#writeData()
+    await super.writeDataFile(this.productsList)
 
     return {
       status_code: SUCCESS.DELETED.STATUS,
@@ -121,17 +101,17 @@ const PM = new ProductManager('./src/storage/products.json')
 
 // En caso de que sea necesario generar de nuevo los productos
 
-PM.reset()
+// PM.resetDataFile()
 
-for (let i = 1; i <= 10; i++) {
-  await PM.addProduct({
-    title: `producto ${i}`,
-    description: `Este es el producto de prueba n°${i}`,
-    price: i * 100,
-    thumbnail: `Imagen ${i}`,
-    code: `abc${i}`,
-    stock: i
-  })
-}
+// for (let i = 1; i <= 10; i++) {
+//   await PM.addProduct({
+//     title: `producto ${i}`,
+//     description: `Este es el producto de prueba n°${i}`,
+//     price: i * 100,
+//     thumbnail: `Imagen ${i}`,
+//     code: `abc${i}`,
+//     stock: i
+//   })
+// }
 
 export { PM }

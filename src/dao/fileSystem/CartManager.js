@@ -1,40 +1,36 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import fs from 'fs/promises'
-import { encryptID } from '../logic/cripto.js'
-import { ERRORS, SUCCESS } from './messages.js'
 import { PM } from './ProductManager.js'
-import { getMax } from '../logic/helpers.js'
 import { CartProducts, Carts } from './Cart.js'
+import { fileSystemManager } from './fileSystemManager.js'
+import { ERRORS, SUCCESS } from '../../mocks/messages.js'
+import { encryptID } from '../../logic/cripto.js'
+import { getMax } from '../../logic/helpers.js'
 
-class CartManager {
-  #path
+/* -------------------------------------------- */
+
+class CartManager extends fileSystemManager {
   #lastID
   constructor(path) {
-    this.#path = path
+    super(path)
+    this.cartsList = []
     this.#lastID = 0
+  }
+
+  async clearCart() {
+    await super.resetDataFile()
     this.cartsList = []
   }
 
-  async reset() {
-    await fs.writeFile(this.#path, '[]')
-    this.cartsList = []
+  async #loadCarts() {
+    const carts = await super.loadDataFile()
+    this.cartsList = [...carts]
   }
 
-  async #writeData() {
-    const json = JSON.stringify(this.cartsList, null, 2)
-    await fs.writeFile(this.#path, json)
-  }
-
-  async #loadData() {
-    const rawData = await fs.readFile(this.#path, 'utf-8')
-    if (rawData === '') {
-      this.cartsList = []
-      return
-    }
-    const data = JSON.parse(rawData)
-    this.cartsList = [...data]
+  async #getCarts() {
+    await this.#loadCarts()
+    return this.cartsList
   }
 
   async #getIndex(cartID) {
@@ -48,11 +44,6 @@ class CartManager {
     return cartIndex
   }
 
-  async #getCarts() {
-    await this.#loadData()
-    return this.cartsList
-  }
-
   async createCart() {
     await this.#getCarts()
 
@@ -61,7 +52,7 @@ class CartManager {
     const newCart = new Carts(++this.#lastID)
     this.cartsList.push(newCart)
 
-    this.#writeData()
+    await super.writeDataFile(this.cartsList)
 
     return {
       status_code: SUCCESS.CART_CREATED.STATUS,
@@ -107,7 +98,7 @@ class CartManager {
     if (productIndex !== -1) {
       ++cart.products[productIndex].quantity
 
-      await this.#writeData()
+      await super.writeDataFile(this.cartsList)
 
       return {
         status_code: SUCCESS.INCREASE_QUANTITY.STATUS,
@@ -119,7 +110,7 @@ class CartManager {
 
     cart.products.push(newCartProduct)
 
-    await this.#writeData()
+    await super.writeDataFile(this.cartsList)
 
     return {
       status_code: SUCCESS.CART_PRODUCT.STATUS,
@@ -131,7 +122,7 @@ class CartManager {
     const cartIndex = await this.#getIndex(cartID)
 
     const cartDeleted = this.cartsList.splice(cartIndex, 1)
-    await this.#writeData()
+    await super.writeDataFile(this.cartsList)
 
     return {
       status_code: SUCCESS.DELETED.STATUS,

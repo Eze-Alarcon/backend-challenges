@@ -1,7 +1,7 @@
 'use strict'
 
 import express, { Router } from 'express'
-import { CM } from '../mocks/CartManager.js'
+import { CM } from '../dao/fileSystem/CartManager.js'
 import { ERRORS } from '../mocks/messages.js'
 
 export const cartRouter = Router()

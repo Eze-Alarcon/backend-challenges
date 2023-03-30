@@ -1,7 +1,7 @@
 'use strict'
 
 import { Router } from 'express'
-import { PM } from '../mocks/ProductManager.js'
+import { PM } from '../dao/fileSystem/ProductManager.js'
 
 const RENDER_PATH = {
   STATIC: 'index.handlebars',

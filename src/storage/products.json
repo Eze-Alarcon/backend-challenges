@@ -108,5 +108,16 @@
     "thumbnail": "Imagen 10",
     "stock": 10,
     "code": "abc10"
+  },
+  {
+    "ref": 11,
+    "id": "a00862793a019beccf9af6f66575714bddbfbaa232a95938e47ec80d016b5ad1",
+    "title": "titulo updated",
+    "description": "Este es un producto de prueba",
+    "price": 1100,
+    "status": true,
+    "thumbnail": "Imagen 11",
+    "stock": 35000,
+    "code": "abc11"
   }
 ]
