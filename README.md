@@ -18,12 +18,11 @@ Pratica Integradora
 
 ✅ Crear sus respectivos schemas.
 
-- Separar los Managers de fileSystem de los managers de MongoDb en una sola carpeta 'dao'.
+✅ Separar los Managers de fileSystem de los managers de MongoDb en una sola carpeta 'dao'.
 
-  ✅ Dentro de dao, agregar también una carpeta 'models' donde vivirán los esquemas de MongoDB.
-  **La estructura deberá ser igual a la vista en esta clase**
+✅ Dentro de dao, agregar también una carpeta 'models' donde vivirán los esquemas de MongoDB.
 
-- Contener todos los Managers (FileSystem y DB) en una carpeta llamada 'Dao'
+✅ Contener todos los Managers (FileSystem y DB) en una carpeta llamada 'Dao'
 
 - Reajustar los servicios con el fin de que puedan funcionar con Mongoose en lugar de FileSystem
 
@@ -35,6 +34,10 @@ Pratica Integradora
   - El formato es: {user:correoDelUsuario, message: mensaje del usuario}
 
 - Corroborar la integridad del proyecto.
+
+### Extra **hacer**
+
+CartManager tiene una funcion extra sin utilidad.
 
 ## Testing
 

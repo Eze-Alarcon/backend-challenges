@@ -5,6 +5,7 @@
 import express from 'express'
 import { engine } from 'express-handlebars'
 import { Server } from 'socket.io'
+import mongoose from 'mongoose'
 
 // Routers
 import { productsRouter } from './routers/productsRouter.js'
@@ -14,8 +15,10 @@ import { viewsRouter } from './routers/viewsRouter.js'
 // Middlewares
 import { handleError } from './middleware/errors.js'
 import { socketHandle } from './middleware/socket.js'
+import { PORT } from './config/server.config.js'
+import { URL } from './config/database.config.js'
 
-const PORT = 8080
+await mongoose.connect(URL)
 
 const app = express()
 app.use('/static', express.static('./static'))
@@ -41,31 +44,3 @@ io.on('connection', async clientSocket => {
   console.log(`Nuevo cliente conectado: ${clientSocket.id}`)
   await socketHandle()
 })
-
-// import mongoose, { Schema } from 'mongoose'
-
-// const USER = 'tutorCoderhouse'
-// const PASS = 'tutorPassword'
-// const DB = 'ecommerce'
-
-// const url = `mongodb+srv://${USER}:${PASS}@coderhousecluster0.vsmyvjt.mongodb.net/${DB}`
-
-// await mongoose.connect(url)
-
-// const studentsSchema = new Schema({
-//   name: { type: String, required: true },
-//   age: { type: Number, min: 0 }
-// })
-
-// const students = mongoose.model('estudiantes', studentsSchema)
-
-// await students.deleteMany()
-
-// await students.create({
-//   name: 'ezequiel',
-//   age: 24
-// })
-
-// const allStudents = await students.find()
-
-// console.log(allStudents)

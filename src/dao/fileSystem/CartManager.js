@@ -2,8 +2,8 @@
 
 /* eslint space-before-function-paren: 0 */
 import { PM } from './ProductManager.js'
-import { CartProducts, Carts } from './Cart.js'
-import { fileSystemManager } from './fileSystemManager.js'
+import { fileSystemManager } from '../fileSystem/fileSystemManager.js'
+import { CartProducts, Carts } from '../../mocks/Cart.js'
 import { ERRORS, SUCCESS } from '../../mocks/messages.js'
 import { encryptID } from '../../logic/cripto.js'
 import { getMax } from '../../logic/helpers.js'
@@ -73,19 +73,19 @@ class CartManager extends fileSystemManager {
     }
   }
 
-  async getCartProductsById(cartID, productID) {
-    await this.#getCarts()
+  // async getCartProductsById(cartID, productID) {
+  //   await this.#getCarts()
 
-    const { cart } = await this.getCartById(cartID)
-    const { item } = await PM.getProductById(productID)
+  //   const { cart } = await this.getCartById(cartID)
+  //   const { item } = await PM.getProductById(productID)
 
-    const productIndex = cart.products.findIndex((el) => el.productRef === item.id)
+  //   const productIndex = cart.products.findIndex((el) => el.productRef === item.id)
 
-    return {
-      status_code: SUCCESS.GET_CART.STATUS,
-      productsList: cart.products[productIndex]
-    }
-  }
+  //   return {
+  //     status_code: SUCCESS.GET_CART.STATUS,
+  //     productsList: cart.products[productIndex]
+  //   }
+  // }
 
   async addProductToCart(cartID, productID) {
     await this.#getCarts()

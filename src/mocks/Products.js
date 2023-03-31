@@ -1,7 +1,7 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import { encryptID } from '../../logic/cripto.js'
+import { encryptID } from '../logic/cripto.js'
 
 export class Products {
   constructor(

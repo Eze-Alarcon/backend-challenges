@@ -1,7 +1,8 @@
 'use strict'
 /* eslint space-before-function-paren: 0 */
 import express, { Router } from 'express'
-import { PM } from '../dao/fileSystem/ProductManager.js'
+// import { PM } from '../dao/fileSystem/ProductManager.js'
+import { PM } from '../dao/mongo/product.manager.js'
 import { limitProducts } from '../logic/helpers.js'
 import { socketHandle } from '../middleware/socket.js'
 

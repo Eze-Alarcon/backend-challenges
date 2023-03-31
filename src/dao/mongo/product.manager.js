@@ -4,9 +4,9 @@
 import { validateInputs, searchMatch } from '../../logic/validations.js'
 import { ERRORS, SUCCESS } from '../../mocks/messages.js'
 import { Products } from '../../mocks/Products.js'
-import { encryptID } from '../../logic/cripto.js'
 import { getMax } from '../../logic/helpers.js'
 import { fileSystemManager } from '../fileSystem/fileSystemManager.js'
+import { PM_MONGO } from './database.manager.js'
 
 class ProductManager extends fileSystemManager {
   #lastID
@@ -16,29 +16,18 @@ class ProductManager extends fileSystemManager {
     this.productsList = []
   }
 
-  async #getIndex(productId) {
-    await this.getProducts()
-
-    const idToCompare = encryptID(productId)
-    const productIndex = this.productsList.findIndex((item) => item.id === idToCompare)
-
-    if (productIndex === -1) throw new Error(ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
-
-    return productIndex
-  }
-
   async getProducts() {
-    const products = await this.loadDataFile()
+    const products = await PM_MONGO.getItems()
     this.productsList = products
     return this.productsList
   }
 
-  async getProductById(productID) {
-    const productIndex = await this.#getIndex(productID)
-    const product = this.productsList[productIndex]
+  async getProductById(query) {
+    const product = await PM_MONGO.findItems(query)
+    if (product === null) throw new Error(ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
     return {
       status_code: SUCCESS.GET.STATUS,
-      item: product
+      item: product[0]
     }
   }
 
@@ -56,7 +45,7 @@ class ProductManager extends fileSystemManager {
     const newProduct = new Products(++this.#lastID, fields)
     this.productsList.push(newProduct)
 
-    await super.writeDataFile(this.productsList)
+    await PM_MONGO.createItem(newProduct)
 
     return {
       status_code: SUCCESS.CREATED.STATUS,
@@ -65,8 +54,8 @@ class ProductManager extends fileSystemManager {
   }
 
   async updateProduct(productId, fields) {
-    const productIndex = await this.#getIndex(productId)
-    const product = this.productsList[productIndex]
+    const response = await this.getProductById(productId)
+    const product = response.item
 
     const validate = await validateInputs(fields, { strict: false })
     if (validate.error) throw new Error(validate.status_code)
@@ -77,7 +66,8 @@ class ProductManager extends fileSystemManager {
     product.price = fields.price ?? product.price
     product.stock = fields.stock ?? product.stock
 
-    await super.writeDataFile(this.productsList)
+    console.log(product)
+    await PM_MONGO.updateItem(product)
     return {
       status_code: SUCCESS.UPDATED.STATUS,
       itemUpdated: product
@@ -85,33 +75,15 @@ class ProductManager extends fileSystemManager {
   }
 
   async deleteProduct(productId) {
-    const productIndex = await this.#getIndex(productId)
-
-    const itemDeleted = this.productsList.splice(productIndex, 1)
-    await super.writeDataFile(this.productsList)
+    await PM_MONGO.deleteItem(productId)
 
     return {
-      status_code: SUCCESS.DELETED.STATUS,
-      itemDeleted
+      status_code: SUCCESS.DELETED.STATUS
+      // itemDeleted
     }
   }
 }
 
 const PM = new ProductManager('./src/storage/products.json')
-
-// En caso de que sea necesario generar de nuevo los productos
-
-// PM.resetDataFile()
-
-// for (let i = 1; i <= 10; i++) {
-//   await PM.addProduct({
-//     title: `producto ${i}`,
-//     description: `Este es el producto de prueba n°${i}`,
-//     price: i * 100,
-//     thumbnail: `Imagen ${i}`,
-//     code: `abc${i}`,
-//     stock: i
-//   })
-// }
 
 export { PM }

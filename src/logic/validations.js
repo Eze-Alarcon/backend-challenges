@@ -133,8 +133,8 @@ export async function validateInputs(fields, options) {
 
 export function searchMatch(evalCode, arr) {
   try {
-    const matchId = arr.some((el) => el.code === evalCode)
-    if (matchId) throw new Error(ERRORS.FIELD_EXIST.ERROR_CODE)
+    const matchCode = arr.some((el) => el.code === evalCode)
+    if (matchCode) throw new Error(ERRORS.FIELD_EXIST.ERROR_CODE)
   } catch (err) {
     return { status_code: err.message, error: true }
   }
