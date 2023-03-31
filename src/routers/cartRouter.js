@@ -1,7 +1,8 @@
 'use strict'
 
 import express, { Router } from 'express'
-import { CM } from '../dao/fileSystem/CartManager.js'
+// import { CM } from '../dao/fileSystem/CartManager.js'
+import { CM } from '../dao/mongo/cart.manager.js'
 import { ERRORS } from '../mocks/messages.js'
 
 export const cartRouter = Router()
@@ -27,7 +28,7 @@ cartRouter
       res.status(response.status_code).json(
         {
           cart: response.cart,
-          length: response.totalProducts
+          totalProducts: response.totalProducts
         })
     } catch (error) {
       return next(error.message)
@@ -36,7 +37,7 @@ cartRouter
   .delete(async (req, res, next) => {
     try {
       const response = await CM.deleteCart(req.params.cid)
-      res.status(response.status_code).json({ cart_deleted: response.deleted })
+      res.status(response.status_code).json({ deleted: response.deleted, cart_deleted: response.carts_deleted })
     } catch (error) {
       return next(error.message)
     }

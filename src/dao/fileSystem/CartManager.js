@@ -23,13 +23,9 @@ class CartManager extends fileSystemManager {
     this.cartsList = []
   }
 
-  async #loadCarts() {
+  async #getCarts() {
     const carts = await super.loadDataFile()
     this.cartsList = [...carts]
-  }
-
-  async #getCarts() {
-    await this.#loadCarts()
     return this.cartsList
   }
 
@@ -72,20 +68,6 @@ class CartManager extends fileSystemManager {
       cart
     }
   }
-
-  // async getCartProductsById(cartID, productID) {
-  //   await this.#getCarts()
-
-  //   const { cart } = await this.getCartById(cartID)
-  //   const { item } = await PM.getProductById(productID)
-
-  //   const productIndex = cart.products.findIndex((el) => el.productRef === item.id)
-
-  //   return {
-  //     status_code: SUCCESS.GET_CART.STATUS,
-  //     productsList: cart.products[productIndex]
-  //   }
-  // }
 
   async addProductToCart(cartID, productID) {
     await this.#getCarts()

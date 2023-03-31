@@ -4,9 +4,9 @@
 import { encryptID } from '../logic/cripto.js'
 
 export class CartProducts {
-  constructor({ id, quantity }
+  constructor({ code, quantity }
   ) {
-    this.productRef = id
+    this.productCode = code
     this.quantity = quantity ?? 1
   }
 }

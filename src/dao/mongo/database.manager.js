@@ -1,8 +1,9 @@
 /* eslint-disable space-before-function-paren */
-import { productSchema } from '../models/products.schema.js'
-import { cartSchema } from '../models/cart.schema.js'
-import { messageSchema } from '../models/messages.schema.js'
 import mongoose from 'mongoose'
+import { productSchema } from './models/products.schema.js'
+import { cartSchema } from './models/cart.schema.js'
+import { messageSchema } from './models/messages.schema.js'
+import { ERRORS } from '../../mocks/messages.js'
 
 class databaseManager {
   #collection
@@ -13,7 +14,7 @@ class databaseManager {
   }
 
   validateObject(item) {
-    if (typeof (item) !== 'object' || Array.isArray(item)) throw new Error() // handle message error
+    if (typeof (item) !== 'object' || Array.isArray(item)) throw new Error(ERRORS.REQUIRED_OBJECT.ERROR_CODE)
   }
 
   parseResponse(item) {
@@ -25,9 +26,9 @@ class databaseManager {
     return data
   }
 
-  async findItems(params) {
-    const response = await mongoose.model(this.#collection, this.#schema).find({ code: params }).lean()
-    if (response.length === 0) return null
+  async findItems(query) {
+    const response = await mongoose.model(this.#collection, this.#schema).find(query).lean()
+    if (response.length === 0) throw new Error()
     const data = this.parseResponse(response)
     return data
   }
@@ -49,8 +50,9 @@ class databaseManager {
     return data
   }
 
-  async deleteItem(params) {
-    await mongoose.model(this.#collection, this.#schema).deleteOne({ code: params })
+  async deleteItem(query) {
+    const response = await mongoose.model(this.#collection, this.#schema).deleteOne(query)
+    return response
   }
 }
 
@@ -59,35 +61,48 @@ class ProductsDB extends databaseManager {
     super('products', productSchema)
   }
 
-  // async getProducts() {
-  //   const products = await super.getItems()
-  //   return products
-  // }
+  async findProductByID(productCode) {
+    try {
+      const query = { code: productCode }
+      const response = await super.findItems(query)
+      return response[0]
+    } catch (err) {
+      throw new Error(ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+    }
+  }
 
-  // async createProduct(item) {
-  //   const product = await super.createItem(item)
-  //   return product
-  // }
-
-  // async updateProduct(item) {
-  //   const product = await super.updateItem(item)
-  //   return product
-  // }
-
-  // async deleteProduct(itemID) {
-  //   await super.deleteItem()
-  // }
+  async deleteProduct(productCode) {
+    const query = { code: productCode }
+    const response = await super.deleteItem(query)
+    return response
+  }
 }
 
 class CartsDB extends databaseManager {
   constructor() {
-    super('products', cartSchema)
+    super('carts', cartSchema)
+  }
+
+  async findCartByID(cartRef) {
+    try {
+      const query = { ref: cartRef }
+      const response = await super.findItems(query)
+      return response[0]
+    } catch (err) {
+      throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
+    }
+  }
+
+  async deleteCart(cartRef) {
+    const query = { ref: cartRef }
+    const response = await super.deleteItem(query)
+    return response
   }
 }
 
 class MessagesDB extends databaseManager {
   constructor() {
-    super('products', messageSchema)
+    super('messages', messageSchema)
   }
 }
 

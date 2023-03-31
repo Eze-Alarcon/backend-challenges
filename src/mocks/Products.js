@@ -13,7 +13,7 @@ export class Products {
       price,
       status = true,
       stock = 0,
-      thumbnail // should be an array, fix in the next update
+      thumbnail
     }
   ) {
     this.ref = lastID

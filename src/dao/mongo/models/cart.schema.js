@@ -1,8 +1,8 @@
 import { Schema } from 'mongoose'
 
 const cartSchema = new Schema({
-  productRef: { type: String, required: true },
-  quantity: { type: Number, required: true }
+  ref: { type: String, required: true },
+  products: { type: Array }
 })
 
 export { cartSchema }

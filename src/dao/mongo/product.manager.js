@@ -2,16 +2,14 @@
 
 /* eslint space-before-function-paren: 0 */
 import { validateInputs, searchMatch } from '../../logic/validations.js'
-import { ERRORS, SUCCESS } from '../../mocks/messages.js'
+import { SUCCESS } from '../../mocks/messages.js'
 import { Products } from '../../mocks/Products.js'
 import { getMax } from '../../logic/helpers.js'
-import { fileSystemManager } from '../fileSystem/fileSystemManager.js'
 import { PM_MONGO } from './database.manager.js'
 
-class ProductManager extends fileSystemManager {
+class ProductManager {
   #lastID
-  constructor(path) {
-    super(path)
+  constructor() {
     this.#lastID = 0
     this.productsList = []
   }
@@ -23,11 +21,10 @@ class ProductManager extends fileSystemManager {
   }
 
   async getProductById(query) {
-    const product = await PM_MONGO.findItems(query)
-    if (product === null) throw new Error(ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+    const product = await PM_MONGO.findProductByID(query)
     return {
       status_code: SUCCESS.GET.STATUS,
-      item: product[0]
+      item: product
     }
   }
 
@@ -66,7 +63,6 @@ class ProductManager extends fileSystemManager {
     product.price = fields.price ?? product.price
     product.stock = fields.stock ?? product.stock
 
-    console.log(product)
     await PM_MONGO.updateItem(product)
     return {
       status_code: SUCCESS.UPDATED.STATUS,
@@ -75,15 +71,15 @@ class ProductManager extends fileSystemManager {
   }
 
   async deleteProduct(productId) {
-    await PM_MONGO.deleteItem(productId)
+    const itemDeleted = await PM_MONGO.deleteProduct(productId)
 
     return {
-      status_code: SUCCESS.DELETED.STATUS
-      // itemDeleted
+      status_code: SUCCESS.DELETED.STATUS,
+      itemDeleted
     }
   }
 }
 
-const PM = new ProductManager('./src/storage/products.json')
+const PM = new ProductManager()
 
 export { PM }
