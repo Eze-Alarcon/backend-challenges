@@ -104,6 +104,20 @@ class MessagesDB extends databaseManager {
   constructor() {
     super('messages', messageSchema)
   }
+
+  async createMessage(item) {
+    console.log(item)
+    if (item.message.trim() === '' || item.user.trim() === '') throw new Error(ERRORS.WRONG_INPUT.ERROR_CODE)
+    super.createItem(item)
+  }
+
+  async findMessageByUser(messageID) {
+    // do something
+  }
+
+  async deleteMessage(messageID) {
+    // do something
+  }
 }
 
 const PM_MONGO = new ProductsDB()

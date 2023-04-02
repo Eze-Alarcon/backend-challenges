@@ -17,6 +17,7 @@ import { handleError } from './middleware/errors.js'
 import { socketHandle } from './middleware/socket.js'
 import { PORT } from './config/server.config.js'
 import { URL } from './config/database.config.js'
+import { messageRouter } from './routers/messageRouter.js'
 
 await mongoose.connect(URL)
 
@@ -26,8 +27,9 @@ app.use('/static', express.static('./static'))
 app.engine('handlebars', engine())
 app.set('views', './views')
 
-app.use('/api/products', productsRouter)
-app.use('/api/cart', cartRouter)
+app.use('/api/v1/products', productsRouter)
+app.use('/api/v1/cart', cartRouter)
+app.use('/api/v1/messages', messageRouter)
 app.use('/', viewsRouter)
 app.use(handleError)
 

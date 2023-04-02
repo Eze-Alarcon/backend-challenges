@@ -1,11 +1,13 @@
 'use strict'
 
 import { Router } from 'express'
-import { PM } from '../dao/fileSystem/ProductManager.js'
+import { PM } from '../dao/mongo/product.manager.js'
+import { MM } from '../dao/mongo/messages.manager.js'
 
 const RENDER_PATH = {
   STATIC: 'index.handlebars',
-  DINAMIC: 'realTimeProducts.handlebars'
+  REAL_TIME_PRODUCTS: 'realTimeProducts.handlebars',
+  MESSAGES: 'chat.handlebars'
 }
 
 export const viewsRouter = Router()
@@ -29,11 +31,24 @@ viewsRouter
     try {
       const productList = await PM.getProducts()
 
-      res.render(RENDER_PATH.DINAMIC, {
+      res.render(RENDER_PATH.REAL_TIME_PRODUCTS, {
         headerTitle: 'Home | Products',
         mainTitle: 'List of products in Real Time',
         list: [...productList],
         showList: productList.length > 0
+      })
+    } catch (error) {
+      return next(error.message)
+    }
+  })
+  .get('/messages', async (req, res, next) => {
+    try {
+      const messages = await MM.getMessages()
+      console.log(messages)
+
+      res.render(RENDER_PATH.MESSAGES, {
+        headerTitle: 'Home | Products',
+        mainTitle: 'List of messages'
       })
     } catch (error) {
       return next(error.message)

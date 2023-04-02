@@ -24,20 +24,16 @@ Pratica Integradora
 
 ✅ Contener todos los Managers (FileSystem y DB) en una carpeta llamada 'Dao'
 
-- Reajustar los servicios con el fin de que puedan funcionar con Mongoose en lugar de FileSystem
+✅ Reajustar los servicios con el fin de que puedan funcionar con Mongoose en lugar de FileSystem
 
-- NO ELIMINAR FileSystem de tu proyecto.
+✅ NO ELIMINAR FileSystem de tu proyecto.
 
-- Implementar una vista nueva en handlebars llamada chat.handlebars, la cual permita implementar un chat como el visto en clase.
+- Implementar una vista nueva en handlebars llamada chat.handlebars, la cual permita implementar un chat.
 
-  - Los mensajes deberán guardarse en una colección 'messages' en mongo (no es necesario implementarlo en FileSystem).
+  - Los mensajes deberán guardarse en una colección 'messages' en mongo.
   - El formato es: {user:correoDelUsuario, message: mensaje del usuario}
 
 - Corroborar la integridad del proyecto.
-
-### Extra **hacer**
-
-CartManager tiene una funcion extra sin utilidad.
 
 ## Testing
 

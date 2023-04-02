@@ -182,10 +182,19 @@ const CARTS_SUCCESS = {
   }
 }
 
+const MESSAGES_ERRORS = {
+  WRONG_INPUT: {
+    MESSAGE: "Empty fields",
+    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
+    ERROR_CODE: "WRONG_INPUT"
+  }
+}
+
 const ERRORS = {
   ...PRODUCTS_ERRORS,
   ...CARTS_ERROR,
-  ...SERVER_ERROR
+  ...SERVER_ERROR,
+  ...MESSAGES_ERRORS
 }
 
 const SUCCESS = {
