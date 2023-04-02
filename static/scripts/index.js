@@ -34,7 +34,6 @@ const template = `
 const compileTemplate = Handlebars.compile(template)
 
 serverSocket.on('updateList', data => {
-  // console.log(data)
   if (container !== null) {
     container.innerHTML = compileTemplate({
       headerTitle: 'Home | Products',

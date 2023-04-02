@@ -54,6 +54,11 @@ class databaseManager {
     const response = await mongoose.model(this.#collection, this.#schema).deleteOne(query)
     return response
   }
+
+  async deleteAll() {
+    const response = await mongoose.model(this.#collection, this.#schema).deleteMany()
+    return response
+  }
 }
 
 class ProductsDB extends databaseManager {
@@ -106,17 +111,13 @@ class MessagesDB extends databaseManager {
   }
 
   async createMessage(item) {
-    console.log(item)
     if (item.message.trim() === '' || item.user.trim() === '') throw new Error(ERRORS.WRONG_INPUT.ERROR_CODE)
     super.createItem(item)
   }
 
-  async findMessageByUser(messageID) {
-    // do something
-  }
-
-  async deleteMessage(messageID) {
-    // do something
+  async deleteMessage() {
+    const response = super.deleteAll()
+    return response
   }
 }
 

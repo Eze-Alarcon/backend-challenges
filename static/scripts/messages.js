@@ -1,12 +1,24 @@
 /* eslint-disable space-before-function-paren */
 /* eslint-disable no-undef */
-// const serverSocket = io('http://localhost:8080')
+const serverSocket = io('http://localhost:8080')
 
-// const container = document.getElementById('messagesContainer') ?? null
 const form = document.getElementById('formContainer')
+const messagesContainer = document.getElementById('messagesContainer')
 const submitter = document.getElementById('formButton')
+const deleteBtn = document.getElementById('deleteButton')
 
-if (form instanceof HTMLFormElement) {
+if (deleteBtn instanceof HTMLButtonElement) {
+  deleteBtn.addEventListener('click', handleDelete)
+
+  function handleDelete(event) {
+    event.preventDefault()
+    fetch('/api/v1/messages', {
+      method: 'DELETE'
+    })
+  }
+}
+
+if (form instanceof HTMLFormElement && submitter instanceof HTMLButtonElement) {
   form.addEventListener('submit', handleSubmit)
 
   function handleSubmit(event) {
@@ -25,30 +37,27 @@ if (form instanceof HTMLFormElement) {
   }
 }
 
-// 🔴 eliminar el componente por una simple lista
-// 🔴 implementar el tema del if en handlebars para mostrar o no mensajes (depediendo si hay o no)
-// 🔴 implementar socket en esta seccion
+const template = `
+{{#if showList}}
+    {{#each list}}
+      <li><div>
+        <p><italic>{{this.user}}</italic>: {{this.message}}</p>
+      </div></li>
+    {{/each}}
+  {{else}}
+    <p>No hay mensajes</p>
+  {{/if}}
+`
 
-// const template = `
-// <div class="card" style="width: 18rem;">
-//   <div class="card-body">
-//     <h5 class="card-title">Usuario</h5>
-//     <p class="card-text">Insertar mensaje</p>
-//     <a href="#" class="card-link">Eliminar mensaje</a>
-//   </div>
-// </div>
-// `
+const compileTemplate = Handlebars.compile(template)
 
-// const compileTemplate = Handlebars.compile(template)
-
-// serverSocket.on('updateList', data => {
-//   // console.log(data)
-//   if (container !== null) {
-//     container.innerHTML = compileTemplate({
-//       headerTitle: 'Messages',
-//       mainTitle: 'List of messages in Real Time',
-//       list: data.list,
-//       showList: data.showList
-//     })
-//   }
-// })
+serverSocket.on('messagesList', data => {
+  if (messagesContainer !== null) {
+    messagesContainer.innerHTML = compileTemplate({
+      headerTitle: 'Messages',
+      mainTitle: 'Chat in Real Time',
+      list: data.list,
+      showList: data.showList
+    })
+  }
+})

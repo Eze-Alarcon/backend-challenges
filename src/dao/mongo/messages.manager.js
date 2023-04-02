@@ -6,40 +6,25 @@ import { Message } from '../../mocks/Message.class.js'
 import { MM_MONGO } from './database.manager.js'
 
 class MessageManager {
-  constructor() {
-    this.messageList = []
-  }
-
   async getMessages() {
     const messages = await MM_MONGO.getItems()
-    this.messageList = messages
-    return this.messageList
-  }
-
-  async getMessageById(query) {
-    const message = await MM_MONGO.findMessageByUser(query)
-    return {
-      status_code: SUCCESS.GET.STATUS,
-      item: message
-    }
+    return messages
   }
 
   async addMessage(fields) {
-    await this.getMessages()
+    const createMessage = new Message({ user: fields.user, message: fields.message })
+    const newMessage = createMessage.getMessage()
 
-    const newMessage = new Message({ user: fields.user, message: fields.message })
-    this.messageList.push(newMessage.getMessage())
-
-    await MM_MONGO.createMessage(newMessage.getMessage())
+    await MM_MONGO.createMessage(newMessage)
 
     return {
       status_code: SUCCESS.CREATED.STATUS,
-      productAdded: newMessage
+      messageAdded: newMessage
     }
   }
 
-  async deleteProduct(messageID) {
-    const itemDeleted = await MM_MONGO.deleteMessage(messageID)
+  async deleteMessages() {
+    const itemDeleted = await MM_MONGO.deleteMessage()
 
     return {
       status_code: SUCCESS.DELETED.STATUS,

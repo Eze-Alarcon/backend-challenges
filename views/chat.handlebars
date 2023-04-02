@@ -20,10 +20,12 @@
       rows='3'
     ></textarea>
   </div>
+  <button type='button' class='btn btn-danger' id='deleteButton'>Delete messages</button>
   <button type='submit' id='formButton' class='btn btn-primary'>Enviar</button>
 </form>
 
-<div id='messagesContainer'></div>
+<ul id='messagesContainer'>
+</ul>
 
 <script src='/socket.io/socket.io.js'></script>
 <script src='/static/scripts/messages.js'></script>

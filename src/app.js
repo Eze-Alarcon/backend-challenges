@@ -14,7 +14,7 @@ import { viewsRouter } from './routers/viewsRouter.js'
 
 // Middlewares
 import { handleError } from './middleware/errors.js'
-import { socketHandle } from './middleware/socket.js'
+import { handleMessageSocket, socketHandle } from './middleware/socket.js'
 import { PORT } from './config/server.config.js'
 import { URL } from './config/database.config.js'
 import { messageRouter } from './routers/messageRouter.js'
@@ -45,4 +45,5 @@ export const io = new Server(server)
 io.on('connection', async clientSocket => {
   console.log(`Nuevo cliente conectado: ${clientSocket.id}`)
   await socketHandle()
+  await handleMessageSocket()
 })

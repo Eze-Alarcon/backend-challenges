@@ -28,25 +28,11 @@ Pratica Integradora
 
 ✅ NO ELIMINAR FileSystem de tu proyecto.
 
-- Implementar una vista nueva en handlebars llamada chat.handlebars, la cual permita implementar un chat.
+✅ Implementar una vista nueva en handlebars llamada chat.handlebars, la cual permita implementar un chat.
 
-  - Los mensajes deberán guardarse en una colección 'messages' en mongo.
-  - El formato es: {user:correoDelUsuario, message: mensaje del usuario}
+✅ Los mensajes deberán guardarse en una colección 'messages' en mongo.
+✅ El formato es: {user:correoDelUsuario, message: mensaje del usuario}
 
-- Corroborar la integridad del proyecto.
+✅ Corroborar la integridad del proyecto.
 
 ## Testing
-
-Se instalará y correrá el servidor en el puerto indicado.
-
-- El servidor debe levantarse sin problema.
-
-Se abrirá la ruta raíz
-
-- Debe visualizarse el contenido de la vista index.handlebars
-- No se debe activar el websocket aún.
-
-Se buscará en la url del navegador la ruta '/realtimeproducts'.
-
-- Se corroborará que el servidor haya conectado con el cliente, en la consola del servidor deberá mostrarse un mensaje de 'cliente conectado'.
-- Se debe mostrar la lista de productos y se corroborará que se esté enviando desde websocket.
