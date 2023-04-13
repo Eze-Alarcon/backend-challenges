@@ -1,13 +1,12 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import { ERRORS, SUCCESS } from '../mocks/messages.js'
+import { ERRORS, SUCCESS } from './errors.messages.js'
 
 function validateObject(fields, strict) {
-  if (fields === null || fields === undefined || typeof (fields) !== 'object') {
-    if (!strict) {
-      throw new Error(ERRORS.UPDATE_MORE_FIELDS.ERROR_CODE)
-    }
+  if (fields === null || typeof (fields) !== 'object' || Array.isArray(fields)) {
+    if (!strict) throw new Error(ERRORS.UPDATE_MORE_FIELDS.ERROR_CODE)
+
     throw new Error(ERRORS.REQUIRED_FIELDS.ERROR_CODE)
   }
   return SUCCESS.OBJECT_RECEIVED.STATUS
@@ -27,6 +26,7 @@ function estrictInputs(fields) {
   if (description === undefined || description === null) {
     throw new Error(ERRORS.EMPTY_DESCRIPTION.ERROR_CODE)
   }
+
   if (typeof (description) !== 'string') {
     throw new Error(ERRORS.FIELD_DESCRIPTION.ERROR_CODE)
   }
@@ -34,6 +34,7 @@ function estrictInputs(fields) {
   if (thumbnail === undefined || thumbnail === null) {
     throw new Error(ERRORS.EMPTY_THUMBNAIL.ERROR_CODE)
   }
+
   if (typeof (thumbnail) !== 'string') {
     throw new Error(ERRORS.FIELD_THUMBNAIL.ERROR_CODE)
   }
@@ -41,6 +42,7 @@ function estrictInputs(fields) {
   if (title === undefined || title === null) {
     throw new Error(ERRORS.EMPTY_TITLE.ERROR_CODE)
   }
+
   if (typeof (title) !== 'string') {
     throw new Error(ERRORS.FIELD_TITLE.ERROR_CODE)
   }
@@ -48,6 +50,7 @@ function estrictInputs(fields) {
   if (price === undefined || price === null) {
     throw new Error(ERRORS.EMPTY_PRICE.ERROR_CODE)
   }
+
   if (typeof (price) !== 'number') {
     throw new Error(ERRORS.FIELD_PRICE.ERROR_CODE)
   }
@@ -112,18 +115,11 @@ function looseInputs(fields) {
   }
 }
 
-export async function validateInputs(fields, options) {
-  try {
-    validateObject(fields, options.strict)
+export function validateInputs(fields, strictValidation = false) {
+  validateObject(fields, strictValidation)
 
-    if (options.strict) estrictInputs(fields)
-    if (!options.strict) looseInputs(fields)
-  } catch (err) {
-    return {
-      status_code: err.message,
-      error: true
-    }
-  }
+  if (strictValidation) estrictInputs(fields)
+  else looseInputs(fields)
 
   return {
     status_code: SUCCESS.FIELDS.STATUS,
@@ -131,16 +127,7 @@ export async function validateInputs(fields, options) {
   }
 }
 
-export function searchMatch(evalCode, arr) {
-  try {
-    const matchCode = arr.some((el) => el.code === evalCode)
-    if (matchCode) throw new Error(ERRORS.FIELD_EXIST.ERROR_CODE)
-  } catch (err) {
-    return { status_code: err.message, error: true }
-  }
-
-  return {
-    status_code: SUCCESS.FIELD.STATUS,
-    error: false
-  }
+export function searchMatch(id, arr) {
+  const matchCode = arr.some((el) => el.code === id)
+  if (matchCode) throw new Error(ERRORS.FIELD_EXIST.ERROR_CODE)
 }

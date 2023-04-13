@@ -1,10 +1,6 @@
 'use strict'
-/* eslint space-before-function-paren: 0 */
 import express, { Router } from 'express'
-// import { PM } from '../dao/fileSystem/ProductManager.js'
-import { PM } from '../dao/mongo/product.manager.js'
-import { limitProducts } from '../logic/helpers.js'
-import { socketHandle } from '../middleware/socket.js'
+import { PM as productManager } from '../mongo/product.manager.js'
 
 export const productsRouter = Router()
 
@@ -14,7 +10,7 @@ productsRouter
   .route('/:pid')
   .get(async (req, res, next) => {
     try {
-      const response = await PM.getProductById(req.params.pid)
+      const response = await productManager.getProductById(req.params.pid)
       res.status(response.status_code).json(response.item)
     } catch (error) {
       return next(error.message)
@@ -22,8 +18,7 @@ productsRouter
   })
   .put(async (req, res, next) => {
     try {
-      const response = await PM.updateProduct(req.params.pid, req.body)
-      await socketHandle()
+      const response = await productManager.updateProduct(req.params.pid, req.body)
 
       res.status(response.status_code).json(response.itemUpdated)
     } catch (error) {
@@ -32,8 +27,7 @@ productsRouter
   })
   .delete(async (req, res, next) => {
     try {
-      const response = await PM.deleteProduct(req.params.pid)
-      await socketHandle()
+      const response = await productManager.deleteProduct(req.params.pid)
 
       res.status(response.status_code).json({ product_deleted: response.itemDeleted })
     } catch (error) {
@@ -43,29 +37,48 @@ productsRouter
 
 productsRouter
   .route('/')
+  // Deberá poder recibir por query params un limit (opcional), una page (opcional), un sort (opcional) y un query (opcional)
   .get(async (req, res, next) => {
-    if (req.query.limit === undefined &&
-      req.query.page === undefined
-    ) return next()
+    // if (
+    //   req.query.limit === undefined &&
+    //   req.query.page === undefined
+    // ) return next()
     try {
-      const allProducts = await PM.getProducts()
-      const list = limitProducts(allProducts, req.query.limit, req.query.page)
-      res.json({ ...list })
+      const products = await productManager.getProducts(req.query)
+      res.json({
+        payload: products
+        // status,
+        // totalPages,
+        // prevPage,
+        // nextPage,
+        // page,
+        // hasPrevPage,
+        // hasNextPage,
+        // prevLink,
+        // nextLink
+      })
+
+      /*
+        {
+          status: success/error
+          payload: Resultado de los productos solicitados
+          totalPages: Total de páginas
+          prevPage: Página anterior
+          nextPage: Página siguiente
+          page: Página actual
+          hasPrevPage: Indicador para saber si la página previa existe
+          hasNextPage: Indicador para saber si la página siguiente existe.
+          prevLink: Link directo a la página previa (null si hasPrevPage=false)
+          nextLink: Link directo a la página siguiente (null si hasNextPage=false)
+        }
+      */
     } catch (error) {
       return next(error.message)
     }
   })
-  .get(async (req, res) => {
-    const response = await PM.getProducts()
-    res.json({
-      lenght: response.length,
-      products: response
-    })
-  })
   .post(async (req, res, next) => {
     try {
-      const response = await PM.addProduct(req.body)
-      await socketHandle()
+      const response = await productManager.addProduct(req.body)
       res.status(response.status_code).json(response.productAdded)
     } catch (error) {
       return next(error.message)

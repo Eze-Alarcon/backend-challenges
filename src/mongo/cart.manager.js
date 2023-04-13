@@ -1,9 +1,9 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import { CartProducts, Carts } from '../../mocks/Cart.js'
-import { SUCCESS } from '../../mocks/messages.js'
-import { getMax } from '../../logic/helpers.js'
+import { CartProducts, Carts } from '../mocks/Cart.class.js'
+import { SUCCESS } from '../helpers//messages.js'
+import { getMax } from '../helpers/getMax.js'
 import { CM_MONGO, PM_MONGO } from './database.manager.js'
 
 /* -------------------------------------------- */

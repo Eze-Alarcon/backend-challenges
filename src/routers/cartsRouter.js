@@ -1,30 +1,29 @@
 'use strict'
 
 import express, { Router } from 'express'
-// import { CM } from '../dao/fileSystem/CartManager.js'
-import { CM } from '../dao/mongo/cart.manager.js'
-import { ERRORS } from '../mocks/messages.js'
+import { CM as cartManager } from '../mongo/cart.manager.js'
+import { ERRORS } from '../helpers/errors.messages.js'
 
-export const cartRouter = Router()
+export const cartsRouter = Router()
 
-cartRouter.use(express.json())
+cartsRouter.use(express.json())
 
-cartRouter
+cartsRouter
   .route('/:cid/product/:pid')
   .post(async (req, res, next) => {
     try {
-      const response = await CM.addProductToCart(req.params.cid, req.params.pid)
+      const response = await cartManager.addProductToCart(req.params.cid, req.params.pid)
       res.status(response.status_code).json(response.productAdded)
     } catch (error) {
       return next(error.message)
     }
   })
 
-cartRouter
+cartsRouter
   .route('/:cid')
   .get(async (req, res, next) => {
     try {
-      const response = await CM.getCartById(req.params.cid)
+      const response = await cartManager.getCartById(req.params.cid)
       res.status(response.status_code).json(
         {
           cart: response.cart,
@@ -36,18 +35,18 @@ cartRouter
   })
   .delete(async (req, res, next) => {
     try {
-      const response = await CM.deleteCart(req.params.cid)
+      const response = await cartManager.deleteCart(req.params.cid)
       res.status(response.status_code).json({ deleted: response.deleted, cart_deleted: response.carts_deleted })
     } catch (error) {
       return next(error.message)
     }
   })
 
-cartRouter
+cartsRouter
   .route('/')
   .post(async (req, res, next) => {
     try {
-      const response = await CM.createCart()
+      const response = await cartManager.createCart()
       res.status(response.status_code).json(response.cart)
     } catch (error) {
       return next(error.message)

@@ -1,46 +1,49 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import { validateInputs, searchMatch } from '../../logic/validations.js'
-import { SUCCESS } from '../../mocks/messages.js'
-import { Products } from '../../mocks/Products.js'
-import { getMax } from '../../logic/helpers.js'
+import { validateInputs, searchMatch } from '../helpers/validations.js'
+import { SUCCESS } from '../helpers/errors.messages.js'
+import { getMax } from '../helpers/getMax.js'
 import { PM_MONGO } from './database.manager.js'
+import { Product } from '../classes/product.class.js'
 
 class ProductManager {
   #lastID
+  #productsList
   constructor() {
     this.#lastID = 0
-    this.productsList = []
+    this.#productsList = []
   }
 
-  async getProducts() {
-    const products = await PM_MONGO.getItems()
-    this.productsList = products
-    return this.productsList
+  async getProducts(options) {
+    const products = await PM_MONGO.getItems(options)
+    this.#productsList = products.docs
+    return {
+      status_code: SUCCESS.GET.STATUS,
+      products
+    }
   }
 
   async getProductById(query) {
-    const product = await PM_MONGO.findProductByID(query)
+    const product = await PM_MONGO.getItems(query)
     return {
       status_code: SUCCESS.GET.STATUS,
-      item: product
+      item: product.docs
     }
   }
 
   async addProduct(fields) {
-    const validate = await validateInputs(fields, { strict: true })
-    if (validate.error) throw new Error(validate.status_code)
+    const strictValidation = true
+    validateInputs(fields, strictValidation)
 
     await this.getProducts()
 
-    const match = searchMatch(fields.code, this.productsList)
-    if (match.error) throw new Error(match.status_code)
+    searchMatch(fields.id, this.#productsList)
 
-    this.#lastID = getMax(this.productsList)
+    this.#lastID = getMax(this.#productsList)
 
-    const newProduct = new Products(++this.#lastID, fields)
-    this.productsList.push(newProduct)
+    const newProduct = new Product({ ...fields, id: ++this.#lastID })
+    this.#productsList.push(newProduct)
 
     await PM_MONGO.createItem(newProduct)
 
@@ -51,11 +54,10 @@ class ProductManager {
   }
 
   async updateProduct(productId, fields) {
-    const response = await this.getProductById(productId)
-    const product = response.item
+    const { item } = await this.getProductById(productId)
+    const product = item // ver si llegan otros mas y sino probar con item[0]
 
-    const validate = await validateInputs(fields, { strict: false })
-    if (validate.error) throw new Error(validate.status_code)
+    validateInputs(fields)
 
     product.description = fields.description ?? product.description
     product.thumbnail = fields.thumbnail ?? product.thumbnail

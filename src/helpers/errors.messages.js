@@ -90,7 +90,7 @@ const PRODUCTS_ERRORS = {
     ERROR_CODE: "FIELD_CODE_EXIST"
   },
   FIELD_EXIST: {
-    MESSAGE: "[ERROR]: There is a product with the same Code",
+    MESSAGE: "[ERROR]: There is a product with the same ID",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
     ERROR_CODE: "FIELD_EXIST"
   },

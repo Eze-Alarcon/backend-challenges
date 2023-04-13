@@ -1,6 +1,6 @@
 'use strict'
 /* eslint space-before-function-paren: 0 */
-import { ERRORS } from '../mocks/messages.js'
+import { ERRORS } from '../helpers/errors.messages.js'
 
 export function handleError(error, req, res, next) {
   try {
