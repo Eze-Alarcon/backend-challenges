@@ -51,26 +51,30 @@ class ProductManager {
   }
 
   async updateProduct(productID, fields) {
-    const { item } = await this.getProductById(productID)
-    const product = item // ver si llegan otros mas y sino probar con item[0]
+    const query = { id: productID }
+    const { item } = await this.getProductById(query)
 
     validateInputs(fields)
 
-    product.description = fields.description ?? product.description
-    product.thumbnail = fields.thumbnail ?? product.thumbnail
-    product.title = fields.title ?? product.title
-    product.price = fields.price ?? product.price
-    product.stock = fields.stock ?? product.stock
+    const newProduct = {
+      description: fields.description ?? item.description,
+      thumbnail: fields.thumbnail ?? item.thumbnail,
+      title: fields.title ?? item.title,
+      price: fields.price ?? item.price,
+      stock: fields.stock ?? item.stock
+    }
 
-    await PM_MONGO.updateItem(product)
+    await PM_MONGO.updateProduct(query, newProduct)
     return {
       status_code: SUCCESS.UPDATED.STATUS,
-      itemUpdated: product
+      itemUpdated: newProduct
     }
   }
 
-  async deleteProduct(productId) {
-    const itemDeleted = await PM_MONGO.deleteProduct(productId)
+  async deleteProduct(productID) {
+    const query = { id: productID }
+
+    const itemDeleted = await PM_MONGO.deleteProduct(query)
 
     return {
       status_code: SUCCESS.DELETED.STATUS,

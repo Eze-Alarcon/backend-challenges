@@ -12,6 +12,7 @@ productsRouter
     try {
       const { pid: id } = req.params
       const response = await productManager.getProductById({ id })
+
       res.status(response.status_code).json({ product: response.item })
     } catch (error) {
       return next(error.message)

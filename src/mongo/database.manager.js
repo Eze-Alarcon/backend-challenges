@@ -3,25 +3,16 @@ import { productModel } from './models/products.schema.js'
 import { cartModel } from './models/cart.schema.js'
 import { ERRORS } from '../helpers/errors.messages.js'
 
-// ===== DB Manager =====
-
-class databaseManager {
-  validateObject(item) {
-    if (typeof (item) !== 'object' || Array.isArray(item)) throw new Error(ERRORS.REQUIRED_OBJECT.ERROR_CODE)
-  }
-
-  parseResponse(item) {
-    return JSON.parse(JSON.stringify(item))
-  }
-}
-
 // ===== Products DB Manager =====
 
-class ProductsDB extends databaseManager {
+class ProductsDB {
   #model
   constructor(model) {
-    super()
     this.#model = model
+  }
+
+  #parseResponse(item) {
+    return JSON.parse(JSON.stringify(item))
   }
 
   #handleQueries(options) {
@@ -71,33 +62,36 @@ class ProductsDB extends databaseManager {
   async findItems(query) {
     const response = await this.#model.find(query).lean()
     if (response.length === 0) throw new Error()
-    const data = super.parseResponse(response)
+    const data = this.#parseResponse(response)
     return data
   }
 
   async createProduct(item) {
     try {
       const response = await this.#model.create(item)
-      const data = super.parseResponse(response)
+      const data = this.#parseResponse(response)
       return data
     } catch (err) {
       console.log(err)
     }
   }
 
-  async deleteProduct(productCode) {
-    const query = { code: productCode }
-    const response = await super.deleteItem(query)
+  async updateProduct({ id }, updates) {
+    const data = await this.#model.updateOne({ id }, updates)
+    return data
+  }
+
+  async deleteProduct({ id }) {
+    const response = await this.#model.deleteOne(id)
     return response
   }
 }
 
 // ===== Cart DB manager =====
 
-class CartsDB extends databaseManager {
+class CartsDB {
   #model
   constructor(model) {
-    super()
     this.#model = model
   }
 

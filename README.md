@@ -39,7 +39,7 @@ Desafios del curso de coderhouse
 
 ## Aspectos a incluir
 
-**Metodo GET**
+**Metodo GET ✅**
 
 Con base en nuestra implementación actual de productos, modificar el método GET / para que cumpla con los siguientes puntos:
 
@@ -72,7 +72,7 @@ El método GET deberá devolver un objeto con el siguiente formato:
 }
 ```
 
-  - Se deberá poder buscar productos por categoría o por disponibilidad, y se deberá poder realizar un ordenamiento de estos productos de manera ascendente o descendente por precio.
+  - Se deberá poder buscar productos por categoría o por disponibilidad, y se deberá poder realizar un ordenamiento de estos productos de manera ascendente o descendente por precio. **🔴 falta la parte de disponibilidad q ni idea que es**
 
 **Router del cart**
 
