@@ -15,9 +15,9 @@ class ProductManager {
     this.#productsList = []
   }
 
-  async getProducts(options) {
+  async getProducts(options = {}) {
     const products = await PM_MONGO.getItems(options)
-    this.#productsList = products.docs
+    this.#productsList = [...products.payload]
     return {
       status_code: SUCCESS.GET.STATUS,
       products
@@ -28,7 +28,7 @@ class ProductManager {
     const product = await PM_MONGO.getItems(query)
     return {
       status_code: SUCCESS.GET.STATUS,
-      item: product.docs
+      item: product.payload[0]
     }
   }
 
@@ -38,14 +38,11 @@ class ProductManager {
 
     await this.getProducts()
 
-    searchMatch(fields.id, this.#productsList)
-
+    searchMatch(++this.#lastID, this.#productsList)
     this.#lastID = getMax(this.#productsList)
 
     const newProduct = new Product({ ...fields, id: ++this.#lastID })
-    this.#productsList.push(newProduct)
-
-    await PM_MONGO.createItem(newProduct)
+    await PM_MONGO.createProduct(newProduct)
 
     return {
       status_code: SUCCESS.CREATED.STATUS,
@@ -53,8 +50,8 @@ class ProductManager {
     }
   }
 
-  async updateProduct(productId, fields) {
-    const { item } = await this.getProductById(productId)
+  async updateProduct(productID, fields) {
+    const { item } = await this.getProductById(productID)
     const product = item // ver si llegan otros mas y sino probar con item[0]
 
     validateInputs(fields)

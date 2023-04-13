@@ -7,8 +7,8 @@ export class Product {
     id,
     title,
     description,
-    code,
     price,
+    code,
     status = true,
     stock = 0,
     thumbnail = []

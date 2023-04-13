@@ -7,9 +7,9 @@ export function handleError(error, req, res, next) {
     const { STATUS, MESSAGE } = ERRORS[error]
 
     return res.status(STATUS).json({ message: MESSAGE })
-  } catch (error) {
+  } catch (err) {
     const { STATUS, MESSAGE } = ERRORS.SERVER_ERROR
-    console.log(error)
+    console.log('log de error en el erros.js', err)
     return res.status(STATUS).json({ message: MESSAGE })
   }
 }

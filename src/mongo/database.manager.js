@@ -25,7 +25,12 @@ class ProductsDB extends databaseManager {
   }
 
   #handleQueries(options) {
-    const pageOptions = { limit: options.limit || 10, page: options.page || 1, sort: { price: null } }
+    const pageOptions = {
+      limit: options.limit || 10,
+      page: options.page || 1,
+      sort: { price: null },
+      projection: { _id: 0 }
+    }
     const pageQuery = {}
 
     for (const [key, value] of Object.entries(options)) {
@@ -44,8 +49,20 @@ class ProductsDB extends databaseManager {
   async getItems(options) {
     try {
       const { pageOptions, pageQuery } = this.#handleQueries(options)
+
       const data = await this.#model.paginate(pageQuery, pageOptions)
-      return data
+      return {
+        payload: data.docs,
+        status: data.status_code,
+        totalPages: data.totalPages,
+        prevPage: data.prevPage,
+        nextPage: data.nextPage,
+        page: data.page,
+        hasPrevPage: data.hasPrevPage,
+        hasNextPage: data.hasNextPage
+        // prevLink,
+        // nextLink
+      }
     } catch (err) {
       throw new Error(ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
     }
@@ -61,7 +78,7 @@ class ProductsDB extends databaseManager {
   async createProduct(item) {
     try {
       const response = await this.#model.create(item)
-      const data = this.parseResponse(response)
+      const data = super.parseResponse(response)
       return data
     } catch (err) {
       console.log(err)

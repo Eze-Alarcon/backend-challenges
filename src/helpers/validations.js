@@ -17,7 +17,7 @@ function estrictInputs(fields) {
     title,
     description,
     price,
-    thumbnail,
+    // thumbnail,
     stock,
     status,
     code
@@ -31,13 +31,13 @@ function estrictInputs(fields) {
     throw new Error(ERRORS.FIELD_DESCRIPTION.ERROR_CODE)
   }
 
-  if (thumbnail === undefined || thumbnail === null) {
-    throw new Error(ERRORS.EMPTY_THUMBNAIL.ERROR_CODE)
-  }
+  // if (thumbnail === undefined || thumbnail === null) {
+  //   throw new Error(ERRORS.EMPTY_THUMBNAIL.ERROR_CODE)
+  // }
 
-  if (typeof (thumbnail) !== 'string') {
-    throw new Error(ERRORS.FIELD_THUMBNAIL.ERROR_CODE)
-  }
+  // if (typeof (thumbnail) !== 'string') {
+  //   throw new Error(ERRORS.FIELD_THUMBNAIL.ERROR_CODE)
+  // }
 
   if (title === undefined || title === null) {
     throw new Error(ERRORS.EMPTY_TITLE.ERROR_CODE)
@@ -84,11 +84,11 @@ function looseInputs(fields) {
     }
   }
 
-  if (fields.thumbnail !== undefined && fields.thumbnail !== null) {
-    if (typeof (fields.thumbnail) !== 'string') {
-      throw new Error(ERRORS.FIELD_THUMBNAIL.ERROR_CODE)
-    }
-  }
+  // if (fields.thumbnail !== undefined && fields.thumbnail !== null) {
+  //   if (typeof (fields.thumbnail) !== 'string') {
+  //     throw new Error(ERRORS.FIELD_THUMBNAIL.ERROR_CODE)
+  //   }
+  // }
 
   if (fields.title !== undefined && fields.title !== null) {
     if (typeof (fields.title) !== 'string') {
@@ -128,6 +128,6 @@ export function validateInputs(fields, strictValidation = false) {
 }
 
 export function searchMatch(id, arr) {
-  const matchCode = arr.some((el) => el.code === id)
+  const matchCode = arr.some((el) => el.id === id)
   if (matchCode) throw new Error(ERRORS.FIELD_EXIST.ERROR_CODE)
 }

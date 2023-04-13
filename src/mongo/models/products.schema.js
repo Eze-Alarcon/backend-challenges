@@ -10,7 +10,7 @@ const productSchema = new Schema({
   status: { type: Boolean, required: true },
   stock: { type: Number, required: true },
   thumbnail: { type: Array, default: [] }
-})
+}, { versionKey: false })
 
 productSchema.plugin(mongoosePaginate)
 
