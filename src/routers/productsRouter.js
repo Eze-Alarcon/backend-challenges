@@ -10,8 +10,8 @@ productsRouter
   .route('/:pid')
   .get(async (req, res, next) => {
     try {
-      const { pid: id } = req.params
-      const response = await productManager.getProductById({ id })
+      const id = { id: req.params.pid }
+      const response = await productManager.getProductById(id)
 
       res.status(response.status_code).json({ product: response.item })
     } catch (error) {
@@ -20,7 +20,7 @@ productsRouter
   })
   .put(async (req, res, next) => {
     try {
-      const { pid: id } = req.params
+      const id = { id: req.params.pid }
       const response = await productManager.updateProduct(id, req.body)
 
       res.status(response.status_code).json(response.itemUpdated)
@@ -30,7 +30,7 @@ productsRouter
   })
   .delete(async (req, res, next) => {
     try {
-      const { pid: id } = req.params
+      const id = { id: req.params.pid }
       const response = await productManager.deleteProduct(id)
 
       res.status(response.status_code).json({ product_deleted: response.itemDeleted })

@@ -7,6 +7,7 @@ export class Product {
     id,
     title,
     description,
+    category,
     price,
     code,
     status = true,
@@ -16,6 +17,7 @@ export class Product {
     this.id = id
     this.title = title
     this.description = description
+    this.category = category
     this.price = price
     this.status = status
     this.thumbnail = thumbnail

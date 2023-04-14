@@ -2,7 +2,6 @@
 
 import express, { Router } from 'express'
 import { CM as cartManager } from '../mongo/cart.manager.js'
-import { ERRORS } from '../helpers/errors.messages.js'
 
 export const cartsRouter = Router()
 
@@ -12,7 +11,11 @@ cartsRouter
   .route('/:cid/product/:pid')
   .post(async (req, res, next) => {
     try {
-      const response = await cartManager.addProductToCart(req.params.cid, req.params.pid)
+      const query = {
+        cartID: req.params.cid,
+        productID: req.params.pid
+      }
+      const response = await cartManager.addProductToCart(query)
       res.status(response.status_code).json(response.productAdded)
     } catch (error) {
       return next(error.message)
@@ -23,7 +26,8 @@ cartsRouter
   .route('/:cid')
   .get(async (req, res, next) => {
     try {
-      const response = await cartManager.getCartById(req.params.cid)
+      const query = req.params.cid
+      const response = await cartManager.getCartById(query)
       res.status(response.status_code).json(
         {
           cart: response.cart,
@@ -35,7 +39,8 @@ cartsRouter
   })
   .delete(async (req, res, next) => {
     try {
-      const response = await cartManager.deleteCart(req.params.cid)
+      const query = req.params.cid
+      const response = await cartManager.deleteCartProducts(query)
       res.status(response.status_code).json({ deleted: response.deleted, cart_deleted: response.carts_deleted })
     } catch (error) {
       return next(error.message)
@@ -54,7 +59,8 @@ cartsRouter
   })
   .get(async (req, res, next) => {
     try {
-      throw new Error(ERRORS.FEATURE_NOT_IMPLEMENTED.ERROR_CODE)
+      const response = await cartManager.getCarts()
+      res.status(response.status_code).json(response)
     } catch (error) {
       next(error.message)
     }

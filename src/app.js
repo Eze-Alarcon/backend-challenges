@@ -8,7 +8,7 @@ import mongoose from 'mongoose'
 
 // Routers
 import { productsRouter } from './routers/productsRouter.js'
-// import { cartsRouter } from './routers/cartsRouter.js'
+import { cartsRouter } from './routers/cartsRouter.js'
 // import { viewsRouter } from './routers/viewsRouter.js'
 
 // Middlewares
@@ -25,7 +25,7 @@ app.engine('handlebars', engine())
 app.set('views', './views')
 
 app.use('/api/v1/products', productsRouter)
-// app.use('/api/v1/cart', cartsRouter)
+app.use('/api/v1/cart', cartsRouter)
 // app.use('/', viewsRouter)
 app.use(handleError)
 

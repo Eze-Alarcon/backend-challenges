@@ -5,7 +5,7 @@ import { ERRORS } from '../helpers/errors.messages.js'
 
 // ===== Products DB Manager =====
 
-class ProductsDB {
+class DB_PRODUCT_MANAGER {
   #model
   constructor(model) {
     this.#model = model
@@ -37,7 +37,7 @@ class ProductsDB {
     return { pageOptions, pageQuery }
   }
 
-  async getItems(options) {
+  async getProducts(options) {
     try {
       const { pageOptions, pageQuery } = this.#handleQueries(options)
 
@@ -59,11 +59,13 @@ class ProductsDB {
     }
   }
 
-  async findItems(query) {
-    const response = await this.#model.find(query).lean()
-    if (response.length === 0) throw new Error()
-    const data = this.#parseResponse(response)
-    return data
+  async findProducts(query) {
+    try {
+      const response = await this.#model.find(query, { _id: 0 }).lean()
+      return response
+    } catch (err) {
+      throw new Error(ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+    }
   }
 
   async createProduct(item) {
@@ -89,59 +91,45 @@ class ProductsDB {
 
 // ===== Cart DB manager =====
 
-class CartsDB {
+class DB_CART_MANAGER {
   #model
   constructor(model) {
     this.#model = model
   }
 
-  async findCartByID(cartRef) {
-    try {
-      const query = { ref: cartRef }
-      const response = await super.findItems(query)
-      return response[0]
-    } catch (err) {
-      throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
-    }
+  #parseResponse(item) {
+    return JSON.parse(JSON.stringify(item))
   }
 
-  async deleteCart(cartRef) {
-    const query = { ref: cartRef }
-    const response = await super.deleteItem(query)
+  async getCarts() {
+    const response = await this.#model.find({}, { _id: 0 }).lean()
     return response
   }
 
-  async getItems() {
-    const data = await this.#model.find().lean()
-    return data
+  async findCartByID({ id }) {
+    const response = await this.#model.find({ id }, { _id: 0 }).lean()
+    if (response.length === 0) throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
+    return response[0]
   }
 
-  async findItems(query) {
-    const response = await this.#model.find(query).lean()
-    if (response.length === 0) throw new Error()
-    const data = super.parseResponse(response)
-    return data
-  }
-
-  async createItem(item) {
-    this.validateObject(item)
+  async createCart(item) {
     try {
       const response = await this.#model.create(item)
-      const data = this.parseResponse(response)
+      const data = this.#parseResponse(response)
       return data
     } catch (err) {
-      console.log(err)
+      console.log(err) // manejar mejor el error
     }
   }
 
-  async updateItem(item) {
+  async updateItem({ id, item }) {
     this.validateObject(item)
-    const data = await this.#model.updateOne((item))
+    const data = await this.#model.updateOne({ id }, item)
     return data
   }
 
-  async deleteItem(query) {
-    const response = await this.#model.deleteOne(query)
+  async deleteCartProducts({ id }) {
+    const response = await this.#model.deleteOne({ id })
     return response
   }
 
@@ -151,7 +139,7 @@ class CartsDB {
   }
 }
 
-const PM_MONGO = new ProductsDB(productModel)
-const CM_MONGO = new CartsDB(cartModel)
+const DB_PRODUCTS = new DB_PRODUCT_MANAGER(productModel)
+const DB_CARTS = new DB_CART_MANAGER(cartModel)
 
-export { CM_MONGO, PM_MONGO }
+export { DB_CARTS, DB_PRODUCTS }
