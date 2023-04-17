@@ -32,7 +32,7 @@ const clearCartProducts = async (req, res, next) => {
   try {
     const query = req.params.cid
     const response = await cartManager.deleteAllCartProducts(query)
-    res.status(response.status_code).json({ response })
+    res.status(response.status_code).json(response.cartUpdated)
   } catch (error) {
     return next(error.message)
   }
@@ -50,7 +50,7 @@ const createNewCart = async (req, res, next) => {
 const getAllCarts = async (req, res, next) => {
   try {
     const response = await cartManager.getCarts()
-    res.status(response.status_code).json(response)
+    res.status(response.status_code).json(response.carts)
   } catch (error) {
     next(error.message)
   }
@@ -63,7 +63,7 @@ const deleteCartProduct = async (req, res, next) => {
       productID: req.params.pid
     }
     const response = await cartManager.deleteCartProduct(query)
-    res.status(response.status_code).json(response)
+    res.status(response.status_code).json(response.details)
   } catch (error) {
     next(error.message)
   }

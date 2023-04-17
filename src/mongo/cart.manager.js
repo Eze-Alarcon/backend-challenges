@@ -24,8 +24,7 @@ class CartManager {
 
   #findIndex(arr, searchedValue) {
     const productIndex = arr.products.findIndex((el) => {
-      const parseElement = el.product.id
-
+      const parseElement = el.product.id._id
       const productID = this.#parseData(parseElement)
       return productID === searchedValue
     })
@@ -69,7 +68,7 @@ class CartManager {
   async getCartById(query) {
     try {
       const cart = await DB_CARTS.findCartByID({ id: query })
-      const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
+      const totalProducts = cart.products.reduce((acc, el) => acc + el.product.quantity, 0)
       return {
         status_code: SUCCESS.GET_CART.STATUS,
         totalProducts,
@@ -140,7 +139,6 @@ class CartManager {
         details
       }
     } catch (err) {
-      console.log(err)
       throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
     }
   }

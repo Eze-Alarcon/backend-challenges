@@ -1,7 +1,7 @@
 /* eslint-disable space-before-function-paren */
 import { productModel } from './models/products.schema.js'
 import { cartModel } from './models/cart.schema.js'
-import { ERRORS } from '../helpers/errors.messages.js'
+import { ERRORS, SUCCESS } from '../helpers/errors.messages.js'
 import mongoose from 'mongoose'
 import { SERVER_CONFIG } from '../config/server.config.js'
 
@@ -19,10 +19,11 @@ class DB_PRODUCT_MANAGER {
 
   #handleQueries(options) {
     const pageOptions = {
-      limit: options.limit || 10,
+      limit: options.limit || 3,
       page: options.page || 1,
       sort: { price: null },
-      projection: { _id: 0 }
+      projection: { _id: 0 },
+      lean: true
     }
     const pageQuery = {
       price: { $gte: 0 }
@@ -64,7 +65,7 @@ class DB_PRODUCT_MANAGER {
         ...Object.entries(newOptions)
       ]).toString()
 
-      links.prevLink = `${SERVER_CONFIG.BASE_URL}${SERVER_CONFIG.PRODUCTS_ROUTE}?${newParams}`
+      links.prevLink = `${SERVER_CONFIG.BASE_URL}/?${newParams}`
     }
 
     if (data.hasNextPage) {
@@ -76,7 +77,7 @@ class DB_PRODUCT_MANAGER {
         ...Object.entries(newOptions)
       ]).toString()
 
-      links.nextLink = `${SERVER_CONFIG.BASE_URL}${SERVER_CONFIG.PRODUCTS_ROUTE}?${newParams}`
+      links.nextLink = `${SERVER_CONFIG.BASE_URL}/?${newParams}`
     }
     return links
   }
@@ -93,7 +94,7 @@ class DB_PRODUCT_MANAGER {
 
       return {
         payload: data.docs,
-        status: data.status_code,
+        status: SUCCESS.GET.STATUS,
         totalPages: data.totalPages,
         prevPage: data.prevPage,
         nextPage: data.nextPage,
@@ -151,7 +152,7 @@ class DB_CART_MANAGER {
   }
 
   async getCarts() {
-    const response = await this.#model.find({}, { _id: 0 }).lean()
+    const response = await this.#model.find({}, { _id: 0, products: { _id: 0 } }).lean()
     return response
   }
 
@@ -163,12 +164,13 @@ class DB_CART_MANAGER {
       .populate(
         {
           path: 'products.product.id',
-          select: '-_id -stock'
+          select: '-stock'
         })
       .lean()
 
     if (response.length === 0) throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
-    console.log(response)
+
+    // me trae un array, de esta forma obtengo el valor que busco
     return response[0]
   }
 

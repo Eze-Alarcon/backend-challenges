@@ -16,13 +16,13 @@ cartsRouter.use(express.json())
 
 cartsRouter
   .route('/:cid/product/:pid')
-  .put(updateCartProducts) // ✅
-  .delete(deleteCartProduct) // ✅
+  .put(updateCartProducts)
+  .delete(deleteCartProduct)
 
 cartsRouter
   .route('/:cid')
-  .get(getCart) // TODO
-  .delete(clearCartProducts) // ✅
+  .get(getCart)
+  .delete(clearCartProducts)
 
 cartsRouter
   .route('/')

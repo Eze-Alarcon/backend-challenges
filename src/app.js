@@ -9,7 +9,7 @@ import mongoose from 'mongoose'
 // Routers
 import { productsRouter } from './routers/productsRouter.js'
 import { cartsRouter } from './routers/cartsRouter.js'
-// import { viewsRouter } from './routers/viewsRouter.js'
+import { viewsRouter } from './routers/viewsRouter.js'
 
 // Middlewares
 import { handleError } from './middleware/errors.js'
@@ -26,7 +26,7 @@ app.set('views', SC.VIEWS_FOLDER)
 
 app.use(SC.PRODUCTS_ROUTE, productsRouter)
 app.use(SC.CARTS_ROUTE, cartsRouter)
-// app.use('/', viewsRouter)
+app.use('/', viewsRouter)
 app.use(handleError)
 
 app.listen(SC.PORT, () => {
