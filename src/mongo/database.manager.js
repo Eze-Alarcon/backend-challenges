@@ -156,7 +156,6 @@ class DB_CART_MANAGER {
   }
 
   async findCartByID({ id }) {
-    console.log(id)
     const response = await this.#model
       .find(
         { id },
@@ -169,6 +168,7 @@ class DB_CART_MANAGER {
       .lean()
 
     if (response.length === 0) throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
+    console.log(response)
     return response[0]
   }
 
