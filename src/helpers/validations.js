@@ -131,3 +131,9 @@ export function searchMatch(id, arr) {
   const matchCode = arr.some((el) => el.id === id)
   if (matchCode) throw new Error(ERRORS.FIELD_EXIST.ERROR_CODE)
 }
+
+export function validateQuantity(value) {
+  if (typeof (value) !== 'number') {
+    if (value !== null) throw new Error(ERRORS.FIELD_QUANTITY.ERROR_CODE)
+  }
+}

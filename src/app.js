@@ -13,22 +13,22 @@ import { cartsRouter } from './routers/cartsRouter.js'
 
 // Middlewares
 import { handleError } from './middleware/errors.js'
-import { PORT } from './config/server.config.js'
+import { SERVER_CONFIG as SC } from './config/server.config.js'
 import { URL } from './config/database.config.js'
 
 await mongoose.connect(URL)
 
 const app = express()
-app.use('/static', express.static('./static'))
+app.use(SC.STATIC_ROUTE, express.static(SC.STATIC_FOLDER))
 
 app.engine('handlebars', engine())
-app.set('views', './views')
+app.set('views', SC.VIEWS_FOLDER)
 
-app.use('/api/v1/products', productsRouter)
-app.use('/api/v1/cart', cartsRouter)
+app.use(SC.PRODUCTS_ROUTE, productsRouter)
+app.use(SC.CARTS_ROUTE, cartsRouter)
 // app.use('/', viewsRouter)
 app.use(handleError)
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`)
+app.listen(SC.PORT, () => {
+  console.log(`Example app listening on ${SC.BASE_URL}`)
 })

@@ -79,6 +79,11 @@ const PRODUCTS_ERRORS = {
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
     ERROR_CODE: "FIELD_STOCK"
   },
+  FIELD_QUANTITY: {
+    MESSAGE: "[ERROR]: The field 'quantity' must be a number.",
+    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
+    ERROR_CODE: "FIELD_QUANTITY"
+  },
   FIELD_STATUS: {
     MESSAGE: "[ERROR]: The field 'stock' must be a boolean.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
@@ -98,6 +103,11 @@ const PRODUCTS_ERRORS = {
     MESSAGE: "[ERROR]: Product not found",
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
     ERROR_CODE: "PRODUCT_NOT_FOUND"
+  },
+  NO_PRODUCTS_PARAMETERS: {
+    MESSAGE: "[ERROR]: No products were found with these search query parameters",
+    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK,
+    ERROR_CODE: "NO_PRODUCTS_PARAMETERS"
   },
   QUERY_NOT_NUMBER: {
     MESSAGE: "[ERROR]: Limit and page must be a number",
@@ -150,6 +160,21 @@ const CARTS_ERROR = {
   }
 }
 
+const CARTS_SUCCESS = {
+  GET_CART: {
+    MESSAGE: "Cart found successfully",
+    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
+  },
+  CART_CREATED: {
+    MESSAGE: "Cart created successfully",
+    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
+  },
+  CART_PRODUCT: {
+    MESSAGE: "Product added to cart successfully",
+    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
+  }
+}
+
 const SERVER_ERROR = {
   FEATURE_NOT_IMPLEMENTED: {
     MESSAGE: "Feature not available at the moment, available in future releases.",
@@ -163,38 +188,30 @@ const SERVER_ERROR = {
   }
 }
 
-const CARTS_SUCCESS = {
-  GET_CART: {
-    MESSAGE: "Cart found successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
+const PRODUCT_MANAGER_ERRORS = {
+  GET_CARTS: {
+    MESSAGE: "Something went wrong with the 'getCarts' method",
+    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
+    ERROR_CODE: "GET_CARTS"
   },
-  CART_CREATED: {
-    MESSAGE: "Cart created successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
+  CREATE_CARTS: {
+    MESSAGE: "Something went wrong with the 'createCart' method",
+    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
+    ERROR_CODE: "CREATE_CARTS"
   },
-  INCREASE_QUANTITY: {
-    MESSAGE: "Quantity increased by one",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
-  },
-  CART_PRODUCT: {
-    MESSAGE: "Product added to cart successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
+  ADD_PRODUCT_TO_CART: {
+    MESSAGE: "Something went wrong with the 'addProductToCart' method",
+    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
+    ERROR_CODE: "ADD_PRODUCT_TO_CART"
   }
-}
 
-const MESSAGES_ERRORS = {
-  WRONG_INPUT: {
-    MESSAGE: "Empty fields",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "WRONG_INPUT"
-  }
 }
 
 const ERRORS = {
   ...PRODUCTS_ERRORS,
   ...CARTS_ERROR,
   ...SERVER_ERROR,
-  ...MESSAGES_ERRORS
+  ...PRODUCT_MANAGER_ERRORS
 }
 
 const SUCCESS = {

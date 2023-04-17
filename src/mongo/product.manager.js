@@ -55,8 +55,6 @@ class ProductManager {
 
     validateInputs(fields)
 
-    console.log(fields)
-
     const newProduct = {
       ...item,
       description: fields.description ?? item.description,
@@ -66,8 +64,6 @@ class ProductManager {
       price: fields.price ?? item.price,
       stock: fields.stock ?? item.stock
     }
-
-    console.log(newProduct)
 
     await DB_PRODUCTS.updateProduct(query, newProduct)
     return {

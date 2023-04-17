@@ -1,10 +1,12 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import { CartProducts, Carts } from '../classes/cart.class.js'
-import { SUCCESS } from '../helpers/errors.messages.js'
+import { Cart } from '../classes/cart.class.js'
+import { SUCCESS, ERRORS } from '../helpers/errors.messages.js'
 import { getMax } from '../helpers/getMax.js'
-import { DB_CARTS, DB_PRODUCTS } from './database.manager.js'
+import { validateQuantity } from '../helpers/validations.js'
+import { DB_CARTS } from './database.manager.js'
+import { PM as productManager } from './product.manager.js'
 
 /* -------------------------------------------- */
 
@@ -16,81 +18,130 @@ class CartManager {
     this.#lastID = 0
   }
 
-  async getCarts() {
-    const carts = await DB_CARTS.getCarts()
-    console.log('getCarts in manager')
-    this.#cartsList = [...carts]
+  #parseData(value) {
+    return JSON.parse(JSON.stringify(value))
+  }
+
+  #findIndex(arr, searchedValue) {
+    const productIndex = arr.products.findIndex((el) => {
+      const parseElement = el.product.id
+
+      const productID = this.#parseData(parseElement)
+      return productID === searchedValue
+    })
     return {
-      status_code: SUCCESS.GET.STATUS,
-      carts
+      exist: productIndex !== -1,
+      index: productIndex
+    }
+  }
+
+  async getCarts() {
+    try {
+      const carts = await DB_CARTS.getCarts()
+      this.#cartsList = [...carts]
+      return {
+        status_code: SUCCESS.GET.STATUS,
+        carts
+      }
+    } catch (err) {
+      throw new Error(ERRORS.GET_CARTS.ERROR_CODE)
     }
   }
 
   async createCart() {
-    await this.getCarts()
+    try {
+      await this.getCarts()
+      this.#lastID = getMax(this.#cartsList)
 
-    this.#lastID = getMax(this.#cartsList)
+      const newCart = new Cart({ id: ++this.#lastID })
 
-    const newCart = new Carts({ id: ++this.#lastID })
+      await DB_CARTS.createCart(newCart)
 
-    await DB_CARTS.createCart(newCart)
-
-    return {
-      status_code: SUCCESS.CART_CREATED.STATUS,
-      cart: newCart
+      return {
+        status_code: SUCCESS.CART_CREATED.STATUS,
+        cart: newCart
+      }
+    } catch (err) {
+      throw new Error(ERRORS.CREATE_CARTS.ERROR_CODE)
     }
   }
 
   async getCartById(query) {
-    const cart = await DB_CARTS.findCartByID({ id: query })
-    const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
-    return {
-      status_code: SUCCESS.GET_CART.STATUS,
-      totalProducts,
-      cart
+    try {
+      const cart = await DB_CARTS.findCartByID({ id: query })
+      const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
+      return {
+        status_code: SUCCESS.GET_CART.STATUS,
+        totalProducts,
+        cart
+      }
+    } catch (err) {
+      throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
     }
   }
 
-  async addProductToCart({ cartID, productID }) {
-    await this.getCarts()
+  async addProductToCart({ cartID, productID, quantityValue = null }) {
+    try {
+      validateQuantity(quantityValue)
+      const cart = await DB_CARTS.findCartByID({ id: cartID })
+      const { item: product } = await productManager.getProductById({ id: productID })
+      let response
 
-    const cart = await DB_CARTS.findCartByID({ id: cartID })
-    const product = await DB_PRODUCTS.findProducts({ id: productID })
+      const parsedID = this.#parseData(product._id)
+      const { exist, index } = this.#findIndex(cart, parsedID)
 
-    const productIndex = cart.products.findIndex((el) => el.productCode === product.code)
+      if (!exist) {
+        response = await DB_CARTS.addProductToCart({ id: cartID, productID: product._id })
+      }
 
-    if (productIndex !== -1) {
-      ++cart.products[productIndex].quantity
+      if (exist) {
+        const newValue = quantityValue ?? ++cart.products[index].product.quantity
 
-      await DB_CARTS.updateItem(cart)
+        const updateInfo = {
+          id: cartID,
+          productID: parsedID,
+          quantity: newValue
+        }
+
+        response = await DB_CARTS.updateCartProductQuantity(updateInfo)
+      }
 
       return {
-        status_code: SUCCESS.INCREASE_QUANTITY.STATUS,
-        productAdded: cart
+        status_code: SUCCESS.CART_PRODUCT.STATUS,
+        operationDetails: { response }
       }
-    }
-
-    const newCartProduct = new CartProducts({ id: product.id })
-
-    cart.products.push(newCartProduct)
-
-    await DB_CARTS.updateItem(cart)
-
-    return {
-      status_code: SUCCESS.CART_PRODUCT.STATUS,
-      productAdded: cart
+    } catch (err) {
+      throw new Error(ERRORS.ADD_PRODUCT_TO_CART.ERROR_CODE)
     }
   }
 
-  async deleteCartProducts(query) {
-    const cartDeleted = await DB_CARTS.deleteCartProducts({ id: query })
+  async deleteAllCartProducts(query) {
+    try {
+      const cartUpdated = await DB_CARTS.deleteAllCartProducts({ id: query })
 
-    const deleted = cartDeleted.deletedCount > 0
+      return {
+        status_code: SUCCESS.DELETED.STATUS,
+        cartUpdated
+      }
+    } catch (err) {
+      throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
+    }
+  }
 
-    return {
-      status_code: SUCCESS.DELETED.STATUS,
-      carts_deleted: cartDeleted.deletedCount,
-      deleted
+  async deleteCartProduct({ cartID, productID }) {
+    try {
+      const { item: product } = await productManager.getProductById({ id: productID })
+      const parsedID = this.#parseData(product._id)
+
+      const details = await DB_CARTS.deleteCartProduct({ id: cartID, productID: parsedID })
+
+      return {
+        status_code: SUCCESS.DELETED.STATUS,
+        details
+      }
+    } catch (err) {
+      console.log(err)
+      throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
     }
   }
 }

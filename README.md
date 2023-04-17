@@ -55,7 +55,7 @@ Con base en nuestra implementación actual de productos, modificar el método GE
 
 **Respuesta del metodo GET**
 
-El método GET deberá devolver un objeto con el siguiente formato:
+El método GET deberá devolver un objeto con el siguiente formato: **✅**
 
 ```
 {
@@ -72,20 +72,20 @@ El método GET deberá devolver un objeto con el siguiente formato:
 }
 ```
 
-  - Se deberá poder buscar productos por categoría o por disponibilidad, y se deberá poder realizar un ordenamiento de estos productos de manera ascendente o descendente por precio. **🔴 falta la parte de disponibilidad q ni idea que es**
+  - Se deberá poder buscar productos por categoría o por disponibilidad, y se deberá poder realizar un ordenamiento de estos productos de manera ascendente o descendente por precio. **✅**
 
 **Router del cart**
 
 Además, agregar al router de carts los siguientes endpoints:
 
     
-  - DELETE api/carts/:cid/products/:pid => deberá eliminar del carrito el producto seleccionado. **TODO**
+  - DELETE api/carts/:cid/products/:pid => deberá eliminar del carrito el producto seleccionado. **✅'**
   
-  - PUT api/carts/:cid => deberá actualizar el carrito con un arreglo de productos con el formato especificado. **TODO**
+  - PUT api/carts/:cid => deberá actualizar el carrito con un arreglo de productos con el formato especificado. **✅**
   
-  - PUT api/carts/:cid/products/:pid => deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body **TODO**
+  - PUT api/carts/:cid/products/:pid => deberá poder actualizar SÓLO la cantidad de ejemplares del producto por cualquier cantidad pasada desde req.body **✅**
   
-  - DELETE api/carts/:cid => deberá eliminar todos los productos del carrito **Modificar**
+  - DELETE api/carts/:cid => deberá eliminar todos los productos del carrito **✅**
   
   - Esta vez, para el modelo de Carts, en su propiedad products, el id de cada producto generado dentro del array tiene que hacer referencia al modelo de Products. Modificar la ruta /:cid para que al traer todos los productos, los traiga completos mediante un “populate”. De esta manera almacenamos sólo el Id, pero al solicitarlo podemos desglosar los productos asociados. **TODO**
 
