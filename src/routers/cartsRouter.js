@@ -17,11 +17,11 @@ cartsRouter.use(express.json())
 cartsRouter
   .route('/:cid/product/:pid')
   .put(updateCartProducts) // ✅
-  .delete(deleteCartProduct) // TODO
+  .delete(deleteCartProduct) // ✅
 
 cartsRouter
   .route('/:cid')
-  .get(getCart)
+  .get(getCart) // TODO
   .delete(clearCartProducts) // ✅
 
 cartsRouter

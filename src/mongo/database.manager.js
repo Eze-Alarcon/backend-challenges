@@ -151,12 +151,23 @@ class DB_CART_MANAGER {
   }
 
   async getCarts() {
-    const response = await this.#model.find({}, { _id: 0, products: { _id: 0 } }).lean()
+    const response = await this.#model.find({}, { _id: 0 }).lean()
     return response
   }
 
   async findCartByID({ id }) {
-    const response = await this.#model.find({ id }, { products: { _id: 0 } }).lean()
+    console.log(id)
+    const response = await this.#model
+      .find(
+        { id },
+        { _id: 0, products: { _id: 0 } })
+      .populate(
+        {
+          path: 'products.product.id',
+          select: '-_id -stock'
+        })
+      .lean()
+
     if (response.length === 0) throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
     return response[0]
   }
