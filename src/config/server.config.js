@@ -2,9 +2,9 @@ const PORT = 8080
 
 const BASE_URL = `http://localhost:${PORT}`
 
-const PRODUCTS_ROUTE = '/api/v1/products/'
+const PRODUCTS_ROUTE = '/api/products/'
 
-const CARTS_ROUTE = '/api/v1/cart'
+const CARTS_ROUTE = '/api/cart'
 
 const STATIC_ROUTE = '/static'
 

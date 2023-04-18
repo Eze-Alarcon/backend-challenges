@@ -163,7 +163,7 @@ class DB_CART_MANAGER {
         { _id: 0, products: { _id: 0 } })
       .populate(
         {
-          path: 'products.product.id',
+          path: 'products.product',
           select: '-stock'
         })
       .lean()
@@ -188,10 +188,8 @@ class DB_CART_MANAGER {
         {
           products:
           {
-            product: {
-              id: new mongoose.Types.ObjectId(productID),
-              quantity: 1
-            }
+            product: new mongoose.Types.ObjectId(productID),
+            quantity: 1
           }
         }
       }
@@ -206,9 +204,9 @@ class DB_CART_MANAGER {
 
   async updateCartProductQuantity({ cartID, productID, quantity }) {
     const data = await this.#model.updateOne(
-      { cartID, 'products.product.id': productID },
-      { $set: { 'products.$[elem].product.quantity': quantity } },
-      { arrayFilters: [{ 'elem.product.id': productID }] }
+      { cartID, 'products.product': productID },
+      { $set: { 'products.$[elem].quantity': quantity } },
+      { arrayFilters: [{ 'elem.product': productID }] }
     )
     const dataWasModified = data.modifiedCount > 0
 
@@ -230,7 +228,7 @@ class DB_CART_MANAGER {
   async deleteCartProduct({ id, productID }) {
     const data = await this.#model.updateOne(
       { id },
-      { $pull: { products: { 'product.id': productID } } }
+      { $pull: { products: { product: productID } } }
     )
     const dataWasModified = data.modifiedCount > 0
     return {
