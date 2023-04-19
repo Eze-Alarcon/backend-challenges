@@ -17,6 +17,9 @@ Desafios del curso de coderhouse
       - [cart/](#cart)
       - [cart/:cid](#cartcid)
       - [cart/:cid/product/:pid](#cartcidproductpid)
+    - [Endpoints con vistas (HTML)](#endpoints-con-vistas-html)
+      - [Products View](#products-view)
+      - [Cart View](#cart-view)
 - [Aspectos a incluir](#aspectos-a-incluir)
 - [Aspectos de evaluacion](#aspectos-de-evaluacion)
   - [Productos](#productos)
@@ -315,6 +318,21 @@ El metodo DELETE elimina un producto del carrito
   }
   
   * productRemoved: indica si se ha eliminado un producto
+
+
+### Endpoints con vistas (HTML)
+
+#### Products View 
+
+URL: [Link a products view -> http://localhost:8080/](http://localhost:8080/)
+
+En esta vista, se encontrara una lista de todos los productos existentes con su respectiva navegacion por paginas.
+
+#### Cart View 
+
+URL: [Link a cart view (del carrito 1) -> http://localhost:8080/cart/1](http://localhost:8080/cart/1)
+
+En esta vista, se encontrara el desgloce de los productos de un carrito en particular. 
 
 # Aspectos a incluir
 
