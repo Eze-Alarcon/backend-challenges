@@ -189,6 +189,14 @@ const SERVER_ERROR = {
 }
 
 const PRODUCT_MANAGER_ERRORS = {
+  CREATE_PRODUCT: {
+    MESSAGE: "Something went wrong with the 'createProduct' method",
+    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
+    ERROR_CODE: "CREATE_PRODUCT"
+  }
+}
+
+const CART_MANAGER_ERRORS = {
   GET_CARTS: {
     MESSAGE: "Something went wrong with the 'getCarts' method",
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
@@ -211,6 +219,7 @@ const ERRORS = {
   ...PRODUCTS_ERRORS,
   ...CARTS_ERROR,
   ...SERVER_ERROR,
+  ...CART_MANAGER_ERRORS,
   ...PRODUCT_MANAGER_ERRORS
 }
 

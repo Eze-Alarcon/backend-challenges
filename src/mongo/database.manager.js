@@ -134,7 +134,7 @@ class DB_PRODUCT_MANAGER {
       const data = this.#parseResponse(response)
       return data
     } catch (err) {
-      console.log(err)
+      throw new Error(ERRORS.CREATE_PRODUCT.ERROR_CODE)
     }
   }
 
