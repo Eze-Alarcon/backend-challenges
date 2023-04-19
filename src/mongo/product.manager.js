@@ -1,23 +1,17 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import { validateInputs, searchMatch } from '../helpers/validations.js'
+import { validateInputs } from '../helpers/validations.js'
 import { SUCCESS } from '../helpers/errors.messages.js'
-import { getMax } from '../helpers/getMax.js'
 import { DB_PRODUCTS } from './database.manager.js'
 import { Product } from '../classes/product.class.js'
 
 class ProductManager {
-  #lastID
-  #productsList
-  constructor() {
-    this.#lastID = 0
-    this.#productsList = []
-  }
+  #nextID
+  constructor() { this.#nextID = 0 }
 
   async getProducts(options = {}) {
     const products = await DB_PRODUCTS.getProducts(options)
-    this.#productsList = [...products.payload]
     return {
       status_code: SUCCESS.GET.STATUS,
       products
@@ -36,12 +30,13 @@ class ProductManager {
     const strictValidation = true
     validateInputs(fields, strictValidation)
 
-    await this.getProducts()
+    const lastItem = await DB_PRODUCTS.getLastProduct()
 
-    searchMatch(++this.#lastID, this.#productsList)
-    this.#lastID = getMax(this.#productsList)
+    lastItem.length > 0
+      ? this.#nextID = ++lastItem[0].id
+      : this.#nextID = 1
 
-    const newProduct = new Product({ ...fields, id: ++this.#lastID })
+    const newProduct = new Product({ ...fields, id: this.#nextID })
     await DB_PRODUCTS.createProduct(newProduct)
 
     return {

@@ -40,9 +40,9 @@ class DB_PRODUCT_MANAGER {
       ) pageQuery[key] = value
 
       // si aplica un sort, revisa si el sort es ascendente o descendente
-      if (key === 'sort' && (value === 'asc' || value === 1)) {
+      if (key === 'sort' && (value === 'asc' || value === '1')) {
         pageOptions.sort.price = 'ascending'
-      } else if (key === 'sort' && (value === 'desc' || value === -1)) {
+      } else if (key === 'sort' && (value === 'desc' || value === '-1')) {
         pageOptions.sort.price = 'descending'
       }
     }
@@ -107,6 +107,16 @@ class DB_PRODUCT_MANAGER {
     } catch (err) {
       throw new Error(ERRORS.NO_PRODUCTS_PARAMETERS.ERROR_CODE)
     }
+  }
+
+  async getLastProduct() {
+    const data = await this.#model.paginate({}, {
+      limit: 1,
+      sort: { id: -1 },
+      projection: { _id: 0 },
+      lean: true
+    })
+    return data.docs
   }
 
   async findProducts(query) {

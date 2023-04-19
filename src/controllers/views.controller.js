@@ -33,7 +33,6 @@ async function cartItems(req, res, next) {
   try {
     const query = req.params.cid
     const myCart = await cartManager.getCartById(query)
-    console.log('myCart', myCart.cart.products[0])
 
     res.status(myCart.status_code).render(RENDER_PATH.CART, {
       headerTitle: 'Home | My cart',

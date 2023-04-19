@@ -11,6 +11,8 @@ Desafios del curso de coderhouse
   - [API Endpoints:](#api-endpoints)
   - [Detalles de los Endpoints](#detalles-de-los-endpoints)
     - [Endpoints de productos](#endpoints-de-productos)
+      - [products/](#products)
+      - [Products/:pid](#productspid)
 - [Aspectos a incluir](#aspectos-a-incluir)
 - [Aspectos de evaluacion](#aspectos-de-evaluacion)
   - [Productos](#productos)
@@ -54,8 +56,8 @@ API URL: http://localhost:8080/api/
 Describire brevemente los endpoints y entrare en detalle mas adelante.
 
 Endpoints de productos
-  - products/
-  - products/:pid 
+  - products/ **✅**
+  - products/:pid ** ✅ **
  
 :pid ==> productID
 
@@ -75,8 +77,8 @@ Endpoints con vistas (HTML):
 
 ### Endpoints de productos
 
-1. products/
-   
+#### products/
+
   Este endpoint cuenta con 2 metodos disponibles:
 
   * GET
@@ -132,18 +134,18 @@ Para crear el producto es necesario enviar los campos requeridos:
   status -> opcionales, valor por defecto: true
   thumbnail -> opcionales, valor por defecto: []
   stock -> opcionales, valor por defecto: 0
-  code -> opcionales, valor por defecto: code-id (valor del id)
+  code -> opcionales, valor por defecto: code-UUID (UUID -> ----valor random)
 }
 
-2. products/:pid
-   
-Este endpoint cuenta con 2 metodos disponibles:
+#### Products/:pid
+
+Este endpoint cuenta con 3 metodos disponibles:
 
   * GET
   * PUT
   * DELETE
 
-EL metodo get nos devolvera el producto con el id que se encuentre en la url (:pid)
+EL metodo GET nos devolvera el producto con el id que se encuentre en la url (:pid), este metodo no espera ningun otro dato.
 
 El metodo PUT nos permite actualizar los valores de un producto ya sea total o parcialmente; los valores perceptibles a cambiar son:
 
@@ -155,6 +157,22 @@ El metodo PUT nos permite actualizar los valores de un producto ya sea total o p
   price
   stock
 }
+
+En caso de que los valores ingresados sean admitidos, se retornara el objeto con sus valores actualizados.
+
+El metodo Delete devolvera un objeto con el siguiente formato:
+
+{
+  "product_deleted": {
+    "acknowledged": boolean,
+    "deletedCount": number
+  }
+}
+
+* acknowledged: true si la db ha entendido bien la instruccion, false en caso contrario
+  
+* deletedCount: 1 si ha borrado algun elemento, 0 en caso de que no se haya logrado borrar el elemento
+
 
 
 # Aspectos a incluir

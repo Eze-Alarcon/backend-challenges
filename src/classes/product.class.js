@@ -1,5 +1,5 @@
 'use strict'
-
+import crypto from 'crypto'
 /* eslint space-before-function-paren: 0 */
 
 export class Product {
@@ -22,6 +22,6 @@ export class Product {
     this.status = status
     this.thumbnail = thumbnail
     this.stock = stock
-    this.code = code ?? `code-${this.id}`
+    this.code = code ?? `code-${crypto.randomUUID()}`
   }
 }

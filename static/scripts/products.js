@@ -1,7 +1,7 @@
+/* eslint-disable space-before-function-paren */
 
 async function addProductToCart(productID) {
   const CART_ID = 1
   const FETCH_URL = `http://localhost:8080/api/cart/${CART_ID}/product/${productID}`
-  const data = await fetch(FETCH_URL, { method: 'PUT' })
-  console.log(data)
+  await fetch(FETCH_URL, { method: 'PUT' })
 }
