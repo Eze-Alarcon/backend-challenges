@@ -191,7 +191,7 @@ class DB_CART_MANAGER {
   }
 
   async addProductToCart({ id, productID }) {
-    const data = await this.#model.updateOne(
+    await this.#model.updateOne(
       { id },
       {
         $push:
@@ -205,7 +205,6 @@ class DB_CART_MANAGER {
       }
     )
     return {
-      ...data,
       productAdded: true,
       productModified: false,
       quantityValue: 1

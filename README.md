@@ -13,6 +13,10 @@ Desafios del curso de coderhouse
     - [Endpoints de productos](#endpoints-de-productos)
       - [products/](#products)
       - [Products/:pid](#productspid)
+    - [Endpoints de cart](#endpoints-de-cart)
+      - [cart/](#cart)
+      - [cart/:cid](#cartcid)
+      - [cart/:cid/product/:pid](#cartcidproductpid)
 - [Aspectos a incluir](#aspectos-a-incluir)
 - [Aspectos de evaluacion](#aspectos-de-evaluacion)
   - [Productos](#productos)
@@ -79,63 +83,69 @@ Endpoints con vistas (HTML):
 
 #### products/
 
-  Este endpoint cuenta con 2 metodos disponibles:
+Este endpoint cuenta con 2 metodos disponibles:
 
   * GET
   * POST
 
 El metodo GET, hara un llamado para traernos los productos, cuenta con las siguientes caracteristicas:
 
-* limit
-* page
-* sort
+  * limit
+  * page
+  * sort
 
-page y limit deben ser valores numericos
+  page y limit deben ser valores numericos
 
-sort ordenara segun el precio, puede tomar los siguientes valores:
-  - asc o 1 => para ordenar de forma ascendente
-  - desc o -1 => para ordenar de forma descendente
+  sort ordenara segun el precio, puede tomar los siguientes valores:
+    - asc o 1 => para ordenar de forma ascendente
+    - desc o -1 => para ordenar de forma descendente
 
-En el caso de que se desee filtrar, contamos con 2 opciones:
-  - price
-  - other
+  En el caso de que se desee filtrar, contamos con 2 opciones:
+    - price
+    - other
 
-price debe ser un valor numerico pero other nos permite pasarle una clave y un valor para buscar, ejemplo:
+  price debe ser un valor numerico pero other nos permite pasarle una clave y un valor para buscar, ejemplo:
 
-http://localhost:8080/api/products/?id=5
+  http://localhost:8080/api/products/?id=5
 
-Nos devuelve el producto con id: 5.
+  Nos devuelve el producto con id: 5.
 
-http://localhost:8080/api/v1/products/?code=code-2
+  http://localhost:8080/api/v1/products/?code=code-2
 
-Nos devuelve el producto con codigo: 'code-2'.
+  Nos devuelve el producto con codigo: 'code-2'.
 
 El metodo POST nos permite crear un producto con la siguiente estructura:
 
-{
-  id: Number
-  title: String
-  description: String
-  category: String
-  price: Number
-  status: Boolean
-  thumbnail: Array[]
-  stock: Number
-  code: String
-}
+  {
+    id: Number
+    title: String
+    description: String
+    category: String
+    price: Number
+    status: Boolean
+    thumbnail: Array[]
+    stock: Number
+    code: String
+  }
 
-Para crear el producto es necesario enviar los campos requeridos:
+  Para crear el producto es necesario enviar los campos requeridos:
 
-{
-  title
-  description
-  category
-  price
-  status -> opcionales, valor por defecto: true
-  thumbnail -> opcionales, valor por defecto: []
-  stock -> opcionales, valor por defecto: 0
-  code -> opcionales, valor por defecto: code-UUID (UUID -> ----valor random)
-}
+  {
+    title
+    description
+    category
+    price
+  }
+
+  aunque tambien tiene campos opcionales: 
+  {
+    status -> opcionales, valor por defecto: true
+    thumbnail -> opcionales, valor por defecto: []
+    stock -> opcionales, valor por defecto: 0
+    code -> opcionales, valor por defecto: code-UUID (UUID -> valor random)
+  }
+
+  Nos respondera con el objeto añadido a la base de datos.
 
 #### Products/:pid
 
@@ -173,7 +183,138 @@ El metodo Delete devolvera un objeto con el siguiente formato:
   
 * deletedCount: 1 si ha borrado algun elemento, 0 en caso de que no se haya logrado borrar el elemento
 
+### Endpoints de cart
 
+#### cart/
+
+Este endpoint cuenta con 2 metodos disponibles:
+
+* GET
+* POST
+
+El metodo GET fue implementado con la finalidad de facilitar las operaciones de testear.
+
+  Al llamar este metodo devuelve la coleccion completa de carritos.
+
+El metodo POST crea un carrito con la siguiente interfaz:
+
+{
+  id: string,
+  products: array[]
+}
+
+#### cart/:cid 
+
+Este endpoint cuenta con 2 metodos disponibles:
+
+* GET 
+* DELETE
+
+El metodo GET, buscara un carrito en particular.
+
+  Devuelve el carrito que corresponda con el ID enviado bajo el valor ':cid', junto con el detalle de cada producto y un dato extra que corresponde al total de productos en el carrito.
+
+  ejemplo: cart/1
+
+  {
+  cart: {
+    id: "1",
+    products: [
+      {
+        product: {
+          _id: "64388ce145c7207533a840c9",
+          id: 2,
+          code: "code-2",
+          title: "titulo update",
+          description: "Description 1",
+          price: 100,
+          status: true,
+          thumbnail: []
+        },
+        quantity: 4
+      },
+    ]
+  },
+  totalProducts: 4
+}
+
+El metodo DELETE borrara todos los elementos dentro de un carrito
+
+  Ejemplo:
+
+  Supongamos un carrito:
+
+  {
+    id: "1",
+    products: [
+      {
+        product: "64388ce145c7207533a840c9",
+        quantity: 4
+      },
+      {
+        product: "64388d0c45c7207533a840d9",
+        quantity: 1
+      },
+      {
+        product: "64388ced45c7207533a840cd",
+        quantity: 1
+      }
+    ]
+  }
+
+  al aplicarle el metodo, obtendremos:
+
+  {
+    id: "1",
+    products: []
+  }
+
+#### cart/:cid/product/:pid
+
+Este endpoint cuenta con 2 metodos disponibles:
+
+* PUT 
+* DELETE
+
+El metodo PUT ingresa un producto en el carrito o, en el caso de que exista el producto en el carrito, modificara la cantidad del mismo.
+
+  En caso de que el producto no existe en el carrito, y le asignara 1 al campo "quantity" (cantidad) del producto.
+
+  Caso contrario, sumara +1 a la cantidad del producto seleccionado. Opcionalmente, este metodo acepta que se le pase por el body, un json con el siguiente formato:
+
+  {
+    "quantity": number
+  }
+
+  Esto hara que el la cantidad del producto se vea modificado por el valor enviado.
+
+  Al llamar a este metodo obtendremos la siguiente respuesta:
+
+  {
+    details: {
+      response: {
+        productAdded: boolean,
+        productModified: boolean,
+        quantityValue: number
+      }
+    }
+  } 
+
+  * productAdded: indica si se ha agregado un nuevo producto al carrito,
+
+  * productModified: indica si se ha modificado un producto,
+  
+  * quantityValue: indica el valor al cual ha cambiado la cantidad del producto
+
+El metodo DELETE elimina un producto del carrito
+
+  Nos retorna el siguiente objeto:
+
+  {
+    "productRemoved": boolean
+  }
+  
+  * productRemoved: indica si se ha eliminado un producto
 
 # Aspectos a incluir
 

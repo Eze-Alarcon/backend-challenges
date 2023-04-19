@@ -107,7 +107,7 @@ class CartManager {
 
       return {
         status_code: SUCCESS.CART_PRODUCT.STATUS,
-        operationDetails: { response }
+        operationDetails: response
       }
     } catch (err) {
       throw new Error(ERRORS.ADD_PRODUCT_TO_CART.ERROR_CODE)
