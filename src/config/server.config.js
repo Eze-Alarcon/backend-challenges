@@ -4,7 +4,7 @@ const BASE_URL = `http://localhost:${PORT}`
 
 const PRODUCTS_ROUTE = '/api/products/'
 
-const CARTS_ROUTE = '/api/cart'
+const CARTS_ROUTE = '/api/carts'
 
 const STATIC_ROUTE = '/static'
 

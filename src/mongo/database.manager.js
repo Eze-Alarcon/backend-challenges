@@ -19,7 +19,7 @@ class DB_PRODUCT_MANAGER {
 
   #handleQueries(options) {
     const pageOptions = {
-      limit: options.limit || 3,
+      limit: options.limit || 10,
       page: options.page || 1,
       sort: { price: null },
       projection: { _id: 0 },

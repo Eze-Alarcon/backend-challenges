@@ -5,7 +5,7 @@
   "description": "desafios de coderhouse",
   "main": "./src/app.js",
   "scripts": {
-    "test": "node .",
+    "test": "node --inspect .",
     "dev": "nodemon -e 'js,handlebars' .",
     "lint": "standard . --fix"
   },
