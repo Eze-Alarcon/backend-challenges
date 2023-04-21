@@ -4,6 +4,10 @@ Desafios del curso de coderhouse
 
 - [Curso de Backend en Coderhouse - Modulo 2 - Desafios](#curso-de-backend-en-coderhouse---modulo-2---desafios)
 - [Documentacion del proyecto](#documentacion-del-proyecto)
+  - [Mejoras](#mejoras)
+    - [Roles](#roles)
+    - [Vistas](#vistas)
+    - [Seguridad](#seguridad)
   - [Consideraciones](#consideraciones)
   - [API Endpoints:](#api-endpoints)
   - [Detalles de los Endpoints](#detalles-de-los-endpoints)
@@ -27,6 +31,29 @@ Desafios del curso de coderhouse
 
 # Documentacion del proyecto
 
+## Mejoras
+
+Se ha agregado un sistema de sesiones, un sistema de roles para los mismos y algunas pantallas nuevas.
+
+### Roles
+
+Por el momentos los roles disponibles son: 
+  
+  * User: para los usuarios que no disponen de privilegios
+  
+  * Admin: para los usuarios con privilegios administrativos 
+
+### Vistas 
+
+Tambien se han implementado 3 vistas nuevas y algunas modificaciones en las demas, detallaremos las vistas implementadas:
+
+  * / -> esta vista nos llevara a la pestaña de login en donde colocaremos nuestras credenciales de acceso
+  * /register -> en caso de no contar con credenciales, deberemos crear una cuenta
+  * /profile -> aqui podremos ver informacion (no sensible) del usuario
+
+### Seguridad
+  
+Como medida de seguridad, solo las vistas de login y register estaran disponibles sin iniciar sesion.
 
 ## Consideraciones
 
