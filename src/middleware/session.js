@@ -7,7 +7,6 @@ function hasSession(req, res, next) {
 
 function alreadyHasSession(req, res, next) {
   if (req.session.user) return res.redirect('/products')
-
   next()
 }
 

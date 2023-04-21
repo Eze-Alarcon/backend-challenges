@@ -21,15 +21,13 @@ class UsersManager {
     return user
   }
 
-  async createUser(user) {
-    const {
-      email,
-      password,
-      first_name,
-      last_name,
-      age
-    } = user
-
+  async createUser({
+    email,
+    password,
+    first_name,
+    last_name,
+    age
+  }) {
     const searchedUser = await this.#searchUser({ email, password })
 
     if (searchedUser.userExist) {

@@ -5,6 +5,7 @@ import {
   logout,
   register
 } from '../controllers/session.controller.js'
+import { alreadyHasSession, hasSession } from '../middleware/session.js'
 
 export const sessionRouter = Router()
 
@@ -12,12 +13,12 @@ sessionRouter.use(express.json())
 
 sessionRouter
   .route('/login')
-  .post(login)
+  .post(alreadyHasSession, login)
 
 sessionRouter
   .route('/register')
-  .post(register)
+  .post(alreadyHasSession, register)
 
 sessionRouter
   .route('/logout')
-  .delete(logout)
+  .delete(hasSession, logout)

@@ -25,7 +25,9 @@ async function productsPaginate(req, res, next) {
       mainTitle: 'List of products',
       info: products,
       listExist: products.payload.length > 0,
-      urlToCart: VIEWS_LINKS.goToCart
+      urlToCart: VIEWS_LINKS.goToCart,
+      name: req.session.name,
+      role: req.session.admin
     })
   } catch (error) {
     return next(error.message)
@@ -68,7 +70,7 @@ function profile(req, res, next) {
     user: req.session.user,
     name: req.session.name,
     age: req.session.age,
-    admin: req.session.admin
+    role: req.session.admin
   }
 
   res.status(200).render(RENDER_PATH.PROFILE, {
