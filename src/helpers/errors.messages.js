@@ -6,6 +6,8 @@
 const STATUS_CODE = {
   CLIENT_ERROR: {
     BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    FORBIDDEN: 403,
     NOT_FOUND: 404
   },
   SUCCESSFUL_RESPONSE: {
@@ -215,6 +217,14 @@ const CART_MANAGER_ERRORS = {
 
 }
 
+const AUTH_ERROR = {
+  NO_SESSION: {
+    MESSAGE: "Login to continue",
+    STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
+    ERROR_CODE: "NO_SESSION"
+  }
+}
+
 const ERRORS = {
   ...PRODUCTS_ERRORS,
   ...CARTS_ERROR,
@@ -228,4 +238,4 @@ const SUCCESS = {
   ...CARTS_SUCCESS
 }
 
-export { ERRORS, SUCCESS }
+export { ERRORS, SUCCESS, AUTH_ERROR }

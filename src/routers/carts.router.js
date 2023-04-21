@@ -9,6 +9,7 @@ import {
   getAllCarts,
   deleteCartProduct
 } from '../controllers/cart.controller.js'
+import { hasSession } from '../middleware/session.js'
 
 export const cartsRouter = Router()
 
@@ -16,15 +17,15 @@ cartsRouter.use(express.json())
 
 cartsRouter
   .route('/:cid/product/:pid')
-  .put(updateCartProducts)
-  .delete(deleteCartProduct)
+  .put(hasSession, updateCartProducts)
+  .delete(hasSession, deleteCartProduct)
 
 cartsRouter
   .route('/:cid')
-  .get(getCart)
-  .delete(clearCartProducts)
+  .get(hasSession, getCart)
+  .delete(hasSession, clearCartProducts)
 
 cartsRouter
   .route('/')
-  .post(createNewCart)
-  .get(getAllCarts)
+  .post(hasSession, createNewCart)
+  .get(hasSession, getAllCarts)

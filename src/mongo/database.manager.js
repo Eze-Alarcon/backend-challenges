@@ -1,9 +1,9 @@
 /* eslint-disable space-before-function-paren */
+import mongoose from 'mongoose'
 import { productModel } from './models/products.schema.js'
 import { cartModel } from './models/cart.schema.js'
 import { ERRORS, SUCCESS } from '../helpers/errors.messages.js'
-import mongoose from 'mongoose'
-import { SERVER_CONFIG } from '../config/server.config.js'
+import { SERVER } from '../config/server.config.js'
 
 // ===== Products DB Manager =====
 
@@ -65,7 +65,7 @@ class DB_PRODUCT_MANAGER {
         ...Object.entries(newOptions)
       ]).toString()
 
-      links.prevLink = `${SERVER_CONFIG.BASE_URL}/?${newParams}`
+      links.prevLink = `${SERVER.BASE_URL}/?${newParams}`
     }
 
     if (data.hasNextPage) {
@@ -77,7 +77,7 @@ class DB_PRODUCT_MANAGER {
         ...Object.entries(newOptions)
       ]).toString()
 
-      links.nextLink = `${SERVER_CONFIG.BASE_URL}/?${newParams}`
+      links.nextLink = `${SERVER.BASE_URL}/?${newParams}`
     }
     return links
   }
