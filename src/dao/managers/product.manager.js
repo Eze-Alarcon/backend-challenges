@@ -1,10 +1,10 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import { validateInputs } from '../helpers/validations.js'
-import { SUCCESS } from '../helpers/errors.messages.js'
-import { DB_PRODUCTS } from './database.manager.js'
-import { Product } from '../classes/product.class.js'
+import { validateInputs } from '../../helpers/validations.js'
+import { SUCCESS } from '../../helpers/errors.messages.js'
+import { DB_PRODUCTS } from '../database/products.database.js'
+import { Product } from '../../classes/product.class.js'
 
 class ProductManager {
   #nextID

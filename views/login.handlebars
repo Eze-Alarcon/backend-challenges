@@ -6,20 +6,17 @@
     <input type="email" name="email" class="form-control" id="input_email" aria-describedby="emailHelp">
     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
   </div>
-  <div class="input-group">
-    <span class="input-group-text">First and last name</span>
-    <input type="text" name="first_name" aria-label="First name" class="form-control">
-    <input type="text" name="last_name" aria-label="Last name" class="form-control">
-  </div>
-  <div class="mb-3">
-    <label for="input_age" class="form-label">Age</label>
-    <input type="number" name="age" class="form-control" id="input_age" placeholder="99">
-  </div>
   <div class="mb-3">
     <label for="input_password" class="form-label">Password</label>
     <input type="password" name="password" class="form-control" id="input_password">
   </div>
-  <button type="submit" class="btn btn-primary">Iniciar session</button>
+  <button type="submit" class="btn btn-primary">Log in</button>
 </form>
+
+<div>
+  <p id="message_container"></p>
+</div>
+
+<a id="btn_container" href="/register" class="btn btn-primary" role="button">Create an account</a>
 
 <script src="/static/scripts/login.js"></script>

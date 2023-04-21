@@ -1,18 +1,13 @@
 /* eslint-disable space-before-function-paren */
 
 function hasSession(req, res, next) {
-  if (!req.session.user) {
-    return res.redirect('/')
-    // podria enviarlo a una pagina que indique que no esta logeado
-  }
+  if (!req.session.user) return res.redirect('/')
   next()
 }
 
 function alreadyHasSession(req, res, next) {
-  if (req.session.user) {
-    return res.redirect('/products')
-    // podria enviarlo a una pagina que indique que ya esta logeado
-  }
+  if (req.session.user) return res.redirect('/products')
+
   next()
 }
 

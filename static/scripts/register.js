@@ -1,7 +1,6 @@
 /* eslint-disable space-before-function-paren */
 
-const loginForm = document.getElementById('login_form')
-const msgContainer = document.getElementById('message_container')
+const loginForm = document.getElementById('register_form')
 
 loginForm.addEventListener('submit', handleSubmit)
 
@@ -14,7 +13,7 @@ async function handleSubmit(e) {
 }
 
 async function postData(data) {
-  const URL = '/api/sessions/login'
+  const URL = '/api/sessions/register'
 
   const sendForm = await fetch(URL, {
     method: 'POST',
@@ -24,5 +23,4 @@ async function postData(data) {
   const response = await sendForm.json()
 
   if (response.isLog) window.location.assign('/products')
-  else msgContainer.innerText = response.message
 }

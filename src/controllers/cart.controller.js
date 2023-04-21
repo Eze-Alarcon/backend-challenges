@@ -1,4 +1,4 @@
-import { CM as cartManager } from '../mongo/cart.manager.js'
+import { CM as cartManager } from '../dao/managers/cart.manager.js'
 
 const updateCartProducts = async (req, res, next) => {
   try {

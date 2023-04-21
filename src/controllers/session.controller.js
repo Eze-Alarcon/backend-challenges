@@ -1,28 +1,40 @@
 /* eslint-disable space-before-function-paren */
 
-function login(req, res, next) {
-  const userInfo = {
+import { UM as usersManager } from '../dao/managers/user.manager.js'
+
+async function login(req, res) {
+  const searchedUser = await usersManager.logUser({
     email: req.body.email,
-    name: `${req.body.first_name} ${req.body.last_name}`,
-    age: req.body.age
-  }
-  console.log(userInfo)
+    password: req.body.password
+  })
 
-  if (req.session.user) {
-    return res.json({ rta: 'Usuario ya logeado' }) // podria hacer directamente el redirect
+  if (searchedUser.userExist) {
+    req.session.user = searchedUser.user.email
+    req.session.admin = req.session.admin ?? false
+    return res.json({ message: 'login success', isLog: true })
   }
-  // if (username !== 'eze' || password !== 'admin') res.send('login failed')
 
-  req.session.user = userInfo.email
-  req.session.admin = true
-  res.json({ rta: 'login success' })
+  res.json({ message: 'login failed', isLog: false })
 }
 
-function logout(req, res, next) {
+async function register(req, res) {
+  await usersManager.createUser(req.body)
+
+  // if (username !== 'eze' || password !== 'admin') res.send('login failed')
+
+  // a futuro, guardar esto en un session manager
+  req.session.user = req.body.email
+  req.session.name = `${req.body.first_name} ${req.body.last_name}`
+  req.session.age = req.body.age
+  req.session.admin = false
+  res.json({ message: 'login success', isLog: true })
+}
+
+function logout(req, res) {
   req.session.destroy(err => {
     if (!err) res.send('logout ok!')
     else res.send({ status: 'Logout Error', body: err })
   })
 }
 
-export { login, logout }
+export { login, register, logout }

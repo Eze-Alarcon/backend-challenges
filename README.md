@@ -331,7 +331,7 @@ Ajustar nuestro servidor principal para trabajar con un sistema de login.
 
 Se deberá contar con una estructura de router para sessions en /api/sessions/ el cual contará con métodos para registrar a un usuario y para su respectivo login **✅**
 
-Se deberá contar además con un router de vistas en la ruta base / para llevar al formulario de login, de registro y de perfil.
+Se deberá contar además con un router de vistas en la ruta base / para llevar al formulario de login, de registro y de perfil. **🔴 Falta la de registro?**
 
 El formulario de registro insertará en la base de datos el usuario. El cual deberá contar con:
   * first_name

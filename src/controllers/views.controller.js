@@ -1,6 +1,6 @@
 /* eslint-disable space-before-function-paren */
-import { PM as productManager } from '../mongo/product.manager.js'
-import { CM as cartManager } from '../mongo/cart.manager.js'
+import { PM as productManager } from '../dao/managers/product.manager.js'
+import { CM as cartManager } from '../dao/managers/cart.manager.js'
 import { SERVER } from '../config/server.config.js'
 
 const VIEWS_LINKS = {
@@ -9,9 +9,11 @@ const VIEWS_LINKS = {
 }
 
 const RENDER_PATH = {
-  PRODUCTS: 'products.handlebars',
-  CART: 'cart.handlebars',
-  LOGIN: 'login.handlebars'
+  CART: 'cart',
+  LOGIN: 'login',
+  PROFILE: 'profile',
+  REGISTER: 'register',
+  PRODUCTS: 'products'
 }
 
 async function productsPaginate(req, res, next) {
@@ -49,9 +51,31 @@ async function cartItems(req, res, next) {
 
 function login(req, res, next) {
   res.status(200).render(RENDER_PATH.LOGIN, {
-    headerTitle: 'Login',
-    mainTitle: 'Iniciar sesion'
+    headerTitle: 'Log in',
+    mainTitle: 'Log in'
   })
 }
 
-export { productsPaginate, cartItems, login }
+function register(req, res, next) {
+  res.status(200).render(RENDER_PATH.REGISTER, {
+    headerTitle: 'Register',
+    mainTitle: 'Register'
+  })
+}
+
+function profile(req, res, next) {
+  const userInfo = {
+    user: req.session.user,
+    name: req.session.name,
+    age: req.session.age,
+    admin: req.session.admin
+  }
+
+  res.status(200).render(RENDER_PATH.PROFILE, {
+    headerTitle: 'HOME | Profile',
+    mainTitle: 'My Profile',
+    userInfo
+  })
+}
+
+export { productsPaginate, cartItems, login, profile, register }

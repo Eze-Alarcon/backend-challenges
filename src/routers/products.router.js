@@ -7,13 +7,10 @@ import {
   getAllProducts,
   createProduct
 } from '../controllers/product.controller.js'
-// import { hasSession } from '../middleware/session.js'
 
 export const productsRouter = Router()
 
 productsRouter.use(express.json())
-
-// productsRouter.use(hasSession)
 
 productsRouter
   .route('/:pid')

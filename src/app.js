@@ -31,7 +31,7 @@ app.use(session({
   store: MongoStore.create({
     mongoUrl: URL_DB,
     mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-    ttl: 60 // 1 minuto
+    ttl: 30
   }),
   secret: SERVER.SECRET_WORDS,
   resave: false,
@@ -40,6 +40,7 @@ app.use(session({
 
 app.engine('handlebars', engine())
 app.set('views', FOLDERS.VIEWS_FOLDER)
+app.set('view engine', 'handlebars')
 
 app.use(ROUTES.SESSION_ROUTE, sessionRouter)
 app.use(ROUTES.PRODUCTS_ROUTE, productsRouter)

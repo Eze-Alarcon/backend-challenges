@@ -1,12 +1,12 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import { Cart } from '../classes/cart.class.js'
-import { SUCCESS, ERRORS } from '../helpers/errors.messages.js'
-import { getMax } from '../helpers/getMax.js'
-import { validateQuantity } from '../helpers/validations.js'
-import { DB_CARTS } from './database.manager.js'
+import { Cart } from '../../classes/cart.class.js'
+import { SUCCESS, ERRORS } from '../../helpers/errors.messages.js'
+import { getMax } from '../../helpers/getMax.js'
+import { validateQuantity } from '../../helpers/validations.js'
 import { PM as productManager } from './product.manager.js'
+import { DB_CARTS } from '../database/carts.database.js'
 
 /* -------------------------------------------- */
 
