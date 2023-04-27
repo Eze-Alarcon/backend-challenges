@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable space-before-function-paren */
 
-import { UM as usersManager } from '../dao/managers/user.manager.js'
+import { usersManager } from '../dao/managers/user.manager.js'
 
 // deberia mandarlo a otro lado aunque no se donde
 const ADMINS = [

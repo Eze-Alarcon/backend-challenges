@@ -1,7 +1,6 @@
 /* eslint-disable space-before-function-paren */
 
 import mongoose from 'mongoose'
-import { ERRORS } from '../../helpers/errors.messages.js'
 import { cartModel } from '../models/cart.schema.js'
 
 class DB_CART_MANAGER {
@@ -12,6 +11,16 @@ class DB_CART_MANAGER {
 
   #parseResponse(item) {
     return JSON.parse(JSON.stringify(item))
+  }
+
+  async getLastID() {
+    const data = await this.#model
+      .find()
+      .sort({ id: -1 })
+      .limit(1)
+      .projection({ id: 1 })
+      .lean()
+    return data
   }
 
   async getCarts() {
@@ -31,7 +40,7 @@ class DB_CART_MANAGER {
         })
       .lean()
 
-    if (response.length === 0) throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
+    if (response.length === 0) throw new Error()
 
     // me trae un array, de esta forma obtengo el valor que busco
     return response[0]

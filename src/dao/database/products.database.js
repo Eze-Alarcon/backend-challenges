@@ -1,7 +1,7 @@
 /* eslint-disable space-before-function-paren */
 
 import { SERVER } from '../../config/server.config.js'
-import { ERRORS, SUCCESS } from '../../helpers/errors.messages.js'
+import { STATUS_CODE } from '../../helpers/errors.messages.js'
 import { productModel } from '../models/products.schema.js'
 
 class DB_PRODUCT_MANAGER {
@@ -80,29 +80,25 @@ class DB_PRODUCT_MANAGER {
   }
 
   async getProducts(options) {
-    try {
-      const { pageOptions, pageQuery } = this.#handleQueries(options)
+    const { pageOptions, pageQuery } = this.#handleQueries(options)
 
-      const data = await this.#model.paginate(pageQuery, pageOptions)
-      if (data.docs.length < 1) throw new Error()
+    const data = await this.#model.paginate(pageQuery, pageOptions)
+    if (data.docs.length < 1) throw new Error()
 
-      // Genero los links de la paginas anterios y siguiente
-      const links = this.#generateLinks(options, data)
+    // Genero los links de la paginas anterios y siguiente
+    const links = this.#generateLinks(options, data)
 
-      return {
-        payload: data.docs,
-        status: SUCCESS.GET.STATUS,
-        totalPages: data.totalPages,
-        prevPage: data.prevPage,
-        nextPage: data.nextPage,
-        page: data.page,
-        hasPrevPage: data.hasPrevPage,
-        hasNextPage: data.hasNextPage,
-        prevLink: links.prevLink,
-        nextLink: links.nextLink
-      }
-    } catch (err) {
-      throw new Error(ERRORS.NO_PRODUCTS_PARAMETERS.ERROR_CODE)
+    return {
+      payload: data.docs,
+      status: STATUS_CODE.SUCCESS.OK,
+      totalPages: data.totalPages,
+      prevPage: data.prevPage,
+      nextPage: data.nextPage,
+      page: data.page,
+      hasPrevPage: data.hasPrevPage,
+      hasNextPage: data.hasNextPage,
+      prevLink: links.prevLink,
+      nextLink: links.nextLink
     }
   }
 
@@ -117,22 +113,14 @@ class DB_PRODUCT_MANAGER {
   }
 
   async findProducts(query) {
-    try {
-      const response = await this.#model.find(query).lean()
-      return response
-    } catch (err) {
-      throw new Error(ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
-    }
+    const response = await this.#model.find(query).lean()
+    return response
   }
 
   async createProduct(item) {
-    try {
-      const response = await this.#model.create(item)
-      const data = this.#parseResponse(response)
-      return data
-    } catch (err) {
-      throw new Error(ERRORS.CREATE_PRODUCT.ERROR_CODE)
-    }
+    const response = await this.#model.create(item)
+    const data = this.#parseResponse(response)
+    return data
   }
 
   async updateProduct({ id }, updates) {

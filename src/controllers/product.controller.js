@@ -1,4 +1,4 @@
-import { PM as productManager } from '../dao/managers/product.manager.js'
+import { productManager } from '../dao/managers/product.manager.js'
 
 const getProducts = async (req, res, next) => {
   try {

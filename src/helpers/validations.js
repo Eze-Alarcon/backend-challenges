@@ -1,15 +1,14 @@
 'use strict'
 
 /* eslint space-before-function-paren: 0 */
-import { ERRORS, SUCCESS } from './errors.messages.js'
+import { STATUS_CODE, CREATE_PRODUCT_ERRORS } from './errors.messages.js'
 
 function validateObject(fields, strict) {
   if (fields === null || typeof (fields) !== 'object' || Array.isArray(fields)) {
-    if (!strict) throw new Error(ERRORS.UPDATE_MORE_FIELDS.ERROR_CODE)
-
-    throw new Error(ERRORS.REQUIRED_FIELDS.ERROR_CODE)
+    if (!strict) throw new Error(CREATE_PRODUCT_ERRORS.UPDATE_MORE_FIELDS.ERROR_CODE)
+    else throw new Error(CREATE_PRODUCT_ERRORS.REQUIRED_FIELDS.ERROR_CODE)
   }
-  return SUCCESS.OBJECT_RECEIVED.STATUS
+  return STATUS_CODE.SUCCESS.OK
 }
 
 function estrictInputs(fields) {
@@ -17,101 +16,64 @@ function estrictInputs(fields) {
     title,
     description,
     price,
-    // thumbnail,
     stock,
     status,
     code
   } = fields
 
-  if (description === undefined || description === null) {
-    throw new Error(ERRORS.EMPTY_DESCRIPTION.ERROR_CODE)
-  }
-
-  if (typeof (description) !== 'string') {
-    throw new Error(ERRORS.FIELD_DESCRIPTION.ERROR_CODE)
-  }
-
-  // if (thumbnail === undefined || thumbnail === null) {
-  //   throw new Error(ERRORS.EMPTY_THUMBNAIL.ERROR_CODE)
-  // }
-
-  // if (typeof (thumbnail) !== 'string') {
-  //   throw new Error(ERRORS.FIELD_THUMBNAIL.ERROR_CODE)
-  // }
-
-  if (title === undefined || title === null) {
-    throw new Error(ERRORS.EMPTY_TITLE.ERROR_CODE)
-  }
-
-  if (typeof (title) !== 'string') {
-    throw new Error(ERRORS.FIELD_TITLE.ERROR_CODE)
-  }
-
-  if (price === undefined || price === null) {
-    throw new Error(ERRORS.EMPTY_PRICE.ERROR_CODE)
+  if (
+    typeof (description) !== 'string' &&
+    typeof (title) !== 'string'
+  ) {
+    throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_STRING.ERROR_CODE)
   }
 
   if (typeof (price) !== 'number') {
-    throw new Error(ERRORS.FIELD_PRICE.ERROR_CODE)
+    throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_NUMBER.ERROR_CODE)
   }
 
   // This fields could be empty, null or undefined
 
-  if (stock !== undefined && stock !== null) {
-    if (typeof (stock) !== 'number') {
-      throw new Error(ERRORS.FIELD_STOCK.ERROR_CODE)
-    }
+  if ((code !== undefined && code !== null) && typeof (code) !== 'string') {
+    throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_STRING.ERROR_CODE)
   }
 
-  if (status !== undefined && status !== null) {
-    if (typeof (status) !== 'boolean') {
-      throw new Error(ERRORS.FIELD_STATUS.ERROR_CODE)
-    }
+  if ((stock !== undefined && stock !== null) && typeof (stock) !== 'number') {
+    throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_NUMBER.ERROR_CODE)
   }
 
-  if (code !== undefined && code !== null) {
-    if (typeof (code) !== 'string') {
-      throw new Error(ERRORS.FIELD_CODE_EXIST.ERROR_CODE)
-    }
+  if ((status !== undefined && status !== null) && typeof (status) !== 'boolean') {
+    throw new Error(CREATE_PRODUCT_ERRORS.FIELD_STATUS.ERROR_CODE)
   }
 }
 
-// All fields could be empty, null or undefined
+// ===== All fields could be empty, null or undefined =====
+
 function looseInputs(fields) {
-  if (fields.description !== undefined && fields.description !== null) {
-    if (typeof (fields.description) !== 'string') {
-      throw new Error(ERRORS.FIELD_DESCRIPTION.ERROR_CODE)
-    }
+  const title = fields.title
+  const description = fields.description
+  const price = fields.price
+  const stock = fields.stock
+  const status = fields.status
+
+  if ((description !== undefined && description !== null) && typeof (description) !== 'string') {
+    throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_STRING.ERROR_CODE)
   }
 
-  // if (fields.thumbnail !== undefined && fields.thumbnail !== null) {
-  //   if (typeof (fields.thumbnail) !== 'string') {
-  //     throw new Error(ERRORS.FIELD_THUMBNAIL.ERROR_CODE)
-  //   }
-  // }
-
-  if (fields.title !== undefined && fields.title !== null) {
-    if (typeof (fields.title) !== 'string') {
-      throw new Error(ERRORS.FIELD_TITLE.ERROR_CODE)
-    }
+  if ((title !== undefined && title !== null) && typeof (title) !== 'string') {
+    throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_STRING.ERROR_CODE)
   }
 
-  if (fields.price !== undefined && fields.price !== null) {
-    if (typeof (fields.price) !== 'number') {
-      throw new Error(ERRORS.FIELD_PRICE.ERROR_CODE)
-    }
+  if ((price !== undefined && price !== null) && typeof (price) !== 'number') {
+    throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_NUMBER.ERROR_CODE)
   }
 
-  if (fields.stock !== undefined && fields.stock !== null) {
-    if (typeof (fields.stock) !== 'number') {
-      throw new Error(ERRORS.FIELD_STOCK.ERROR_CODE)
-    }
+  if ((stock !== undefined && stock !== null) && typeof (stock) !== 'number') {
+    throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_NUMBER.ERROR_CODE)
   }
 
-  if (fields.status !== undefined && fields.status !== null) {
-    if (typeof (fields.status) !== 'boolean') {
-      throw new Error(ERRORS.FIELD_STATUS.ERROR_CODE)
-    }
+  if ((status !== undefined && status !== null) && typeof (status) !== 'boolean') {
+    throw new Error(CREATE_PRODUCT_ERRORS.FIELD_STATUS.ERROR_CODE)
   }
 }
 
@@ -122,18 +84,13 @@ export function validateInputs(fields, strictValidation = false) {
   else looseInputs(fields)
 
   return {
-    status_code: SUCCESS.FIELDS.STATUS,
+    status_code: STATUS_CODE.SUCCESS.OK,
     error: false
   }
 }
 
-export function searchMatch(id, arr) {
-  const matchCode = arr.some((el) => el.id === id)
-  if (matchCode) throw new Error(ERRORS.FIELD_EXIST.ERROR_CODE)
-}
-
 export function validateQuantity(value) {
   if (typeof (value) !== 'number') {
-    if (value !== null) throw new Error(ERRORS.FIELD_QUANTITY.ERROR_CODE)
+    throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_NUMBER.ERROR_CODE)
   }
 }

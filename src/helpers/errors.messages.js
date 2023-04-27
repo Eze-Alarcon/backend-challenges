@@ -10,9 +10,10 @@ const STATUS_CODE = {
     FORBIDDEN: 403,
     NOT_FOUND: 404
   },
-  SUCCESSFUL_RESPONSE: {
+  SUCCESS: {
     OK: 200,
-    CREATED: 201
+    CREATED: 201,
+    NO_CONTENT: 204
   },
   SERVER_ERROR: {
     INTERNAL_ERROR: 500,
@@ -20,7 +21,9 @@ const STATUS_CODE = {
   }
 }
 
-const PRODUCTS_ERRORS = {
+/* ========== Errores de productos ========== */
+
+const CREATE_PRODUCT_ERRORS = {
   REQUIRED_OBJECT: {
     MESSAGE: "[ERROR]: Expected object.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
@@ -36,71 +39,46 @@ const PRODUCTS_ERRORS = {
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
     ERROR_CODE: "UPDATE_MORE_FIELDS"
   },
-  EMPTY_DESCRIPTION: {
-    MESSAGE: "[ERROR]: The field 'description' is missing, null or undefined.",
+  INCORRECT_FIELD_TYPE_STRING: {
+    MESSAGE: "[ERROR]: The fields 'title, code, thumbnail and description' must be strings.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "EMPTY_DESCRIPTION"
+    ERROR_CODE: "INCORRECT_FIELD_TYPE_STRING"
   },
-  EMPTY_THUMBNAIL: {
-    MESSAGE: "[ERROR]: The field 'thumbnail' is missing, null or undefined.",
+  INCORRECT_FIELD_TYPE_NUMBER: {
+    MESSAGE: "[ERROR]: The fields 'price, stock and quantity' must be numbers.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "EMPTY_THUMBNAIL"
-  },
-  EMPTY_TITLE: {
-    MESSAGE: "[ERROR]: The field 'title' is missing, null or undefined.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "EMPTY_TITLE"
-  },
-  EMPTY_PRICE: {
-    MESSAGE: "[ERROR]: The field 'price' is missing, null or undefined.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "EMPTY_PRICE"
-  },
-  FIELD_DESCRIPTION: {
-    MESSAGE: "[ERROR]: The field 'description' must be a string.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "FIELD_DESCRIPTION"
-  },
-  FIELD_THUMBNAIL: {
-    MESSAGE: "[ERROR]: The field 'thumbnail' must be a string.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "FIELD_THUMBNAIL"
-  },
-  FIELD_TITLE: {
-    MESSAGE: "[ERROR]: The field 'title' must be a string.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "FIELD_TITLE"
-  },
-  FIELD_PRICE: {
-    MESSAGE: "[ERROR]: The field 'price' must be a number.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "FIELD_PRICE"
-  },
-  FIELD_STOCK: {
-    MESSAGE: "[ERROR]: The field 'stock' must be a number.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "FIELD_STOCK"
-  },
-  FIELD_QUANTITY: {
-    MESSAGE: "[ERROR]: The field 'quantity' must be a number.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "FIELD_QUANTITY"
+    ERROR_CODE: "INCORRECT_FIELD_TYPE_NUMBER"
   },
   FIELD_STATUS: {
     MESSAGE: "[ERROR]: The field 'stock' must be a boolean.",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
     ERROR_CODE: "FIELD_STATUS"
   },
-  FIELD_CODE_EXIST: {
-    MESSAGE: "[ERROR]: The field 'code' must be a string.",
+  PRODUCT_EXIST: {
+    MESSAGE: "[ERROR]: Product already exists in the database",
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "FIELD_CODE_EXIST"
+    ERROR_CODE: "PRODUCT_EXIST"
+  }
+}
+
+/* ========== Errores del server ========== */
+
+const SERVER_ERROR = {
+  SERVER_ERROR: {
+    MESSAGE: "Something has happened, contact maintenance.",
+    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
+    ERROR_CODE: "SERVER_ERROR"
   },
-  FIELD_EXIST: {
-    MESSAGE: "[ERROR]: There is a product with the same ID",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "FIELD_EXIST"
-  },
+  FEATURE_NOT_IMPLEMENTED: {
+    MESSAGE: "Feature not available at the moment, available in future releases.",
+    STATUS: STATUS_CODE.SERVER_ERROR.NOT_IMPLEMENTED,
+    ERROR_CODE: "FEATURE_NOT_IMPLEMENTED"
+  }
+}
+
+/* ========== Errores de los managers ========== */
+
+const PRODUCT_MANAGER_ERRORS = {
   PRODUCT_NOT_FOUND: {
     MESSAGE: "[ERROR]: Product not found",
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
@@ -111,88 +89,8 @@ const PRODUCTS_ERRORS = {
     STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK,
     ERROR_CODE: "NO_PRODUCTS_PARAMETERS"
   },
-  QUERY_NOT_NUMBER: {
-    MESSAGE: "[ERROR]: Limit and page must be a number",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "QUERY_NOT_NUMBER"
-  },
-  QUERY_ID: {
-    MESSAGE: "[ERROR]: Searched id must be a number",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "QUERY_ID"
-  }
-}
-
-const PRODUCTS_SUCCESS = {
-  FIELDS: {
-    MESSAGE: "Fields ok",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
-  },
-  FIELD: {
-    MESSAGE: "Field ok",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
-  },
-  OBJECT_RECEIVED: {
-    MESSAGE: "Object received successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
-  },
-  CREATED: {
-    MESSAGE: "Item created successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
-  },
-  UPDATED: {
-    MESSAGE: "Item updated successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
-  },
-  DELETED: {
-    MESSAGE: "Item removed successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
-  },
-  GET: {
-    MESSAGE: "Item found successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
-  }
-}
-
-const CARTS_ERROR = {
-  CART_NOT_FOUND: {
-    MESSAGE: "[ERROR]: Cart not found",
-    STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
-    ERROR_CODE: "CART_NOT_FOUND"
-  }
-}
-
-const CARTS_SUCCESS = {
-  GET_CART: {
-    MESSAGE: "Cart found successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK
-  },
-  CART_CREATED: {
-    MESSAGE: "Cart created successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
-  },
-  CART_PRODUCT: {
-    MESSAGE: "Product added to cart successfully",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.CREATED
-  }
-}
-
-const SERVER_ERROR = {
-  FEATURE_NOT_IMPLEMENTED: {
-    MESSAGE: "Feature not available at the moment, available in future releases.",
-    STATUS: STATUS_CODE.SERVER_ERROR.NOT_IMPLEMENTED,
-    ERROR_CODE: "FEATURE_NOT_IMPLEMENTED"
-  },
-  SERVER_ERROR: {
-    MESSAGE: "Something has happened, contact maintenance.",
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    ERROR_CODE: "SERVER_ERROR"
-  }
-}
-
-const PRODUCT_MANAGER_ERRORS = {
   CREATE_PRODUCT: {
-    MESSAGE: "Something went wrong with the 'createProduct' method",
+    MESSAGE: "Something went wrong with the 'addProduct' method",
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     ERROR_CODE: "CREATE_PRODUCT"
   }
@@ -200,22 +98,28 @@ const PRODUCT_MANAGER_ERRORS = {
 
 const CART_MANAGER_ERRORS = {
   GET_CARTS: {
-    MESSAGE: "Something went wrong with the 'getCarts' method",
+    MESSAGE: "[ERROR]: Something went wrong with the 'getCarts' method",
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     ERROR_CODE: "GET_CARTS"
   },
   CREATE_CARTS: {
-    MESSAGE: "Something went wrong with the 'createCart' method",
+    MESSAGE: "[ERROR]: Something went wrong with the 'createCart' method",
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     ERROR_CODE: "CREATE_CARTS"
   },
   ADD_PRODUCT_TO_CART: {
-    MESSAGE: "Something went wrong with the 'addProductToCart' method",
+    MESSAGE: "[ERROR]: Something went wrong with the 'addProductToCart' method",
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     ERROR_CODE: "ADD_PRODUCT_TO_CART"
+  },
+  CART_NOT_FOUND: {
+    MESSAGE: "[ERROR]: Cart not found",
+    STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
+    ERROR_CODE: "CART_NOT_FOUND"
   }
-
 }
+
+/* ========== Errores de autenticacion ========== */
 
 const AUTH_ERROR = {
   NO_SESSION: {
@@ -225,17 +129,11 @@ const AUTH_ERROR = {
   }
 }
 
-const ERRORS = {
-  ...PRODUCTS_ERRORS,
-  ...CARTS_ERROR,
-  ...SERVER_ERROR,
-  ...CART_MANAGER_ERRORS,
-  ...PRODUCT_MANAGER_ERRORS
+export {
+  AUTH_ERROR,
+  CART_MANAGER_ERRORS,
+  CREATE_PRODUCT_ERRORS,
+  PRODUCT_MANAGER_ERRORS,
+  SERVER_ERROR,
+  STATUS_CODE
 }
-
-const SUCCESS = {
-  ...PRODUCTS_SUCCESS,
-  ...CARTS_SUCCESS
-}
-
-export { ERRORS, SUCCESS, AUTH_ERROR }

@@ -1,4 +1,5 @@
-import { CM as cartManager } from '../dao/managers/cart.manager.js'
+/* eslint-disable camelcase */
+import { cartManager } from '../dao/managers/cart.manager.js'
 
 const updateCartProducts = async (req, res, next) => {
   try {
@@ -7,50 +8,56 @@ const updateCartProducts = async (req, res, next) => {
       productID: req.params.pid,
       quantityValue: req.body?.quantity ?? null
     }
-    const response = await cartManager.addProductToCart(query)
-    res.status(response.status_code).json({ details: response.operationDetails })
+    const { operationDetails, status_code } = await cartManager.addProductToCart(query)
+    res
+      .status(status_code)
+      .json({ details: operationDetails })
   } catch (error) {
-    return next(error.message)
+    next(error.message)
   }
 }
 
 const getCart = async (req, res, next) => {
   try {
     const query = req.params.cid
-    const response = await cartManager.getCartById(query)
-    res.status(response.status_code).json(
-      {
-        cart: response.cart,
-        totalProducts: response.totalProducts
-      })
+    const { cart, status_code, totalProducts } = await cartManager.getCartById(query)
+    res
+      .status(status_code)
+      .json({ cart, totalProducts })
   } catch (error) {
-    return next(error.message)
+    next(error.message)
   }
 }
 
 const clearCartProducts = async (req, res, next) => {
   try {
     const query = req.params.cid
-    const response = await cartManager.deleteAllCartProducts(query)
-    res.status(response.status_code).json(response.cartUpdated)
+    const { cartUpdated, status_code } = await cartManager.deleteAllCartProducts(query)
+    res
+      .status(status_code)
+      .json(cartUpdated)
   } catch (error) {
-    return next(error.message)
+    next(error.message)
   }
 }
 
 const createNewCart = async (req, res, next) => {
   try {
-    const response = await cartManager.createCart()
-    res.status(response.status_code).json(response.cart)
+    const { cart, status_code } = await cartManager.createCart()
+    res
+      .status(status_code)
+      .json(cart)
   } catch (error) {
-    return next(error.message)
+    next(error.message)
   }
 }
 
 const getAllCarts = async (req, res, next) => {
   try {
-    const response = await cartManager.getCarts()
-    res.status(response.status_code).json(response.carts)
+    const { carts, status_code } = await cartManager.getCarts()
+    res
+      .status(status_code)
+      .json(carts)
   } catch (error) {
     next(error.message)
   }
@@ -62,8 +69,10 @@ const deleteCartProduct = async (req, res, next) => {
       cartID: req.params.cid,
       productID: req.params.pid
     }
-    const response = await cartManager.deleteCartProduct(query)
-    res.status(response.status_code).json(response.details)
+    const { details, status_code } = await cartManager.deleteCartProduct(query)
+    res
+      .status(status_code)
+      .json(details)
   } catch (error) {
     next(error.message)
   }

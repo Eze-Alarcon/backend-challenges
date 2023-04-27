@@ -2,20 +2,17 @@
 
 /* eslint space-before-function-paren: 0 */
 import { Cart } from '../../classes/cart.class.js'
-import { SUCCESS, ERRORS } from '../../helpers/errors.messages.js'
-import { getMax } from '../../helpers/getMax.js'
+import { STATUS_CODE, CART_MANAGER_ERRORS } from '../../helpers/errors.messages.js'
 import { validateQuantity } from '../../helpers/validations.js'
-import { PM as productManager } from './product.manager.js'
+import { productManager } from './product.manager.js'
 import { DB_CARTS } from '../database/carts.database.js'
 
 /* -------------------------------------------- */
 
 class CartManager {
-  #lastID
-  #cartsList
+  #nextID
   constructor() {
-    this.#cartsList = []
-    this.#lastID = 0
+    this.#nextID = 0
   }
 
   #parseData(value) {
@@ -37,31 +34,33 @@ class CartManager {
   async getCarts() {
     try {
       const carts = await DB_CARTS.getCarts()
-      this.#cartsList = [...carts]
       return {
-        status_code: SUCCESS.GET.STATUS,
+        status_code: STATUS_CODE.SUCCESS.OK,
         carts
       }
     } catch (err) {
-      throw new Error(ERRORS.GET_CARTS.ERROR_CODE)
+      throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
     }
   }
 
   async createCart() {
     try {
-      await this.getCarts()
-      this.#lastID = getMax(this.#cartsList)
+      const lastItem = await DB_CARTS.getLastID()
 
-      const newCart = new Cart({ id: ++this.#lastID })
+      lastItem.length > 0
+        ? this.#nextID = ++lastItem[0].id
+        : this.#nextID = 1
 
-      await DB_CARTS.createCart(newCart)
+      const newCart = new Cart({ id: ++this.#nextID })
+
+      await DB_CARTS.createCart(newCart.getCartData())
 
       return {
-        status_code: SUCCESS.CART_CREATED.STATUS,
+        status_code: STATUS_CODE.SUCCESS.OK,
         cart: newCart
       }
     } catch (err) {
-      throw new Error(ERRORS.CREATE_CARTS.ERROR_CODE)
+      throw new Error(CART_MANAGER_ERRORS.CREATE_CARTS.ERROR_CODE)
     }
   }
 
@@ -70,12 +69,12 @@ class CartManager {
       const cart = await DB_CARTS.findCartByID({ id: query })
       const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
       return {
-        status_code: SUCCESS.GET_CART.STATUS,
+        status_code: STATUS_CODE.SUCCESS.OK,
         totalProducts,
         cart
       }
     } catch (err) {
-      throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
+      throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
     }
   }
 
@@ -106,11 +105,11 @@ class CartManager {
       }
 
       return {
-        status_code: SUCCESS.CART_PRODUCT.STATUS,
+        status_code: STATUS_CODE.SUCCESS.OK,
         operationDetails: response
       }
     } catch (err) {
-      throw new Error(ERRORS.ADD_PRODUCT_TO_CART.ERROR_CODE)
+      throw new Error(CART_MANAGER_ERRORS.ADD_PRODUCT_TO_CART.ERROR_CODE)
     }
   }
 
@@ -119,11 +118,11 @@ class CartManager {
       const cartUpdated = await DB_CARTS.deleteAllCartProducts({ id: query })
 
       return {
-        status_code: SUCCESS.DELETED.STATUS,
+        status_code: STATUS_CODE.SUCCESS.OK,
         cartUpdated
       }
     } catch (err) {
-      throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
+      throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
     }
   }
 
@@ -135,15 +134,15 @@ class CartManager {
       const details = await DB_CARTS.deleteCartProduct({ id: cartID, productID: parsedID })
 
       return {
-        status_code: SUCCESS.DELETED.STATUS,
+        status_code: STATUS_CODE.SUCCESS.OK,
         details
       }
     } catch (err) {
-      throw new Error(ERRORS.CART_NOT_FOUND.ERROR_CODE)
+      throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
     }
   }
 }
 
-const CM = new CartManager()
+const cartManager = new CartManager()
 
-export { CM }
+export { cartManager }

@@ -4,7 +4,9 @@
 import { User } from '../../classes/user.class.js'
 import { DB_USERS } from '../database/users.database.js'
 
-class UsersManager {
+// TODO: INSERTAR LOS TRY CATCH
+
+class UserManager {
   async #searchUser({ email, password }) {
     const data = await DB_USERS.findUser({ email, password })
     const user = data.length > 0 ? data[0] : []
@@ -50,6 +52,6 @@ class UsersManager {
   }
 }
 
-const UM = new UsersManager()
+const userManager = new UserManager()
 
-export { UM }
+export { userManager }

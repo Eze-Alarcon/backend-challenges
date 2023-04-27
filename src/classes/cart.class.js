@@ -1,17 +1,20 @@
 /* eslint-disable space-before-function-paren */
 
-class CartProduct {
-  constructor({ id, quantity }) {
-    this.id = id
-    this.quantity = quantity ?? 1
-  }
-}
-
 class Cart {
+  #id
+  #products
+
   constructor({ id }) {
-    this.id = id
-    this.products = []
+    this.#id = id
+    this.#products = []
+  }
+
+  getCartData() {
+    return {
+      id: this.#id,
+      products: this.#products
+    }
   }
 }
 
-export { CartProduct, Cart }
+export { Cart }

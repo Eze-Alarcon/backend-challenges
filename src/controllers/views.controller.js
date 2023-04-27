@@ -1,6 +1,6 @@
 /* eslint-disable space-before-function-paren */
-import { PM as productManager } from '../dao/managers/product.manager.js'
-import { CM as cartManager } from '../dao/managers/cart.manager.js'
+import { productManager } from '../dao/managers/product.manager.js'
+import { cartManager } from '../dao/managers/cart.manager.js'
 import { SERVER } from '../config/server.config.js'
 
 const VIEWS_LINKS = {
