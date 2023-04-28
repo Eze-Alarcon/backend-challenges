@@ -30,4 +30,12 @@ export class User {
       age: this.#age
     }
   }
+
+  getPublicData() {
+    return {
+      email: this.#email,
+      name: `${this.#first_name} ${this.#last_name}`,
+      age: this.#age
+    }
+  }
 }

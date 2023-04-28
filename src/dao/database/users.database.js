@@ -9,19 +9,13 @@ class DB_USER_MANAGER {
   }
 
   async findUser(query) {
-    const user = await this.#model.find(query).lean()
+    const user = await this.#model.find(query, { _id: 0 }).lean()
 
     return [...user]
   }
 
   async createUser(user) {
-    try {
-      await this.#model.create(user)
-      return { userCreated: true } // TODO: Cambiar esto por algo mas sigificativo
-    } catch (err) {
-      // throw new Error(ERRORS.CREATE_PRODUCT.ERROR_CODE)
-      // TODO: agregar nuevo mensaje de error
-    }
+    await this.#model.create(user)
   }
 }
 

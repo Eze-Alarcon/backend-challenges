@@ -86,7 +86,7 @@ const PRODUCT_MANAGER_ERRORS = {
   },
   NO_PRODUCTS_PARAMETERS: {
     MESSAGE: "[ERROR]: No products were found with these search query parameters",
-    STATUS: STATUS_CODE.SUCCESSFUL_RESPONSE.OK,
+    STATUS: STATUS_CODE.SUCCESS.OK,
     ERROR_CODE: "NO_PRODUCTS_PARAMETERS"
   },
   CREATE_PRODUCT: {
@@ -123,9 +123,14 @@ const CART_MANAGER_ERRORS = {
 
 const AUTH_ERROR = {
   NO_SESSION: {
-    MESSAGE: "Login to continue",
+    MESSAGE: "[ERROR]: Login to continue",
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     ERROR_CODE: "NO_SESSION"
+  },
+  HAVE_ACCOUNT: {
+    MESSAGE: "[ERROR]: Authentication error. If you already have an account, try logging in.",
+    STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
+    ERROR_CODE: "HAVE_ACCOUNT"
   }
 }
 

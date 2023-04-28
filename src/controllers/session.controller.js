@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable space-before-function-paren */
 
-import { usersManager } from '../dao/managers/user.manager.js'
+import { userManager } from '../dao/managers/user.manager.js'
 
 // deberia mandarlo a otro lado aunque no se donde
 const ADMINS = [
@@ -21,35 +21,44 @@ function isAdmin({ email, password }) {
   return ADMINS.some((el) => el.email === email && el.password === password)
 }
 
-async function login(req, res) {
-  const { email, password } = req.body
-  const { user, userExist } = await usersManager.logUser({ email, password })
+async function login(req, res, next) {
+  try {
+    const { email, password } = req.body
+    const { user, status, userCanLog } = await userManager.logUser({ email, password })
 
-  const role = isAdmin({ email, password })
+    const role = isAdmin({ email, password })
 
-  if (userExist) {
-    req.session.user = user.email
-    req.session.name = `${user.first_name} ${user.last_name}`
-    req.session.age = user.age
-    req.session.admin = role
-    return res.json({ message: 'login success', isLog: true })
+    if (userCanLog) {
+      req.session.user = user.email
+      req.session.name = `${user.first_name} ${user.last_name}`
+      req.session.age = user.age
+      req.session.admin = role
+      return res.status(status).json({ message: 'Login success', isLog: true })
+    }
+
+    res.status(status).json({ message: 'Login failed', isLog: false })
+  } catch (error) {
+    next(error.message)
   }
-
-  res.json({ message: 'login failed', isLog: false })
 }
 
-async function register(req, res) {
-  const { email, password, age, first_name, last_name } = req.body
+async function register(req, res, next) {
+  try {
+    const { email, password, age, first_name, last_name } = req.body
 
-  await usersManager.createUser({ email, password, age, first_name, last_name })
+    const { status, user } = await userManager.createUser({ email, password, age, first_name, last_name })
 
-  const role = isAdmin({ email, password })
+    const role = isAdmin({ email, password })
 
-  req.session.user = email
-  req.session.name = `${first_name} ${last_name}`
-  req.session.age = age
-  req.session.admin = role
-  res.json({ message: 'login success', isLog: true })
+    req.session.user = user.email
+    req.session.name = user.name
+    req.session.age = user.age
+    req.session.admin = role
+
+    res.status(status).json({ message: 'login success', isLog: true })
+  } catch (error) {
+    next(error.message)
+  }
 }
 
 function logout(req, res) {

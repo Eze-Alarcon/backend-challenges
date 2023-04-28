@@ -2,13 +2,13 @@
 /* eslint-disable space-before-function-paren */
 
 import { User } from '../../classes/user.class.js'
+import { AUTH_ERROR, STATUS_CODE } from '../../helpers/errors.messages.js'
+import { comparePassword, hashPassword } from '../../helpers/hash.js'
 import { DB_USERS } from '../database/users.database.js'
 
-// TODO: INSERTAR LOS TRY CATCH
-
 class UserManager {
-  async #searchUser({ email, password }) {
-    const data = await DB_USERS.findUser({ email, password })
+  async #searchUser({ email }) {
+    const data = await DB_USERS.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
     return {
@@ -18,9 +18,18 @@ class UserManager {
   }
 
   async logUser({ email, password }) {
-    const user = await this.#searchUser({ email, password })
+    const { user, userExist } = await this.#searchUser({ email })
+    let compare = false
 
-    return user
+    if (userExist) {
+      compare = await comparePassword({ password, hashPassword: user.password })
+    }
+
+    return {
+      user: compare ? user : false,
+      status: compare ? STATUS_CODE.SUCCESS.OK : STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
+      userCanLog: compare
+    }
   }
 
   async createUser({
@@ -30,25 +39,26 @@ class UserManager {
     last_name,
     age
   }) {
-    const searchedUser = await this.#searchUser({ email, password })
+    const { userExist } = await this.#searchUser({ email })
 
-    if (searchedUser.userExist) {
-      console.log('el usuario ya existe') // TODO: dar una respuesta valida
-      console.log('user: ', searchedUser)
-      return
-    }
+    if (userExist) throw new Error(AUTH_ERROR.HAVE_ACCOUNT.ERROR_CODE)
+
+    const newPassword = await hashPassword(password)
 
     const newUser = new User({
       email,
-      password,
+      password: newPassword,
       first_name,
       last_name,
       age
     })
 
-    const userCreated = await DB_USERS.createUser(newUser.getData())
+    await DB_USERS.createUser(newUser.getData())
 
-    console.log('userCreated', userCreated) // TODO: Responder o borrar la rta del user.database
+    return {
+      status: STATUS_CODE.SUCCESS.CREATED,
+      user: newUser.getPublicData()
+    }
   }
 }
 
