@@ -19,6 +19,8 @@ function searchError(errorCode) {
 
 export function handleError(err, req, res, next) {
   try {
+    console.log(err)
+
     const { message, status } = searchError(err)
 
     return res.status(status).json({ message })

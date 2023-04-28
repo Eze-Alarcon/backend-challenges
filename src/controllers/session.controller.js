@@ -42,6 +42,14 @@ async function login(req, res, next) {
   }
 }
 
+async function loginReponse(req, res, next) {
+  return res.json({ message: 'Login success', isLog: true })
+}
+
+async function registerResponse(req, res, next) {
+  res.json({ message: 'login success', isLog: true })
+}
+
 async function register(req, res, next) {
   try {
     const { email, password, age, first_name, last_name } = req.body
@@ -68,4 +76,4 @@ function logout(req, res) {
   })
 }
 
-export { login, register, logout }
+export { login, register, logout, loginReponse, registerResponse }

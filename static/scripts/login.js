@@ -22,6 +22,7 @@ async function postData(data) {
     body: JSON.stringify(data)
   })
   const response = await sendForm.json()
+  console.log(response)
 
   if (response.isLog) window.location.assign('/products')
   else msgContainer.innerText = response.message

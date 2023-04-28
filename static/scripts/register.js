@@ -1,6 +1,7 @@
 /* eslint-disable space-before-function-paren */
 
 const loginForm = document.getElementById('register_form')
+const msgContainer = document.getElementById('message_container')
 
 loginForm.addEventListener('submit', handleSubmit)
 
@@ -23,4 +24,5 @@ async function postData(data) {
   const response = await sendForm.json()
 
   if (response.isLog) window.location.assign('/products')
+  else msgContainer.innerText = response.message
 }

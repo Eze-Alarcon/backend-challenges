@@ -19,16 +19,14 @@ class UserManager {
 
   async logUser({ email, password }) {
     const { user, userExist } = await this.#searchUser({ email })
-    let compare = false
+    if (!userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)
 
-    if (userExist) {
-      compare = await comparePassword({ password, hashPassword: user.password })
-    }
+    const samePassword = await comparePassword({ password, hashPassword: user.password })
+    if (!samePassword) throw new Error(AUTH_ERROR.WRONG_CREDENTIALS.ERROR_CODE)
 
     return {
-      user: compare ? user : false,
-      status: compare ? STATUS_CODE.SUCCESS.OK : STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
-      userCanLog: compare
+      user,
+      status: STATUS_CODE.SUCCESS.OK
     }
   }
 
@@ -41,7 +39,7 @@ class UserManager {
   }) {
     const { userExist } = await this.#searchUser({ email })
 
-    if (userExist) throw new Error(AUTH_ERROR.HAVE_ACCOUNT.ERROR_CODE)
+    if (userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)
 
     const newPassword = await hashPassword(password)
 

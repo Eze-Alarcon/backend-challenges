@@ -67,10 +67,10 @@ function register(req, res, next) {
 
 function profile(req, res, next) {
   const userInfo = {
-    user: req.session.user,
-    name: req.session.name,
-    age: req.session.age,
-    role: req.session.admin
+    user: req.session.passport.user.email,
+    name: req.session.passport.user.name,
+    age: req.session.passport.user.age,
+    role: req.session.passport.user.admin
   }
 
   res.status(200).render(RENDER_PATH.PROFILE, {

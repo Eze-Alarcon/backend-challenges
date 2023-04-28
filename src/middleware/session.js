@@ -1,12 +1,14 @@
 /* eslint-disable space-before-function-paren */
 
 function hasSession(req, res, next) {
-  if (!req.session.user) return res.redirect('/')
+  if (!req.session.passport) return res.redirect('/')
+
   next()
 }
 
 function alreadyHasSession(req, res, next) {
-  if (req.session.user) return res.redirect('/products')
+  if (req.session.passport) return res.redirect('/products')
+
   next()
 }
 

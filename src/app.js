@@ -20,6 +20,7 @@ import { viewsRouter } from './routers/views.router.js'
 
 // Middlewares
 import { handleError } from './middleware/errors.js'
+import { passportInitialize, passportSession } from './middleware/passport.config.js'
 
 await mongoose.connect(URL_DB)
 
@@ -41,6 +42,9 @@ app.use(session({
 app.engine('handlebars', engine())
 app.set('views', FOLDERS.VIEWS_FOLDER)
 app.set('view engine', 'handlebars')
+
+// acá cargo passport en el servidor express como middleware
+app.use(passportInitialize, passportSession)
 
 app.use(ROUTES.SESSION_ROUTE, sessionRouter)
 app.use(ROUTES.PRODUCTS_ROUTE, productsRouter)

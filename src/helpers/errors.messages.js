@@ -127,10 +127,15 @@ const AUTH_ERROR = {
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     ERROR_CODE: "NO_SESSION"
   },
-  HAVE_ACCOUNT: {
-    MESSAGE: "[ERROR]: Authentication error. If you already have an account, try logging in.",
+  NO_ACCOUNT: {
+    MESSAGE: "[ERROR]: Authentication error. If you already have an account, please try to log in or register",
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
-    ERROR_CODE: "HAVE_ACCOUNT"
+    ERROR_CODE: "NO_ACCOUNT"
+  },
+  WRONG_CREDENTIALS: {
+    MESSAGE: "[ERROR]: Authentication error. Invalid username and password",
+    STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
+    ERROR_CODE: "WRONG_CREDENTIALS"
   }
 }
 
