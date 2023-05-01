@@ -8,6 +8,12 @@ const usuarioSchema = new mongoose.Schema({
   age: { type: Number, required: true }
 }, { versionKey: false })
 
-const usuarioModel = mongoose.model('usuarios', usuarioSchema)
+const githubUserSchema = new mongoose.Schema(
+  { email: { type: String, required: true, unique: true } },
+  { versionKey: false }
+)
 
-export { usuarioModel }
+const userModel = mongoose.model('usuarios', usuarioSchema)
+const githubUserModel = mongoose.model('usersGithub', githubUserSchema)
+
+export { userModel, githubUserModel }

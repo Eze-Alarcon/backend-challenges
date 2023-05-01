@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 'use strict'
 import express, { Router } from 'express'
 import {
@@ -6,7 +7,12 @@ import {
   registerResponse
 } from '../controllers/session.controller.js'
 import { alreadyHasSession, hasSession } from '../middleware/session.js'
-import { autenticacionUserLogin, autenticacionUserRegister } from '../middleware/passport.config.js'
+import {
+  autenticacionUserLogin,
+  autenticacionUserRegister,
+  autenticacionUserGithub,
+  antenticacionUserGithub_CB
+} from '../middleware/passport.config.js'
 
 export const sessionRouter = Router()
 
@@ -23,3 +29,11 @@ sessionRouter
 sessionRouter
   .route('/logout')
   .delete(hasSession, logout)
+
+sessionRouter
+  .route('/github')
+  .get(autenticacionUserGithub)
+
+sessionRouter
+  .route('/githubcallback')
+  .get(antenticacionUserGithub_CB, (req, res, next) => { res.redirect('/') })

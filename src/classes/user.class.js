@@ -39,3 +39,14 @@ export class User {
     }
   }
 }
+
+export class UserGithub {
+  #email
+  constructor({ email }) {
+    this.#email = email
+  }
+
+  getData() {
+    return { email: this.#email }
+  }
+}

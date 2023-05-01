@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 /* eslint-disable space-before-function-paren */
 
-import { User } from '../../classes/user.class.js'
+import { User, UserGithub } from '../../classes/user.class.js'
 import { AUTH_ERROR, STATUS_CODE } from '../../helpers/errors.messages.js'
 import { comparePassword, hashPassword } from '../../helpers/hash.js'
-import { DB_USERS } from '../database/users.database.js'
+import { DB_USERS, DB_GITHUB_USERS } from '../database/users.database.js'
 
 class UserManager {
-  async #searchUser({ email }) {
+  async searchUser({ email }) {
     const data = await DB_USERS.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
@@ -18,7 +18,7 @@ class UserManager {
   }
 
   async logUser({ email, password }) {
-    const { user, userExist } = await this.#searchUser({ email })
+    const { user, userExist } = await this.searchUser({ email })
     if (!userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)
 
     const samePassword = await comparePassword({ password, hashPassword: user.password })
@@ -37,7 +37,7 @@ class UserManager {
     last_name,
     age
   }) {
-    const { userExist } = await this.#searchUser({ email })
+    const { userExist } = await this.searchUser({ email })
 
     if (userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)
 
@@ -56,6 +56,31 @@ class UserManager {
     return {
       status: STATUS_CODE.SUCCESS.CREATED,
       user: newUser.getPublicData()
+    }
+  }
+
+  async searchGithubUser({ email }) {
+    const data = await DB_GITHUB_USERS.findUser({ email })
+    const user = data.length > 0 ? data[0] : []
+
+    return {
+      user,
+      userExist: data.length > 0
+    }
+  }
+
+  async createGithubUser({ email }) {
+    const { userExist } = await this.searchUser({ email })
+
+    if (userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)
+
+    const newUser = new UserGithub({ email })
+
+    await DB_GITHUB_USERS.createUser(newUser.getData())
+
+    return {
+      status: STATUS_CODE.SUCCESS.CREATED,
+      user: newUser.getData()
     }
   }
 }
