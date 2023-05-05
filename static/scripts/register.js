@@ -1,11 +1,9 @@
-/* eslint-disable space-before-function-paren */
-
 const loginForm = document.getElementById('register_form')
 const msgContainer = document.getElementById('message_container')
 
 loginForm.addEventListener('submit', handleSubmit)
 
-async function handleSubmit(e) {
+async function handleSubmit (e) {
   e.preventDefault()
 
   const data = Object.fromEntries(new FormData(e.target))
@@ -13,7 +11,7 @@ async function handleSubmit(e) {
   await postData(data)
 }
 
-async function postData(data) {
+async function postData (data) {
   const URL = '/api/sessions/register'
 
   const sendForm = await fetch(URL, {

@@ -1,6 +1,4 @@
-'use strict'
 import crypto from 'crypto'
-/* eslint space-before-function-paren: 0 */
 
 export class Product {
   #id
@@ -13,7 +11,7 @@ export class Product {
   #stock
   #code
 
-  constructor({
+  constructor ({
     id,
     title,
     description,
@@ -35,7 +33,7 @@ export class Product {
     this.#code = code ?? `code-${crypto.randomUUID()}`
   }
 
-  getProductData() {
+  getProductData () {
     return {
       id: this.#id,
       title: this.#title,

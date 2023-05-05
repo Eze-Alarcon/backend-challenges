@@ -1,22 +1,20 @@
-/* eslint-disable space-before-function-paren */
-
-import { userModel, githubUserModel } from '../models/users.schema.js'
+import { userModel, githubUserModel } from '../schemas/users.schema.js'
 
 // ===== Local DB Manager =====
 
 class DB_USER_MANAGER {
   #model
-  constructor(model) {
+  constructor (model) {
     this.#model = model
   }
 
-  async findUser(query) {
+  async findUser (query) {
     const user = await this.#model.find(query, { _id: 0 }).lean()
 
     return [...user]
   }
 
-  async createUser(user) {
+  async createUser (user) {
     await this.#model.create(user)
   }
 }
@@ -25,17 +23,17 @@ class DB_USER_MANAGER {
 
 class DB_USER_GITHUB_MANAGER {
   #model
-  constructor(model) {
+  constructor (model) {
     this.#model = model
   }
 
-  async findUser(query) {
+  async findUser (query) {
     const user = await this.#model.find(query, { _id: 0 }).lean()
 
     return [...user]
   }
 
-  async createUser(user) {
+  async createUser (user) {
     await this.#model.create(user)
   }
 }

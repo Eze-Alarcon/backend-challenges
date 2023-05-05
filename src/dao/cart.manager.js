@@ -1,25 +1,22 @@
-'use strict'
-
-/* eslint space-before-function-paren: 0 */
-import { Cart } from '../../classes/cart.class.js'
-import { STATUS_CODE, CART_MANAGER_ERRORS } from '../../helpers/errors.messages.js'
-import { validateQuantity } from '../../helpers/validations.js'
+import { Cart } from '../classes/cart.class.js'
+import { STATUS_CODE, CART_MANAGER_ERRORS } from '../utils/errors.messages.js'
+import { validateQuantity } from '../utils/validations.js'
 import { productManager } from './product.manager.js'
-import { DB_CARTS } from '../database/carts.database.js'
+import { DB_CARTS } from '../services/carts.database.js'
 
 /* -------------------------------------------- */
 
 class CartManager {
   #nextID
-  constructor() {
+  constructor () {
     this.#nextID = 0
   }
 
-  #parseData(value) {
+  #parseData (value) {
     return JSON.parse(JSON.stringify(value))
   }
 
-  #findIndex(arr, searchedValue) {
+  #findIndex (arr, searchedValue) {
     const productIndex = arr.products.findIndex((el) => {
       const parseElement = el.product._id
       const productID = this.#parseData(parseElement)
@@ -31,7 +28,7 @@ class CartManager {
     }
   }
 
-  async getCarts() {
+  async getCarts () {
     try {
       const carts = await DB_CARTS.getCarts()
       return {
@@ -43,7 +40,7 @@ class CartManager {
     }
   }
 
-  async createCart() {
+  async createCart () {
     try {
       const lastItem = await DB_CARTS.getLastID()
 
@@ -64,7 +61,7 @@ class CartManager {
     }
   }
 
-  async getCartById(query) {
+  async getCartById (query) {
     try {
       const cart = await DB_CARTS.findCartByID({ id: query })
       const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
@@ -78,7 +75,7 @@ class CartManager {
     }
   }
 
-  async addProductToCart({ cartID, productID, quantityValue = null }) {
+  async addProductToCart ({ cartID, productID, quantityValue = null }) {
     try {
       validateQuantity(quantityValue)
       const cart = await DB_CARTS.findCartByID({ id: cartID })
@@ -113,7 +110,7 @@ class CartManager {
     }
   }
 
-  async deleteAllCartProducts(query) {
+  async deleteAllCartProducts (query) {
     try {
       const cartUpdated = await DB_CARTS.deleteAllCartProducts({ id: query })
 
@@ -126,7 +123,7 @@ class CartManager {
     }
   }
 
-  async deleteCartProduct({ cartID, productID }) {
+  async deleteCartProduct ({ cartID, productID }) {
     try {
       const { item: product } = await productManager.getProductById({ id: productID })
       const parsedID = this.#parseData(product._id)

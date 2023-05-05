@@ -1,8 +1,12 @@
-'use strict'
-/* eslint space-before-function-paren: 0 */
-import { SERVER_ERROR, AUTH_ERROR, CART_MANAGER_ERRORS, CREATE_PRODUCT_ERRORS, PRODUCT_MANAGER_ERRORS } from '../helpers/errors.messages.js'
+import {
+  SERVER_ERROR,
+  AUTH_ERROR,
+  CART_MANAGER_ERRORS,
+  CREATE_PRODUCT_ERRORS,
+  PRODUCT_MANAGER_ERRORS
+} from '../utils/errors.messages.js'
 
-function searchError(errorCode) {
+function searchError (errorCode) {
   const ERRORS = {
     ...AUTH_ERROR,
     ...CART_MANAGER_ERRORS,
@@ -17,7 +21,7 @@ function searchError(errorCode) {
   }
 }
 
-export function handleError(err, req, res, next) {
+export function handleError (err, req, res, next) {
   try {
     console.log(err)
 

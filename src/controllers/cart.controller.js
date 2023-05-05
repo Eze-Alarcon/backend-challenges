@@ -1,5 +1,4 @@
-/* eslint-disable camelcase */
-import { cartManager } from '../dao/managers/cart.manager.js'
+import { cartManager } from '../dao/cart.manager.js'
 
 const updateCartProducts = async (req, res, next) => {
   try {

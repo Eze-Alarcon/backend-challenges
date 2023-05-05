@@ -1,5 +1,3 @@
-'use strict'
-
 import { Router } from 'express'
 import { productsPaginate, cartItems, login, profile, register } from '../controllers/views.controller.js'
 import { hasSession, alreadyHasSession } from '../middleware/session.js'

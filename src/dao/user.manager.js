@@ -1,13 +1,11 @@
-/* eslint-disable camelcase */
-/* eslint-disable space-before-function-paren */
 
-import { User, UserGithub } from '../../classes/user.class.js'
-import { AUTH_ERROR, STATUS_CODE } from '../../helpers/errors.messages.js'
-import { comparePassword, hashPassword } from '../../helpers/hash.js'
-import { DB_USERS, DB_GITHUB_USERS } from '../database/users.database.js'
+import { User, UserGithub } from '../classes/user.class.js'
+import { AUTH_ERROR, STATUS_CODE } from '../utils/errors.messages.js'
+import { comparePassword, hashPassword } from '../utils/hash.js'
+import { DB_USERS, DB_GITHUB_USERS } from '../services/users.database.js'
 
 class UserManager {
-  async searchUser({ email }) {
+  async searchUser ({ email }) {
     const data = await DB_USERS.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
@@ -17,7 +15,7 @@ class UserManager {
     }
   }
 
-  async logUser({ email, password }) {
+  async logUser ({ email, password }) {
     const { user, userExist } = await this.searchUser({ email })
     if (!userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)
 
@@ -30,7 +28,7 @@ class UserManager {
     }
   }
 
-  async createUser({
+  async createUser ({
     email,
     password,
     first_name,
@@ -59,7 +57,7 @@ class UserManager {
     }
   }
 
-  async searchGithubUser({ email }) {
+  async searchGithubUser ({ email }) {
     const data = await DB_GITHUB_USERS.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
@@ -69,7 +67,7 @@ class UserManager {
     }
   }
 
-  async createGithubUser({ email }) {
+  async createGithubUser ({ email }) {
     const { userExist } = await this.searchUser({ email })
 
     if (userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)

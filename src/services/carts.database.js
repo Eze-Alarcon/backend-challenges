@@ -1,19 +1,17 @@
-/* eslint-disable space-before-function-paren */
-
 import mongoose from 'mongoose'
-import { cartModel } from '../models/cart.schema.js'
+import { cartModel } from '../schemas/cart.schema.js'
 
 class DB_CART_MANAGER {
   #model
-  constructor(model) {
+  constructor (model) {
     this.#model = model
   }
 
-  #parseResponse(item) {
+  #parseResponse (item) {
     return JSON.parse(JSON.stringify(item))
   }
 
-  async getLastID() {
+  async getLastID () {
     const data = await this.#model
       .find()
       .sort({ id: -1 })
@@ -23,12 +21,12 @@ class DB_CART_MANAGER {
     return data
   }
 
-  async getCarts() {
+  async getCarts () {
     const response = await this.#model.find({}, { _id: 0, products: { _id: 0 } }).lean()
     return response
   }
 
-  async findCartByID({ id }) {
+  async findCartByID ({ id }) {
     const response = await this.#model
       .find(
         { id },
@@ -46,13 +44,13 @@ class DB_CART_MANAGER {
     return response[0]
   }
 
-  async createCart(item) {
+  async createCart (item) {
     const response = await this.#model.create(item)
     const data = this.#parseResponse(response)
     return data
   }
 
-  async addProductToCart({ id, productID }) {
+  async addProductToCart ({ id, productID }) {
     await this.#model.updateOne(
       { id },
       {
@@ -73,7 +71,7 @@ class DB_CART_MANAGER {
     }
   }
 
-  async updateCartProductQuantity({ cartID, productID, quantity }) {
+  async updateCartProductQuantity ({ cartID, productID, quantity }) {
     const data = await this.#model.updateOne(
       { cartID, 'products.product': productID },
       { $set: { 'products.$[elem].quantity': quantity } },
@@ -88,7 +86,7 @@ class DB_CART_MANAGER {
     }
   }
 
-  async deleteAllCartProducts({ id }) {
+  async deleteAllCartProducts ({ id }) {
     const response = await this.#model.updateOne(
       { id },
       { $set: { products: [] } }
@@ -96,7 +94,7 @@ class DB_CART_MANAGER {
     return response
   }
 
-  async deleteCartProduct({ id, productID }) {
+  async deleteCartProduct ({ id, productID }) {
     const data = await this.#model.updateOne(
       { id },
       { $pull: { products: { product: productID } } }

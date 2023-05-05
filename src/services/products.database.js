@@ -1,20 +1,18 @@
-/* eslint-disable space-before-function-paren */
-
-import { SERVER } from '../../config/server.config.js'
-import { STATUS_CODE } from '../../helpers/errors.messages.js'
-import { productModel } from '../models/products.schema.js'
+import { SERVER } from '../config/server.config.js'
+import { STATUS_CODE } from '../utils/errors.messages.js'
+import { productModel } from '../schemas/products.schema.js'
 
 class DB_PRODUCT_MANAGER {
   #model
-  constructor(model) {
+  constructor (model) {
     this.#model = model
   }
 
-  #parseResponse(item) {
+  #parseResponse (item) {
     return JSON.parse(JSON.stringify(item))
   }
 
-  #handleQueries(options) {
+  #handleQueries (options) {
     const pageOptions = {
       limit: options.limit || 10,
       page: options.page || 1,
@@ -47,7 +45,7 @@ class DB_PRODUCT_MANAGER {
     return { pageOptions, pageQuery }
   }
 
-  #generateLinks(options, data) {
+  #generateLinks (options, data) {
     const links = {
       prevLink: null,
       nextLink: null
@@ -79,7 +77,7 @@ class DB_PRODUCT_MANAGER {
     return links
   }
 
-  async getProducts(options) {
+  async getProducts (options) {
     const { pageOptions, pageQuery } = this.#handleQueries(options)
 
     const data = await this.#model.paginate(pageQuery, pageOptions)
@@ -102,7 +100,7 @@ class DB_PRODUCT_MANAGER {
     }
   }
 
-  async getLastProduct() {
+  async getLastProduct () {
     const data = await this.#model.paginate({}, {
       limit: 1,
       sort: { id: -1 },
@@ -112,23 +110,23 @@ class DB_PRODUCT_MANAGER {
     return data.docs
   }
 
-  async findProducts(query) {
+  async findProducts (query) {
     const response = await this.#model.find(query).lean()
     return response
   }
 
-  async createProduct(item) {
+  async createProduct (item) {
     const response = await this.#model.create(item)
     const data = this.#parseResponse(response)
     return data
   }
 
-  async updateProduct({ id }, updates) {
+  async updateProduct ({ id }, updates) {
     const data = await this.#model.updateOne({ id }, updates)
     return data
   }
 
-  async deleteProduct({ id }) {
+  async deleteProduct ({ id }) {
     const response = await this.#model.deleteOne(id)
     return response
   }

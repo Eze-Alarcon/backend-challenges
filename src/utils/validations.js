@@ -1,9 +1,6 @@
-'use strict'
-
-/* eslint space-before-function-paren: 0 */
 import { STATUS_CODE, CREATE_PRODUCT_ERRORS } from './errors.messages.js'
 
-function validateObject(fields, strict) {
+function validateObject (fields, strict) {
   if (fields === null || typeof (fields) !== 'object' || Array.isArray(fields)) {
     if (!strict) throw new Error(CREATE_PRODUCT_ERRORS.UPDATE_MORE_FIELDS.ERROR_CODE)
     else throw new Error(CREATE_PRODUCT_ERRORS.REQUIRED_FIELDS.ERROR_CODE)
@@ -11,7 +8,7 @@ function validateObject(fields, strict) {
   return STATUS_CODE.SUCCESS.OK
 }
 
-function estrictInputs(fields) {
+function estrictInputs (fields) {
   const {
     title,
     description,
@@ -49,7 +46,7 @@ function estrictInputs(fields) {
 
 // ===== All fields could be empty, null or undefined =====
 
-function looseInputs(fields) {
+function looseInputs (fields) {
   const title = fields.title
   const description = fields.description
   const price = fields.price
@@ -77,7 +74,7 @@ function looseInputs(fields) {
   }
 }
 
-export function validateInputs(fields, strictValidation = false) {
+export function validateInputs (fields, strictValidation = false) {
   validateObject(fields, strictValidation)
 
   if (strictValidation) estrictInputs(fields)
@@ -89,7 +86,7 @@ export function validateInputs(fields, strictValidation = false) {
   }
 }
 
-export function validateQuantity(value) {
+export function validateQuantity (value) {
   if (typeof (value) !== 'number') {
     throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_NUMBER.ERROR_CODE)
   }

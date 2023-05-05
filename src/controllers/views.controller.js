@@ -1,6 +1,5 @@
-/* eslint-disable space-before-function-paren */
-import { productManager } from '../dao/managers/product.manager.js'
-import { cartManager } from '../dao/managers/cart.manager.js'
+import { productManager } from '../dao/product.manager.js'
+import { cartManager } from '../dao/cart.manager.js'
 import { SERVER } from '../config/server.config.js'
 
 const VIEWS_LINKS = {
@@ -16,7 +15,7 @@ const RENDER_PATH = {
   PRODUCTS: 'products'
 }
 
-async function productsPaginate(req, res, next) {
+async function productsPaginate (req, res, next) {
   try {
     const { products } = await productManager.getProducts(req.query)
 
@@ -34,7 +33,7 @@ async function productsPaginate(req, res, next) {
   }
 }
 
-async function cartItems(req, res, next) {
+async function cartItems (req, res, next) {
   try {
     const query = req.params.cid
     const myCart = await cartManager.getCartById(query)
@@ -51,21 +50,21 @@ async function cartItems(req, res, next) {
   }
 }
 
-function login(req, res, next) {
+function login (req, res, next) {
   res.status(200).render(RENDER_PATH.LOGIN, {
     headerTitle: 'Log in',
     mainTitle: 'Log in'
   })
 }
 
-function register(req, res, next) {
+function register (req, res, next) {
   res.status(200).render(RENDER_PATH.REGISTER, {
     headerTitle: 'Register',
     mainTitle: 'Register'
   })
 }
 
-function profile(req, res, next) {
+function profile (req, res, next) {
   const userInfo = {
     user: req.session.passport.user.email,
     name: req.session.passport.user.name,

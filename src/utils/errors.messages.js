@@ -1,6 +1,3 @@
-"use strict"
-
-/* eslint space-before-function-paren: 0 */
 /* eslint quotes: ["error", "double"] */
 
 const STATUS_CODE = {

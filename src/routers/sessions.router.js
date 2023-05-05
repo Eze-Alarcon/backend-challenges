@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-'use strict'
 import express, { Router } from 'express'
 import {
   loginReponse,

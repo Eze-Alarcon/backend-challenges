@@ -1,7 +1,4 @@
-/* eslint-disable camelcase */
-/* eslint-disable space-before-function-paren */
-
-import { userManager } from '../dao/managers/user.manager.js'
+import { userManager } from '../dao/user.manager.js'
 
 // deberia mandarlo a otro lado aunque no se donde
 const ADMINS = [
@@ -17,11 +14,11 @@ const ADMINS = [
   }
 ]
 
-function isAdmin({ email, password }) {
+function isAdmin ({ email, password }) {
   return ADMINS.some((el) => el.email === email && el.password === password)
 }
 
-async function login(req, res, next) {
+async function login (req, res, next) {
   try {
     const { email, password } = req.body
     const { user, status, userCanLog } = await userManager.logUser({ email, password })
@@ -42,15 +39,15 @@ async function login(req, res, next) {
   }
 }
 
-async function loginReponse(req, res, next) {
+async function loginReponse (req, res, next) {
   return res.json({ message: 'Login success', isLog: true })
 }
 
-async function registerResponse(req, res, next) {
+async function registerResponse (req, res, next) {
   res.json({ message: 'login success', isLog: true })
 }
 
-async function register(req, res, next) {
+async function register (req, res, next) {
   try {
     const { email, password, age, first_name, last_name } = req.body
 
@@ -69,7 +66,7 @@ async function register(req, res, next) {
   }
 }
 
-function logout(req, res) {
+function logout (req, res) {
   req.session.destroy(err => {
     if (!err) res.send('logout ok!')
     else res.send({ status: 'Logout Error', body: err })

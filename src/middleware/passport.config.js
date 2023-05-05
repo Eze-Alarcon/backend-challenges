@@ -1,9 +1,7 @@
-/* eslint-disable camelcase */
-/* eslint-disable space-before-function-paren */
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { Strategy as GithubStrategy } from 'passport-github2'
-import { userManager } from '../dao/managers/user.manager.js'
+import { userManager } from '../dao/user.manager.js'
 import { clientID, clientSecret, githubCallbackUrl } from '../config/login.config.js'
 
 passport.use('register', new LocalStrategy(

@@ -1,10 +1,8 @@
-/* eslint-disable space-before-function-paren */
-
 const btnLogout = document.getElementById('btn_logout')
 
 btnLogout.addEventListener('click', logout)
 
-async function logout(event) {
+async function logout (event) {
   event.preventDefault()
 
   await fetch('/api/sessions/logout', { method: 'DELETE' })

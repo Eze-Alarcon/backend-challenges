@@ -1,4 +1,3 @@
-'use strict'
 import express, { Router } from 'express'
 import {
   getProducts,

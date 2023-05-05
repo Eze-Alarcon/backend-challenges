@@ -1,16 +1,13 @@
-'use strict'
-
-/* eslint space-before-function-paren: 0 */
-import { validateInputs } from '../../helpers/validations.js'
-import { STATUS_CODE, PRODUCT_MANAGER_ERRORS } from '../../helpers/errors.messages.js'
-import { DB_PRODUCTS } from '../database/products.database.js'
-import { Product } from '../../classes/product.class.js'
+import { validateInputs } from '../utils/validations.js'
+import { STATUS_CODE, PRODUCT_MANAGER_ERRORS } from '../utils/errors.messages.js'
+import { DB_PRODUCTS } from '../services/products.database.js'
+import { Product } from '../classes/product.class.js'
 
 class ProductManager {
   #nextID
-  constructor() { this.#nextID = 0 }
+  constructor () { this.#nextID = 0 }
 
-  async getProducts(options = {}) {
+  async getProducts (options = {}) {
     try {
       const products = await DB_PRODUCTS.getProducts(options)
       return {
@@ -22,7 +19,7 @@ class ProductManager {
     }
   }
 
-  async getProductById(query) {
+  async getProductById (query) {
     try {
       const product = await DB_PRODUCTS.findProducts(query)
       return {
@@ -34,7 +31,7 @@ class ProductManager {
     }
   }
 
-  async addProduct(fields) {
+  async addProduct (fields) {
     try {
       const strictValidation = true
       validateInputs(fields, strictValidation)
@@ -57,7 +54,7 @@ class ProductManager {
     }
   }
 
-  async updateProduct(query, fields) {
+  async updateProduct (query, fields) {
     try {
       const { item } = await this.getProductById(query)
 
@@ -83,7 +80,7 @@ class ProductManager {
     }
   }
 
-  async deleteProduct(query) {
+  async deleteProduct (query) {
     try {
       const itemDeleted = await DB_PRODUCTS.deleteProduct({ id: query })
 

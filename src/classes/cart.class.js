@@ -1,15 +1,13 @@
-/* eslint-disable space-before-function-paren */
-
 class Cart {
   #id
   #products
 
-  constructor({ id }) {
+  constructor ({ id }) {
     this.#id = id
     this.#products = []
   }
 
-  getCartData() {
+  getCartData () {
     return {
       id: this.#id,
       products: this.#products

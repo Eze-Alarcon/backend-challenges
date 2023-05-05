@@ -1,5 +1,3 @@
-'use strict'
-/* eslint space-before-function-paren: 0 */
 
 // Libraries
 import express from 'express'
