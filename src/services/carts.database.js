@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import mongoose from 'mongoose'
 import { cartModel } from '../schemas/cart.schema.js'
 
@@ -16,9 +17,12 @@ class DB_CART_MANAGER {
       .find()
       .sort({ id: -1 })
       .limit(1)
-      .projection({ id: 1 })
       .lean()
-    return data
+
+    // Si no tiene la propiedad es porque no existe ningun carrito
+    if (!data[0].hasOwnProperty('id')) { return 1 }
+
+    return Number(data[0].id) + 1
   }
 
   async getCarts () {

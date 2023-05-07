@@ -7,11 +7,6 @@ import { DB_CARTS } from '../services/carts.database.js'
 /* -------------------------------------------- */
 
 class CartManager {
-  #nextID
-  constructor () {
-    this.#nextID = 0
-  }
-
   #parseData (value) {
     return JSON.parse(JSON.stringify(value))
   }
@@ -42,19 +37,15 @@ class CartManager {
 
   async createCart () {
     try {
-      const lastItem = await DB_CARTS.getLastID()
+      const newCartID = await DB_CARTS.getLastID()
 
-      lastItem.length > 0
-        ? this.#nextID = ++lastItem[0].id
-        : this.#nextID = 1
-
-      const newCart = new Cart({ id: ++this.#nextID })
+      const newCart = new Cart({ id: newCartID })
 
       await DB_CARTS.createCart(newCart.getCartData())
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
-        cart: newCart
+        cart: newCart.getCartData()
       }
     } catch (err) {
       throw new Error(CART_MANAGER_ERRORS.CREATE_CARTS.ERROR_CODE)

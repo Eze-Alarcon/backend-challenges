@@ -5,11 +5,20 @@ const usuarioSchema = new mongoose.Schema({
   password: { type: String, required: true },
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
-  age: { type: Number, required: true }
+  age: { type: Number, required: true },
+  cartID: { type: Number, required: true },
+  role: { type: String, required: true }
 }, { versionKey: false })
 
 const githubUserSchema = new mongoose.Schema(
-  { email: { type: String, required: true, unique: true } },
+  {
+    email: { type: String, required: true, unique: true },
+    cartID: { type: Number, required: true },
+    role: { type: String, required: true },
+    first_name: { type: String },
+    last_name: { type: String },
+    age: { type: Number }
+  },
   { versionKey: false }
 )
 

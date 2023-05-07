@@ -4,7 +4,7 @@ const ROLES = {
   ADMIN: 'admin'
 }
 
-class GeneralUser {
+class User {
   #email
   #cartID
   #role
@@ -28,7 +28,11 @@ class GeneralUser {
   }
 }
 
-class UserPassport extends GeneralUser {
+class UserPassport extends User {
+  #password
+  #first_name
+  #last_name
+  #age
   constructor ({
     email,
     cartID,
@@ -39,25 +43,35 @@ class UserPassport extends GeneralUser {
     age
   }) {
     super({ email, cartID, role })
-    this.first_name = first_name
-    this.last_name = last_name
-    this.age = age
-    this.password = password
+    this.#first_name = first_name
+    this.#last_name = last_name
+    this.#age = age
+    this.#password = password
   }
 
-  getUserPassport () {
-    const sensitiveData = super.getUser()
+  getUser () {
+    const userData = super.getUser()
     return {
-      ...sensitiveData,
-      first_name: this.first_name,
-      last_name: this.last_name,
-      age: this.age,
-      password: this.password
+      ...userData,
+      first_name: this.#first_name,
+      last_name: this.#last_name,
+      age: this.#age,
+      password: this.#password
+    }
+  }
+
+  getPublicData () {
+    const userData = super.getUser()
+    return {
+      ...userData,
+      first_name: this.#first_name,
+      last_name: this.#last_name,
+      age: this.#age
     }
   }
 }
 
-class UserGithub2 extends GeneralUser {
+class UserGithub extends User {
   constructor ({
     email,
     cartID,
@@ -67,65 +81,13 @@ class UserGithub2 extends GeneralUser {
   }
 
   getUserGithub () {
-    const sensitiveData = super.getUser()
-    return { ...sensitiveData }
-  }
-}
-
-class User {
-  #email
-  #password
-  #first_name
-  #last_name
-  #age
-  constructor ({
-    email,
-    password,
-    first_name,
-    last_name,
-    age
-  }) {
-    this.#email = email
-    this.#password = password
-    this.#first_name = first_name
-    this.#last_name = last_name
-    this.#age = age
-  }
-
-  getData () {
-    return {
-      email: this.#email,
-      password: this.#password,
-      first_name: this.#first_name,
-      last_name: this.#last_name,
-      age: this.#age
-    }
-  }
-
-  getPublicData () {
-    return {
-      email: this.#email,
-      name: `${this.#first_name} ${this.#last_name}`,
-      age: this.#age
-    }
-  }
-}
-
-class UserGithub {
-  #email
-  constructor ({ email }) {
-    this.#email = email
-  }
-
-  getData () {
-    return { email: this.#email }
+    const userData = super.getUser()
+    return { ...userData }
   }
 }
 
 export {
   ROLES,
   UserPassport,
-  UserGithub2,
-  User,
   UserGithub
 }

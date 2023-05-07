@@ -5,6 +5,7 @@ function hasSession (req, res, next) {
 }
 
 function alreadyHasSession (req, res, next) {
+  console.log(req.session)
   if (req.session.passport) return res.redirect('/products')
 
   next()

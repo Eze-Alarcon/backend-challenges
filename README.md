@@ -363,6 +363,8 @@ Crear un modelo User el cual contará con los campos:
 
 Desarrollar las estrategias de Passport para que funcionen con este modelo de usuarios
 
+**En el caso de que use JWT**
+
 Modificar el sistema de login del usuario para poder trabajar con session o con jwt (a tu elección).
 
 (Sólo para jwt) desarrollar una estrategia “current” para extraer la cookie que contiene el token para obtener el usuario asociado a dicho token, en caso de tener el token, devolver al usuario asociado al token, caso contrario devolver un error de passport, utilizar un extractor de cookie.

@@ -1,8 +1,9 @@
 
-import { User, UserGithub } from '../classes/user.class.js'
+import { UserGithub, UserPassport } from '../classes/user.class.js'
 import { AUTH_ERROR, STATUS_CODE } from '../utils/errors.messages.js'
 import { comparePassword, hashPassword } from '../utils/hash.js'
 import { DB_USERS, DB_GITHUB_USERS } from '../services/users.database.js'
+import { cartManager } from './cart.manager.js'
 
 class UserManager {
   async searchUser ({ email }) {
@@ -17,7 +18,7 @@ class UserManager {
 
   async logUser ({ email, password }) {
     const { user, userExist } = await this.searchUser({ email })
-    if (!userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)
+    if (!userExist) throw new Error(AUTH_ERROR.HAS_ACCOUNT.ERROR_CODE)
 
     const samePassword = await comparePassword({ password, hashPassword: user.password })
     if (!samePassword) throw new Error(AUTH_ERROR.WRONG_CREDENTIALS.ERROR_CODE)
@@ -33,23 +34,28 @@ class UserManager {
     password,
     first_name,
     last_name,
-    age
+    age,
+    role
   }) {
     const { userExist } = await this.searchUser({ email })
 
-    if (userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)
+    if (userExist) throw new Error(AUTH_ERROR.HAS_ACCOUNT.ERROR_CODE)
 
     const newPassword = await hashPassword(password)
 
-    const newUser = new User({
+    const { cart } = await cartManager.createCart()
+
+    const newUser = new UserPassport({
       email,
+      cartID: cart.id,
       password: newPassword,
       first_name,
       last_name,
-      age
+      age,
+      role
     })
 
-    await DB_USERS.createUser(newUser.getData())
+    await DB_USERS.createUser(newUser.getUser())
 
     return {
       status: STATUS_CODE.SUCCESS.CREATED,
@@ -70,15 +76,17 @@ class UserManager {
   async createGithubUser ({ email }) {
     const { userExist } = await this.searchUser({ email })
 
-    if (userExist) throw new Error(AUTH_ERROR.NO_ACCOUNT.ERROR_CODE)
+    if (userExist) throw new Error(AUTH_ERROR.HAS_ACCOUNT.ERROR_CODE)
 
-    const newUser = new UserGithub({ email })
+    const { cart } = await cartManager.createCart()
 
-    await DB_GITHUB_USERS.createUser(newUser.getData())
+    const newUser = new UserGithub({ email, cartID: cart.id })
+
+    await DB_GITHUB_USERS.createUser(newUser.getUserGithub())
 
     return {
       status: STATUS_CODE.SUCCESS.CREATED,
-      user: newUser.getData()
+      user: newUser.getUserGithub()
     }
   }
 }

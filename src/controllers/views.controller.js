@@ -1,6 +1,8 @@
 import { productManager } from '../dao/product.manager.js'
 import { cartManager } from '../dao/cart.manager.js'
 import { SERVER } from '../config/server.config.js'
+import { ROLES } from '../classes/user.class.js'
+import Handlebars from 'handlebars'
 
 const VIEWS_LINKS = {
   goToProducts: `${SERVER.BASE_URL}/products`,
@@ -14,6 +16,10 @@ const RENDER_PATH = {
   REGISTER: 'register',
   PRODUCTS: 'products'
 }
+
+Handlebars.registerHelper('eq', function (a, b) {
+  return a === b
+})
 
 async function productsPaginate (req, res, next) {
   try {
@@ -60,7 +66,8 @@ function login (req, res, next) {
 function register (req, res, next) {
   res.status(200).render(RENDER_PATH.REGISTER, {
     headerTitle: 'Register',
-    mainTitle: 'Register'
+    mainTitle: 'Register',
+    roles: Object.values(ROLES)
   })
 }
 
@@ -71,6 +78,8 @@ function profile (req, res, next) {
     age: req.session.passport.user.age,
     role: req.session.passport.user.admin
   }
+
+  // TODO: ver que muestra el req.session si el usuario se logea con github
 
   res.status(200).render(RENDER_PATH.PROFILE, {
     headerTitle: 'HOME | Profile',

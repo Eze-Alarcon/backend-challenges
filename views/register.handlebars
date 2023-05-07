@@ -1,6 +1,6 @@
 <h2>{{mainTitle}}</h2>
 
-<form id='register_form'>
+<form id='register_form' class='mx-3'>
   <div class='mb-3'>
     <label for='input_email' class='form-label'>Email</label>
     <input
@@ -52,6 +52,22 @@
       id='input_password'
     />
   </div>
+  <div class='mb-3'>
+    {{#each roles}}
+      {{#if (eq this 'user')}}
+        <input class='form-check-input' type='radio' name='role' value={{this}} checked>
+        <label class='form-check-label'>
+          {{this}}
+        </label>
+      
+      {{else}}
+        <input class='form-check-input' type='radio' name='role' value={{this}} >
+        <label class='form-check-label' >
+          {{this}}
+        </label>
+      {{/if}}
+    {{/each}}
+  </div>
   <button type='submit' class='btn btn-primary'>Create Account</button>
 </form>
 
@@ -59,7 +75,10 @@
   <p id='message_container'></p>
 </div>
 
+<div class='mx-3'>
 <a href='/' class='btn btn-primary' role='button'>Already have an account? Log
   in</a>
+
+</div>
 
 <script src='/static/scripts/register.js'></script>

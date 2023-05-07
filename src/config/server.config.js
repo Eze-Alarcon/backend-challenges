@@ -10,6 +10,8 @@ const PRODUCTS_ROUTE = '/api/products/'
 
 const SESSION_ROUTE = '/api/sessions'
 
+const USER_ROUTE = '/api/users'
+
 const CARTS_ROUTE = '/api/carts'
 
 const VIEWS_ROUTES = '/'
@@ -32,7 +34,8 @@ const ROUTES = {
   CARTS_ROUTE,
   STATIC_ROUTE,
   SESSION_ROUTE,
-  VIEWS_ROUTES
+  VIEWS_ROUTES,
+  USER_ROUTE
 }
 
 const FOLDERS = {
