@@ -22,7 +22,7 @@ const githubUserSchema = new mongoose.Schema(
   { versionKey: false }
 )
 
-const userModel = mongoose.model('usuarios', usuarioSchema)
+const userModel = mongoose.model('users', usuarioSchema)
 const githubUserModel = mongoose.model('usersGithub', githubUserSchema)
 
 export { userModel, githubUserModel }

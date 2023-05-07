@@ -3,6 +3,7 @@ import { cartManager } from '../dao/cart.manager.js'
 import { SERVER } from '../config/server.config.js'
 import { ROLES } from '../classes/user.class.js'
 import Handlebars from 'handlebars'
+import { verifyToken } from '../middleware/jwt.config.js'
 
 const VIEWS_LINKS = {
   goToProducts: `${SERVER.BASE_URL}/products`,
@@ -17,13 +18,15 @@ const RENDER_PATH = {
   PRODUCTS: 'products'
 }
 
-Handlebars.registerHelper('eq', function (a, b) {
-  return a === b
-})
+Handlebars.registerHelper('eq', function (a, b) { return a === b })
 
 async function productsPaginate (req, res, next) {
   try {
     const { products } = await productManager.getProducts(req.query)
+
+    const token = req.signedCookies.jwt_authorization
+
+    const userInfo = await verifyToken(token)
 
     res.status(products.status).render(RENDER_PATH.PRODUCTS, {
       headerTitle: 'Home | Products',
@@ -31,8 +34,8 @@ async function productsPaginate (req, res, next) {
       info: products,
       listExist: products.payload.length > 0,
       urlToCart: VIEWS_LINKS.goToCart,
-      name: req.session.name,
-      role: req.session.admin
+      name: `${userInfo.first_name} ${userInfo.last_name}`,
+      role: userInfo.role
     })
   } catch (error) {
     return next(error.message)
@@ -71,20 +74,22 @@ function register (req, res, next) {
   })
 }
 
-function profile (req, res, next) {
-  const userInfo = {
-    user: req.session.passport.user.email,
-    name: req.session.passport.user.name,
-    age: req.session.passport.user.age,
-    role: req.session.passport.user.admin
-  }
+async function profile (req, res, next) {
+  const token = req.signedCookies.jwt_authorization
+
+  const userInfo = await verifyToken(token)
 
   // TODO: ver que muestra el req.session si el usuario se logea con github
 
   res.status(200).render(RENDER_PATH.PROFILE, {
     headerTitle: 'HOME | Profile',
     mainTitle: 'My Profile',
-    userInfo
+    userInfo: {
+      user: userInfo.email,
+      name: `${userInfo.first_name} ${userInfo.last_name}`,
+      age: userInfo.age,
+      role: userInfo.role
+    }
   })
 }
 

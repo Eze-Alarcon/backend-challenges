@@ -2,7 +2,8 @@ import express, { Router } from 'express'
 import {
   loginReponse,
   logout,
-  registerResponse
+  registerResponse,
+  saveJwtCookie
 } from '../controllers/session.controller.js'
 import { alreadyHasSession, hasSession } from '../middleware/session.js'
 import {
@@ -22,7 +23,7 @@ sessionRouter
 
 sessionRouter
   .route('/register')
-  .post(alreadyHasSession, autenticacionUserRegister, registerResponse)
+  .post(alreadyHasSession, autenticacionUserRegister, saveJwtCookie, registerResponse)
 
 sessionRouter
   .route('/logout')

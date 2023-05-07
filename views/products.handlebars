@@ -1,7 +1,7 @@
 <h2>{{mainTitle}}</h2>
 
 <h3>Welcome {{name}}</h3>
-{{#if role}}
+{{#if (eq userInfo.role 'admin')}}
 <p>Access level: Admin</p>
 {{else}}
 <p>Access level: User</p>

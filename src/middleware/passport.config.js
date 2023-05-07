@@ -3,6 +3,44 @@ import { Strategy as LocalStrategy } from 'passport-local'
 import { Strategy as GithubStrategy } from 'passport-github2'
 import { userManager } from '../dao/user.manager.js'
 import { clientID, clientSecret, githubCallbackUrl } from '../config/login.config.js'
+import { SECRET_PASSWORD_JWT } from './jwt.config.js'
+import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
+
+passport.use('jwt', new JwtStrategy({
+  jwtFromRequest: ExtractJwt.fromExtractors([function (req) {
+    let token = null
+    console.log('req', req)
+    if (req && req.signedCookies) {
+      token = req.signedCookies.jwt_authorization
+    }
+    return token
+  }]),
+  secretOrKey: SECRET_PASSWORD_JWT
+}, async (jwt_payload, done) => {
+  try {
+    done(null, jwt_payload) // payload es el contenido del token, ya descifrado
+  } catch (error) {
+    done(error)
+  }
+}))
+
+// Este middleware es para agg el JWT en la cookie
+export function autenticacionJwtApi (req, res, next) {
+  passport.authenticate('jwt', (error, jwt_payload, info) => {
+    if (error || !jwt_payload) return next(error)
+    req.user = jwt_payload
+    next()
+  })(req, res, next)
+}
+
+// Este middleware es el que te redirigue en caso de querer acceder sin logearte
+export function autenticacionJwtView (req, res, next) {
+  passport.authenticate('jwt', (error, jwt_payload) => {
+    if (error || !jwt_payload) return res.redirect('/login')
+    req.user = jwt_payload
+    next()
+  })(req, res, next)
+}
 
 passport.use('register', new LocalStrategy(
   { passReqToCallback: true, usernameField: 'email' },
@@ -47,15 +85,11 @@ passport.use('github', new GithubStrategy({
   done(null, user)
 }))
 
-passport.serializeUser((user, next) => { next(null, user) })
-passport.deserializeUser((user, next) => { next(null, user) })
-
 // estos son para cargar en express como middlewares a nivel aplicacion
 export const passportInitialize = passport.initialize()
-export const passportSession = passport.session()
 
 // estos son para cargar como middlewares antes de los controladores correspondientes
-export const autenticacionUserRegister = passport.authenticate('register', { failWithError: true })
-export const autenticacionUserLogin = passport.authenticate('local', { failWithError: true })
-export const autenticacionUserGithub = passport.authenticate('github', { scope: ['user:email'] })
-export const antenticacionUserGithub_CB = passport.authenticate('github', { failWithError: true })
+export const autenticacionUserRegister = passport.authenticate('register', { failWithError: true, session: false })
+export const autenticacionUserLogin = passport.authenticate('local', { failWithError: true, session: false })
+export const autenticacionUserGithub = passport.authenticate('github', { scope: ['user:email'], session: false })
+export const antenticacionUserGithub_CB = passport.authenticate('github', { failWithError: true, session: false })

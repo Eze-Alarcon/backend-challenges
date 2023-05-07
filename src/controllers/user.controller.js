@@ -1,8 +1,8 @@
-import { userManager } from '../dao/user.manager.js'
+// import { userManager } from '../dao/user.manager.js'
 
-async function searchUser (req, res, next) {
-  // const email =
+// async function searchUser (req, res, next) {
+//   // const email =
 
-  // TODO: De donde saco el email ????
-  const user = await userManager.searchUser({ email })
-}
+//   // TODO: De donde saco el email ????
+//   const user = await userManager.searchUser({ email })
+// }

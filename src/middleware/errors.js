@@ -23,6 +23,7 @@ function searchError (errorCode) {
 
 export function handleError (err, req, res, next) {
   try {
+    console.log('Console log del error en hanleError')
     console.log(err)
 
     const { message, status } = searchError(err)

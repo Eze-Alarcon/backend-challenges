@@ -15,12 +15,12 @@ class DB_CART_MANAGER {
   async getLastID () {
     const data = await this.#model
       .find()
-      .sort({ id: -1 })
+      .sort({ id: 'desc' })
       .limit(1)
       .lean()
 
     // Si no tiene la propiedad es porque no existe ningun carrito
-    if (!data[0].hasOwnProperty('id')) { return 1 }
+    if (data.length === 0 || !data[0].hasOwnProperty('id')) { return 1 }
 
     return Number(data[0].id) + 1
   }
@@ -49,6 +49,7 @@ class DB_CART_MANAGER {
   }
 
   async createCart (item) {
+    console.log(item)
     const response = await this.#model.create(item)
     const data = this.#parseResponse(response)
     return data
