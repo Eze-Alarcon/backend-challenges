@@ -9,10 +9,11 @@ async function registerResponse (req, res, next) {
 }
 
 function logout (req, res) {
-  req.session.destroy(err => {
-    if (!err) res.send('logout ok!')
-    else res.send({ status: 'Logout Error', body: err })
+  res.clearCookie('jwt_authorization', {
+    signed: true,
+    httpOnly: true
   })
+  res.send({ status: 'Logout Error' })
 }
 
 function saveJwtCookie (req, res, next) {

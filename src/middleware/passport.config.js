@@ -2,8 +2,7 @@ import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { Strategy as GithubStrategy } from 'passport-github2'
 import { userManager } from '../dao/user.manager.js'
-import { clientID, clientSecret, githubCallbackUrl } from '../config/login.config.js'
-import { SECRET_PASSWORD_JWT } from './jwt.config.js'
+import { clientID, clientSecret, githubCallbackUrl, secretPasswordJwt } from '../config/login.config.js'
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 
 passport.use('jwt', new JwtStrategy({
@@ -15,7 +14,7 @@ passport.use('jwt', new JwtStrategy({
     }
     return token
   }]),
-  secretOrKey: SECRET_PASSWORD_JWT
+  secretOrKey: secretPasswordJwt
 }, async (jwt_payload, done) => {
   try {
     done(null, jwt_payload) // payload es el contenido del token, ya descifrado

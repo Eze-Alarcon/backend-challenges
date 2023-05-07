@@ -1,12 +1,11 @@
 <h2>{{mainTitle}}</h2>
 
 <h3>Welcome {{name}}</h3>
-{{#if (eq userInfo.role 'admin')}}
+{{#if (eq role 'admin')}}
 <p>Access level: Admin</p>
 {{else}}
 <p>Access level: User</p>
 {{/if}}
-
 
 <a href={{urlToCart}} class="btn btn-primary" role="button">Go to my cart</a>
 <a href="/profile" class="btn btn-primary" role="button">Check my profile</a>

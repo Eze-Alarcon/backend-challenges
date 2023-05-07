@@ -18,13 +18,12 @@ import { viewsRouter } from './routers/views.router.js'
 import { handleError } from './middleware/errors.js'
 import { passportInitialize } from './middleware/passport.config.js'
 import cookieParser from 'cookie-parser'
+import { cookieSecret } from './config/login.config.js'
 
 await mongoose.connect(URL_DB)
 
-const COOKIE_SECRET = 'cookie_secret'
-
 const app = express()
-app.use(cookieParser(COOKIE_SECRET))
+app.use(cookieParser(cookieSecret))
 app.use(ROUTES.STATIC_ROUTE, express.static(FOLDERS.STATIC_FOLDER))
 
 app.engine('handlebars', engine())
