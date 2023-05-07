@@ -87,7 +87,8 @@ export function validateInputs (fields, strictValidation = false) {
 }
 
 export function validateQuantity (value) {
-  if (typeof (value) !== 'number') {
+  const num = Number(value)
+  if (typeof (num) !== 'number' || isNaN(num)) {
     throw new Error(CREATE_PRODUCT_ERRORS.INCORRECT_FIELD_TYPE_NUMBER.ERROR_CODE)
   }
 }

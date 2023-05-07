@@ -5,11 +5,6 @@ import { ROLES } from '../classes/user.class.js'
 import Handlebars from 'handlebars'
 import { verifyToken } from '../middleware/jwt.config.js'
 
-const VIEWS_LINKS = {
-  goToProducts: `${SERVER.BASE_URL}/products`,
-  goToCart: `${SERVER.BASE_URL}/cart/1`
-}
-
 const RENDER_PATH = {
   CART: 'cart',
   LOGIN: 'login',
@@ -33,7 +28,8 @@ async function productsPaginate (req, res, next) {
       mainTitle: 'List of products',
       info: products,
       listExist: products.payload.length > 0,
-      urlToCart: VIEWS_LINKS.goToCart,
+      userCart: userInfo.cartID,
+      urlToCart: `${SERVER.BASE_URL}/cart/${userInfo.cartID}`,
       name: `${userInfo.first_name} ${userInfo.last_name}`,
       role: userInfo.role
     })
@@ -52,7 +48,7 @@ async function cartItems (req, res, next) {
       mainTitle: 'My list of products',
       info: myCart.cart.products,
       listExist: myCart.totalProducts > 0,
-      urlToProducts: VIEWS_LINKS.goToProducts
+      urlToProducts: `${SERVER.BASE_URL}/products`
     })
   } catch (error) {
     return next(error.message)

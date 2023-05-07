@@ -7,7 +7,7 @@
 <p>Access level: User</p>
 {{/if}}
 
-<a href={{urlToCart}} class="btn btn-primary" role="button">Go to my cart</a>
+<a href={{urlToCart}} data-cart={{userCart}} id="linkToCart" class="btn btn-primary" role="button">Go to my cart</a>
 <a href="/profile" class="btn btn-primary" role="button">Check my profile</a>
 
 
@@ -26,7 +26,7 @@
               <li class='list-group-item'>Item ID: {{this.id}}</li>
               <li class='list-group-item'>Description: {{this.description}}</li>
               <li class='list-group-item'>Price: ${{this.price}}</li>
-              <li class='list-group-item'>Stock: {{this.stock}}</li>
+              <li class='list-group-item'>Stock: {{this.stock}}</li> {{!-- this.dataset.productid --}}
               <button type="button" onclick="addProductToCart(this.dataset.productid)" data-productid={{this.id}} class="list-group-item list-group-item-action active" aria-current="true">
                 Add product to cart
               </button>

@@ -1,5 +1,6 @@
 import express, { Router } from 'express'
 import {
+  getCurrentUser,
   loginReponse,
   logout,
   registerResponse,
@@ -36,3 +37,7 @@ sessionRouter
 sessionRouter
   .route('/githubcallback')
   .get(antenticacionUserGithub_CB, (req, res, next) => { res.redirect('/') })
+
+sessionRouter
+  .route('/current')
+  .get(hasSession, getCurrentUser)
