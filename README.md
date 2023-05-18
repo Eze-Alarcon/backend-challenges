@@ -341,35 +341,24 @@ En esta vista, se encontrara el desgloce de los productos de un carrito en parti
 
 ## Consigna: Práctica de integración
 
-Continuar sobre el proyecto que has trabajado para la ecommerce y configurar los siguientes elementos:
+Continuar sobre el proyecto que has trabajado para la ecommerce y configurar los siguientes elementos: ..env
 
 ## Aspectos a incluir
 
-**✅**Crear un modelo User el cual contará con los campos:
+Se debe incluir un archivo .env para la informacion sensible
 
-- first_name:String,
+Estrucutra del .env
 
-- last_name:String,
+URL_DB='string de conexion a la db'
+PORT='puerto local de conexion, ej: 8080'
+SALT='un salt para el hash de la contraseña, ej: $2b$10$J5ypbFVWmwBt1x7MFfGW8O'
+COOKIE_SECRET='palabra para el cifrado de la cookie'
+JWT_SECRET='palabra para el cifrado del JWT'
+CLIENT_ID_GITHUB='crendenciales de GitHub'
+CLIENT_GITHUB_SECRET='credenciales de github'
 
-- email:String (único)
 
-- age:Number,
 
-- password:String(Hash)
-
-- cart:Id con referencia a Carts
-
-- role:String(default:’user’)
-
-**✅**Desarrollar las estrategias de Passport para que funcionen con este modelo de usuarios
-
-**En el caso de que use JWT**
-
-**✅**Modificar el sistema de login del usuario para poder trabajar con session o con jwt (a tu elección).
-
-**✅**(Sólo para jwt) desarrollar una estrategia “current” para extraer la cookie que contiene el token para obtener el usuario asociado a dicho token, en caso de tener el token, devolver al usuario asociado al token, caso contrario devolver un error de passport, utilizar un extractor de cookie.
-
-**✅**Agregar al router /api/sessions/ la ruta /current, la cual utilizará el modelo de sesión que estés utilizando, para poder devolver en una respuesta el usuario actual.
 
 ### Desafio
 
