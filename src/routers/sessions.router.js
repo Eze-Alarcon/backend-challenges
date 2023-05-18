@@ -20,7 +20,7 @@ sessionRouter.use(express.json())
 
 sessionRouter
   .route('/login')
-  .post(alreadyHasSession, autenticacionUserLogin, loginReponse)
+  .post(alreadyHasSession, autenticacionUserLogin, saveJwtCookie, loginReponse)
 
 sessionRouter
   .route('/register')
@@ -32,11 +32,11 @@ sessionRouter
 
 sessionRouter
   .route('/github')
-  .get(autenticacionUserGithub)
+  .get(autenticacionUserGithub, saveJwtCookie)
 
 sessionRouter
   .route('/githubcallback')
-  .get(antenticacionUserGithub_CB, (req, res, next) => { res.redirect('/') })
+  .get(antenticacionUserGithub_CB, saveJwtCookie, (req, res, next) => { res.redirect('/') })
 
 sessionRouter
   .route('/current')

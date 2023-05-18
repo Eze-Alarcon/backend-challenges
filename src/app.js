@@ -6,7 +6,7 @@ import { engine } from 'express-handlebars'
 
 // Constants
 import { SERVER, FOLDERS, ROUTES } from './config/server.config.js'
-import { URL_DB } from './config/database.config.js'
+import { URL_DB, COOKIE_SECRET } from './config/config.js'
 
 // Routers
 import { sessionRouter } from './routers/sessions.router.js'
@@ -18,12 +18,11 @@ import { viewsRouter } from './routers/views.router.js'
 import { handleError } from './middleware/errors.js'
 import { passportInitialize } from './middleware/passport.config.js'
 import cookieParser from 'cookie-parser'
-import { cookieSecret } from './config/login.config.js'
 
 await mongoose.connect(URL_DB)
 
 const app = express()
-app.use(cookieParser(cookieSecret))
+app.use(cookieParser(COOKIE_SECRET))
 app.use(ROUTES.STATIC_ROUTE, express.static(FOLDERS.STATIC_FOLDER))
 
 app.engine('handlebars', engine())

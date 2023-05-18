@@ -1,7 +1,7 @@
 import { validateInputs } from '../utils/validations.js'
 import { STATUS_CODE, PRODUCT_MANAGER_ERRORS } from '../utils/errors.messages.js'
 import { DB_PRODUCTS } from '../services/products.database.js'
-import { Product } from '../classes/product.class.js'
+import { Product } from '../models/product.class.js'
 
 class ProductManager {
   #nextID

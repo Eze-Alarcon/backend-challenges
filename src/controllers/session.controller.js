@@ -1,5 +1,7 @@
 import { generateToken, verifyToken } from '../middleware/jwt.config.js'
 
+import { COOKIE_NAME } from '../config/config.js'
+
 async function loginReponse (req, res, next) {
   return res.json({ message: 'Login success', isLog: true })
 }
@@ -9,7 +11,7 @@ async function registerResponse (req, res, next) {
 }
 
 function logout (req, res) {
-  res.clearCookie('jwt_authorization', {
+  res.clearCookie(COOKIE_NAME, {
     signed: true,
     httpOnly: true
   })
@@ -17,7 +19,7 @@ function logout (req, res) {
 }
 
 function saveJwtCookie (req, res, next) {
-  res.cookie('jwt_authorization', generateToken(req.user), {
+  res.cookie(COOKIE_NAME, generateToken(req.user), {
     signed: true,
     httpOnly: true
   })
@@ -25,7 +27,7 @@ function saveJwtCookie (req, res, next) {
 }
 
 async function getCurrentUser (req, res, next) {
-  const token = req.signedCookies.jwt_authorization
+  const token = req.signedCookies[COOKIE_NAME]
 
   const user = await verifyToken(token)
 

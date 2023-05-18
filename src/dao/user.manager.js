@@ -1,5 +1,5 @@
 
-import { UserGithub, UserPassport } from '../classes/user.class.js'
+import { UserGithub, UserPassport } from '../models/user.class.js'
 import { AUTH_ERROR, STATUS_CODE } from '../utils/errors.messages.js'
 import { comparePassword, hashPassword } from '../utils/hash.js'
 import { DB_USERS, DB_GITHUB_USERS } from '../services/users.database.js'

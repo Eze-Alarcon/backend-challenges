@@ -2,19 +2,18 @@ import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { Strategy as GithubStrategy } from 'passport-github2'
 import { userManager } from '../dao/user.manager.js'
-import { clientID, clientSecret, githubCallbackUrl, secretPasswordJwt } from '../config/login.config.js'
+import { GH_CLIENT_ID, GH_CLIENT_SECRET, GH_CB_URL, SECRET_PASSWORD_JWT, COOKIE_NAME } from '../config/config.js'
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 
 passport.use('jwt', new JwtStrategy({
   jwtFromRequest: ExtractJwt.fromExtractors([function (req) {
     let token = null
-    console.log('req', req)
     if (req && req.signedCookies) {
-      token = req.signedCookies.jwt_authorization
+      token = req.signedCookies[COOKIE_NAME]
     }
     return token
   }]),
-  secretOrKey: secretPasswordJwt
+  secretOrKey: SECRET_PASSWORD_JWT
 }, async (jwt_payload, done) => {
   try {
     done(null, jwt_payload) // payload es el contenido del token, ya descifrado
@@ -65,19 +64,20 @@ passport.use('local', new LocalStrategy(
     } catch (err) {
       done(err.message)
     }
-  }))
+  })
+)
 
 passport.use('github', new GithubStrategy({
-  clientID,
-  clientSecret,
-  callbackURL: githubCallbackUrl
-}, async (accessToken, refreshToken, profile, done) => {
-  // console.log('profile', profile)
+  clientID: GH_CLIENT_ID,
+  clientSecret: GH_CLIENT_SECRET,
+  callbackURL: GH_CB_URL
+}, async (_a, _r, profile, done) => {
   let user
-  try {
-    const search = await userManager.searchGithubUser({ email: profile.username })
+
+  const search = await userManager.searchGithubUser({ email: profile.username })
+  if (search.userExist) {
     user = search.user
-  } catch (error) {
+  } else {
     const newUser = await userManager.createGithubUser({ email: profile.username })
     user = newUser.user
   }

@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt'
-import { salt } from '../config/login.config.js'
+import { SALT } from '../config/config.js'
 
 async function hashPassword (password) {
-  return bcrypt.hashSync(password, salt)
+  return bcrypt.hashSync(password, SALT)
 }
 
 async function comparePassword ({ password, hashPassword }) {

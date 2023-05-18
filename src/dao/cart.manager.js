@@ -1,4 +1,4 @@
-import { Cart } from '../classes/cart.class.js'
+import { Cart } from '../models/cart.class.js'
 import { STATUS_CODE, CART_MANAGER_ERRORS } from '../utils/errors.messages.js'
 import { validateQuantity } from '../utils/validations.js'
 import { productManager } from './product.manager.js'

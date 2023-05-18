@@ -1,18 +1,18 @@
 import jwt from 'jsonwebtoken'
 
-import { secretPasswordJwt } from '../config/login.config.js'
+import { SECRET_PASSWORD_JWT } from '../config/config.js'
 
 function generateToken (user) {
   const payload = JSON.parse(JSON.stringify(user))
 
-  const token = jwt.sign(payload, secretPasswordJwt, { expiresIn: '1h' })
+  const token = jwt.sign(payload, SECRET_PASSWORD_JWT, { expiresIn: '1h' })
 
   return token
 }
 
 function verifyToken (token) {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, secretPasswordJwt, (err, decodedPayload) => {
+    jwt.verify(token, SECRET_PASSWORD_JWT, (err, decodedPayload) => {
       if (err) {
         reject(err)
       } else {

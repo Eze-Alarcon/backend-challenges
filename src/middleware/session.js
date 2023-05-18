@@ -1,14 +1,14 @@
 import { verifyToken } from './jwt.config.js'
-
-// req.signedCookies.jwt_authorization === false en el caso de que el usuario haya modificado la cookie
+import { COOKIE_NAME } from '../config/config.js'
+// req.signedCookies[COOKIE_NAME] === false en el caso de que el usuario haya modificado la cookie
 
 async function hasSession (req, res, next) {
   try {
-    if (req.signedCookies.jwt_authorization === undefined || req.signedCookies.jwt_authorization === false) {
+    if (req.signedCookies[COOKIE_NAME] === undefined || req.signedCookies[COOKIE_NAME] === false) {
       return res.redirect('/')
     }
 
-    const token = req.signedCookies.jwt_authorization
+    const token = req.signedCookies[COOKIE_NAME]
 
     await verifyToken(token)
 
@@ -20,8 +20,8 @@ async function hasSession (req, res, next) {
 
 async function alreadyHasSession (req, res, next) {
   try {
-    if (req.signedCookies.jwt_authorization !== undefined && req.signedCookies.jwt_authorization !== false) {
-      const token = req.signedCookies.jwt_authorization
+    if (req.signedCookies[COOKIE_NAME] !== undefined && req.signedCookies[COOKIE_NAME] !== false) {
+      const token = req.signedCookies[COOKIE_NAME]
 
       await verifyToken(token)
       return res.redirect('/products')

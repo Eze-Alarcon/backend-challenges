@@ -1,9 +1,11 @@
 import { productManager } from '../dao/product.manager.js'
 import { cartManager } from '../dao/cart.manager.js'
 import { SERVER } from '../config/server.config.js'
-import { ROLES } from '../classes/user.class.js'
+import { ROLES } from '../models/user.class.js'
 import Handlebars from 'handlebars'
 import { verifyToken } from '../middleware/jwt.config.js'
+
+import { COOKIE_NAME } from '../config/config.js'
 
 const RENDER_PATH = {
   CART: 'cart',
@@ -19,7 +21,7 @@ async function productsPaginate (req, res, next) {
   try {
     const { products } = await productManager.getProducts(req.query)
 
-    const token = req.signedCookies.jwt_authorization
+    const token = req.signedCookies[COOKIE_NAME]
 
     const userInfo = await verifyToken(token)
 
@@ -71,7 +73,7 @@ function register (req, res, next) {
 }
 
 async function profile (req, res, next) {
-  const token = req.signedCookies.jwt_authorization
+  const token = req.signedCookies[COOKIE_NAME]
 
   const userInfo = await verifyToken(token)
 

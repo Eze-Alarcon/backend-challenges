@@ -1,9 +1,12 @@
+import * as dotenv from 'dotenv'
+dotenv.config({
+  path: 'src/config/.env'
+})
+
 // Server
-const PORT = 8080
+const PORT = process.env.PORT
 
 const BASE_URL = `http://localhost:${PORT}`
-
-const SECRET_WORDS = 'palabraSecreta'
 
 // Routes
 const PRODUCTS_ROUTE = '/api/products/'
@@ -25,8 +28,7 @@ const VIEWS_FOLDER = './views'
 
 const SERVER = {
   PORT,
-  BASE_URL,
-  SECRET_WORDS
+  BASE_URL
 }
 
 const ROUTES = {
