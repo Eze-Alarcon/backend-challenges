@@ -367,7 +367,8 @@ En esta vista, se encontrara el desgloce de los productos de un carrito en parti
   - purchaser: String, contendrá el correo del usuario asociado al carrito.
 
 
-<!-- revisar 👇 -->
+**🚩 Esto lo haremos diferente 👇**
+
 * Implementar, en el router de carts, la ruta /:cid/purchase, la cual permitirá finalizar el proceso de compra de dicho carrito.
 
   - La compra debe corroborar el stock del producto al momento de finalizarse
@@ -375,7 +376,33 @@ En esta vista, se encontrara el desgloce de los productos de un carrito en parti
     1) Si el producto tiene suficiente stock para la cantidad indicada en el producto del carrito, entonces restarlo del stock del producto y continuar.
     
     2) Si el producto no tiene suficiente stock para la cantidad indicada en el producto del carrito, entonces no agregar el producto al proceso de compra. 
-<!-- Revisar 👆  -->
+
+**🤔 Porque?**
+
+El profesor no esta de acuerdo con la implementacion de /:cid/purchase, porque las API REST tienen recursos y pero no tienen acciones.
+
+La ruta /:cid/purchase involucra una accion entonces no recomienda hacer esto.
+
+Si podemos crear una ruta de tipo ticket y ahi generar el ticket
+Que diferencia tiene esto? 
+Basicamete que yo podria pensarlo de esta forma: un ticket es un recursos, yo puedo ver un ticket (una peticion GET) crear un ticket (una peticion POST) o borrar un ticket (un DELETE)
+
+En que se diferencia con purchase?
+Purchase es una accion (la traduccion es comprar), yo no puedo borrar una accion, la puedo deshacer pero estamos hablando de otra accion (la accion de deshacer) tampoco puedo actualizar una accion, podria reacerla pero estamos hablando nuevamente de otra accion
+
+En conclusion, vamos a actualizar los items de antes:
+
+**Lo haremos de esta forma 👇 ✅**
+
+* Implementar, en el router de carts, la ruta /:cid/ticket, la cual permitirá finalizar el proceso de compra de dicho carrito.
+
+  - Verificar que el producto exista
+
+  - Corroborar el stock del producto al momento de finalizarse
+    
+    1) Si el producto tiene suficiente stock para la cantidad indicada en el producto del carrito, entonces restarlo del stock del producto y continuar.
+    
+    2) Si el producto no tiene suficiente stock para la cantidad indicada en el producto del carrito, entonces no agregar el producto al proceso de compra. 
 
   - Al final, utilizar el servicio de Tickets para poder generar un ticket con los datos de la compra.
 
