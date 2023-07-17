@@ -19,6 +19,13 @@ cartsRouter
   .delete(hasSession, deleteCartProduct)
 
 cartsRouter
+  .route('/:cid/ticket')
+  // TODO: Pendientes de implementar (GET, POST, DELETE)
+  .get(hasSession) // ! ver si es necesario, leer ticket.manager.js
+  .post(hasSession)
+  .delete(hasSession)
+
+cartsRouter
   .route('/:cid')
   .get(hasSession, getCart)
   .delete(hasSession, clearCartProducts)
