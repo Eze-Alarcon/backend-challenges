@@ -411,5 +411,4 @@ En conclusion, vamos a actualizar los items de antes:
 
 Una vez finalizada la compra, el carrito asociado al usuario que compró deberá contener sólo los productos que no pudieron comprarse. Es decir, se filtran los que sí se compraron y se quedan aquellos que no tenían disponibilidad.
 
-
 ## Proceso de testing
