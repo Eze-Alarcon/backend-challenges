@@ -5,14 +5,14 @@ import {
   logout,
   registerResponse,
   saveJwtCookie
-} from '../controllers/session.controller.js'
-import { alreadyHasSession, hasSession } from '../middleware/session.js'
+} from '../../controllers/session.controller.js'
+import { alreadyHasSession, hasSession } from '../../middleware/session.js'
 import {
   autenticacionUserLogin,
   autenticacionUserRegister,
   autenticacionUserGithub,
   antenticacionUserGithub_CB
-} from '../middleware/passport.config.js'
+} from '../../middleware/passport.config.js'
 
 export const sessionRouter = Router()
 

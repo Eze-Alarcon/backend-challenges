@@ -49,7 +49,6 @@ class DB_CART_MANAGER {
   }
 
   async createCart (item) {
-    console.log(item)
     const response = await this.#model.create(item)
     const data = this.#parseResponse(response)
     return data

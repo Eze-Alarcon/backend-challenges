@@ -1,6 +1,6 @@
 import { productManager } from '../dao/product.manager.js'
 import { cartManager } from '../dao/cart.manager.js'
-import { SERVER } from '../config/server.config.js'
+import { ROUTES, SERVER } from '../config/server.config.js'
 import { ROLES } from '../models/user.class.js'
 import Handlebars from 'handlebars'
 import { verifyToken } from '../middleware/jwt.config.js'
@@ -31,7 +31,7 @@ async function productsPaginate (req, res, next) {
       info: products,
       listExist: products.payload.length > 0,
       userCart: userInfo.cartID,
-      urlToCart: `${SERVER.BASE_URL}/cart/${userInfo.cartID}`,
+      urlToCart: `${SERVER.BASE_URL}${ROUTES.CARTS_ROUTE}/${userInfo.cartID}`,
       name: `${userInfo.first_name} ${userInfo.last_name}`,
       role: userInfo.role
     })
@@ -50,7 +50,7 @@ async function cartItems (req, res, next) {
       mainTitle: 'My list of products',
       info: myCart.cart.products,
       listExist: myCart.totalProducts > 0,
-      urlToProducts: `${SERVER.BASE_URL}/products`
+      urlToProducts: `${SERVER.BASE_URL}${ROUTES.PRODUCTS_ROUTE}`
     })
   } catch (error) {
     return next(error.message)

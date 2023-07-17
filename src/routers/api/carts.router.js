@@ -6,8 +6,8 @@ import {
   createNewCart,
   getAllCarts,
   deleteCartProduct
-} from '../controllers/cart.controller.js'
-import { hasSession } from '../middleware/session.js'
+} from '../../controllers/cart.controller.js'
+import { hasSession } from '../../middleware/session.js'
 
 export const cartsRouter = Router()
 

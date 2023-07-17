@@ -1,5 +1,5 @@
 import express, { Router } from 'express'
-import { alreadyHasSession } from '../middleware/session'
+import { alreadyHasSession } from '../../middleware/session'
 
 export const usersRouter = Router()
 

@@ -5,7 +5,7 @@ import {
   deleteProduct,
   getAllProducts,
   createProduct
-} from '../controllers/product.controller.js'
+} from '../../controllers/product.controller.js'
 
 export const productsRouter = Router()
 
