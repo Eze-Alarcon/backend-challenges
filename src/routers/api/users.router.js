@@ -1,4 +1,7 @@
+// Libraries
 import express, { Router } from 'express'
+
+// Middlewares
 import { alreadyHasSession } from '../../middleware/session'
 
 export const usersRouter = Router()

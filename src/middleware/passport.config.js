@@ -1,9 +1,14 @@
+// Libraries
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { Strategy as GithubStrategy } from 'passport-github2'
-import { userManager } from '../dao/user.manager.js'
-import { GH_CLIENT_ID, GH_CLIENT_SECRET, GH_CB_URL, SECRET_PASSWORD_JWT, COOKIE_NAME } from '../config/config.js'
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
+
+// Config
+import { GH_CLIENT_ID, GH_CLIENT_SECRET, GH_CB_URL, SECRET_PASSWORD_JWT, COOKIE_NAME } from '../config/config.js'
+
+// Services
+import { userManager } from '../services/user.service.js'
 
 passport.use('jwt', new JwtStrategy({
   jwtFromRequest: ExtractJwt.fromExtractors([function (req) {

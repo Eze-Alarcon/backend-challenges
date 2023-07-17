@@ -1,8 +1,13 @@
+// Libraries
 import { Router } from 'express'
 
+// Config
 import { ROUTES } from '../../config/server.config.js'
 
+// controller
 import { productsPaginate, cartItems, login, profile, register } from '../../controllers/views.controller.js'
+
+// Middleware
 import { hasSession, alreadyHasSession } from '../../middleware/session.js'
 
 export const viewsRouter = Router()

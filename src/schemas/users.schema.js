@@ -1,3 +1,4 @@
+// Libraries
 import mongoose from 'mongoose'
 
 const usuarioSchema = new mongoose.Schema({

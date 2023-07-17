@@ -1,4 +1,3 @@
-
 // Libraries
 import express from 'express'
 import mongoose from 'mongoose'
@@ -17,28 +16,28 @@ import { passportInitialize } from './middleware/passport.config.js'
 import { apiRouter } from './routers/api.routes.js'
 import { webRouter } from './routers/web.router.js'
 
-// Server
+// --> Server
 export const app = express()
 app.use(express.json())
 
-// DB
+// --> DB
 await mongoose.connect(URL_DB)
 
-// USER SESSIONS
+// --> USER SESSIONS
 app.use(passportInitialize)
 app.use(cookieParser(COOKIE_SECRET))
 
-// FRONT
+// --> FRONT
 app.engine('handlebars', engine())
 app.set('views', FOLDERS.VIEWS_FOLDER)
 app.set('view engine', 'handlebars')
 app.use(ROUTES.STATIC_ROUTE, express.static(FOLDERS.STATIC_FOLDER))
 
-// routes
+// --> routes
 app.use(ROUTES.API_ROUTE, apiRouter)
 app.use(webRouter)
 
-// ERROR HANDLING
+// --> ERROR HANDLING
 app.use(handleError)
 
 app.listen(SERVER.PORT, () => { console.log(`app on ${SERVER.BASE_URL}`) })

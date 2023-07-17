@@ -1,4 +1,5 @@
-import { cartManager } from '../dao/cart.manager.js'
+// Services
+import { cartManager } from '../services/cart.service.js'
 
 const updateCartProducts = async (req, res, next) => {
   try {

@@ -1,3 +1,4 @@
+// Error messages
 import { STATUS_CODE, CREATE_PRODUCT_ERRORS } from './errors.messages.js'
 
 function validateObject (fields, strict) {

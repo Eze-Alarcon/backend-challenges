@@ -3,7 +3,7 @@
   "name": "desafios",
   "version": "1.0.0",
   "description": "desafios de coderhouse",
-  "main": "./src/index.js",
+  "main": "./src/app.js",
   "scripts": {
     "test": "node .",
     "dev": "nodemon -e 'js,handlebars' .",

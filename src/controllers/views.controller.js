@@ -1,11 +1,19 @@
-import { productManager } from '../dao/product.manager.js'
-import { cartManager } from '../dao/cart.manager.js'
-import { ROUTES, SERVER } from '../config/server.config.js'
-import { ROLES } from '../models/user.class.js'
+// libraries
 import Handlebars from 'handlebars'
-import { verifyToken } from '../middleware/jwt.config.js'
 
+// Config
+import { ROUTES, SERVER } from '../config/server.config.js'
 import { COOKIE_NAME } from '../config/config.js'
+
+// Services
+import { productManager } from '../services/product.service.js'
+import { cartManager } from '../services/cart.service.js'
+
+// Models
+import { ROLES } from '../models/user.model.js'
+
+// Middlewares
+import { verifyToken } from '../middleware/jwt.config.js'
 
 const RENDER_PATH = {
   CART: 'cart',

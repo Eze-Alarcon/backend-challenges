@@ -1,4 +1,7 @@
+// Libraries
 import bcrypt from 'bcrypt'
+
+// Config
 import { SALT } from '../config/config.js'
 
 async function hashPassword (password) {

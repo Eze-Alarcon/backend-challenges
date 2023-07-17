@@ -1,3 +1,4 @@
+// Middlewares
 import { generateToken, verifyToken } from '../middleware/jwt.config.js'
 
 import { COOKIE_NAME } from '../config/config.js'

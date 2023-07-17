@@ -1,9 +1,15 @@
+// Models
+import { UserGithub, UserPassport } from '../models/user.model.js'
 
-import { UserGithub, UserPassport } from '../models/user.class.js'
+// DAOs
+import { DB_USERS, DB_GITHUB_USERS } from '../dao/users.database.js'
+
+// Services
+import { cartManager } from './cart.service.js'
+
+// Utils
 import { AUTH_ERROR, STATUS_CODE } from '../utils/errors.messages.js'
 import { comparePassword, hashPassword } from '../utils/hash.js'
-import { DB_USERS, DB_GITHUB_USERS } from '../services/users.database.js'
-import { cartManager } from './cart.manager.js'
 
 class UserManager {
   async searchUser ({ email }) {

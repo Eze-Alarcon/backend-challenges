@@ -1,3 +1,4 @@
+// Libraries
 import mongoose, { Schema } from 'mongoose'
 
 const cartSchema = new Schema({

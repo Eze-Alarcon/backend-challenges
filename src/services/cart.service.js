@@ -1,8 +1,15 @@
-import { Cart } from '../models/cart.class.js'
-import { STATUS_CODE, CART_MANAGER_ERRORS } from '../utils/errors.messages.js'
+// Models
+import { Cart } from '../models/cart.model.js'
+
+// Services
+import { productManager } from './product.service.js'
+
+// DAOs
+import { DB_CARTS } from '../dao/carts.database.js'
+
+// Utils
 import { validateQuantity } from '../utils/validations.js'
-import { productManager } from './product.manager.js'
-import { DB_CARTS } from '../services/carts.database.js'
+import { STATUS_CODE, CART_MANAGER_ERRORS } from '../utils/errors.messages.js'
 
 /* -------------------------------------------- */
 

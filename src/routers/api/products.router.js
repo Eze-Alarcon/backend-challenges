@@ -1,4 +1,7 @@
+// Libraries
 import express, { Router } from 'express'
+
+// Controller
 import {
   getProducts,
   updateProduct,

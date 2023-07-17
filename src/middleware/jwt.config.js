@@ -1,5 +1,7 @@
+// Libraries
 import jwt from 'jsonwebtoken'
 
+// Config
 import { SECRET_PASSWORD_JWT } from '../config/config.js'
 
 function generateToken (user) {

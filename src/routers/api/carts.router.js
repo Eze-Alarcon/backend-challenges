@@ -1,4 +1,7 @@
+// Libraries
 import express, { Router } from 'express'
+
+// Controller
 import {
   updateCartProducts,
   getCart,
@@ -7,6 +10,8 @@ import {
   getAllCarts,
   deleteCartProduct
 } from '../../controllers/cart.controller.js'
+
+// Middleware
 import { hasSession } from '../../middleware/session.js'
 
 export const cartsRouter = Router()

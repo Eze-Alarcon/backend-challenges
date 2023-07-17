@@ -1,5 +1,10 @@
+// Configs
 import { SERVER } from '../config/server.config.js'
+
+// Error messages
 import { STATUS_CODE } from '../utils/errors.messages.js'
+
+// Schemas
 import { productModel } from '../schemas/products.schema.js'
 
 class DB_PRODUCT_MANAGER {

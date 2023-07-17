@@ -1,4 +1,5 @@
-import { ticketManager } from '../dao/ticket.manager.js'
+// DAOs
+import { ticketManager } from '../dao/tickets.database.js'
 
 /*
   * la idea de este controller es que sea un pasamanos, pasa la info a otros componentes y si otra cosa falla simplemente el controller pasa el error al middleware de error, para ello usar un try-catch y en el catch colocar next(error)

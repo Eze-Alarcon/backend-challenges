@@ -1,4 +1,7 @@
+// Libraries
 import mongoose from 'mongoose'
+
+// Schemas
 import { ticketModel } from '../schemas/ticket.schema.js'
 
 // guiarse con algun otro archivo similar

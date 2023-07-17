@@ -1,5 +1,8 @@
+// Configs
 import { COOKIE_NAME } from '../config/config.js'
 import { verifyToken } from './jwt.config.js'
+
+// Tips
 // req.signedCookies[COOKIE_NAME] === false en el caso de que el usuario haya modificado la cookie
 
 async function hasSession (req, res, next) {

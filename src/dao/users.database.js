@@ -1,3 +1,4 @@
+// Schemas
 import { userModel, githubUserModel } from '../schemas/users.schema.js'
 
 // ===== Local DB Manager =====

@@ -1,4 +1,7 @@
+// Libraries
 import express, { Router } from 'express'
+
+// Controller
 import {
   getCurrentUser,
   loginReponse,
@@ -6,6 +9,8 @@ import {
   registerResponse,
   saveJwtCookie
 } from '../../controllers/session.controller.js'
+
+// Middlewares
 import { alreadyHasSession, hasSession } from '../../middleware/session.js'
 import {
   autenticacionUserLogin,
