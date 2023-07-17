@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv'
+
 dotenv.config({
   path: 'src/config/.env'
 })
@@ -6,43 +7,23 @@ dotenv.config({
 // Server
 const PORT = process.env.PORT
 
-const BASE_URL = `http://localhost:${PORT}`
-
-// Routes
-const PRODUCTS_ROUTE = '/api/products/'
-
-const SESSION_ROUTE = '/api/sessions'
-
-const USER_ROUTE = '/api/users'
-
-const CARTS_ROUTE = '/api/carts'
-
-const VIEWS_ROUTES = '/'
-
-const STATIC_ROUTE = '/static'
-
-// Folders
-const STATIC_FOLDER = './static'
-
-const VIEWS_FOLDER = './views'
-
 const SERVER = {
-  PORT,
-  BASE_URL
+  BASE_URL: `http://localhost:${PORT}`,
+  PORT
 }
 
 const ROUTES = {
-  PRODUCTS_ROUTE,
-  CARTS_ROUTE,
-  STATIC_ROUTE,
-  SESSION_ROUTE,
-  VIEWS_ROUTES,
-  USER_ROUTE
+  PRODUCTS_ROUTE: '/api/products/',
+  SESSION_ROUTE: '/api/sessions',
+  USER_ROUTE: '/api/users',
+  CARTS_ROUTE: '/api/carts',
+  VIEWS_ROUTES: '/',
+  STATIC_ROUTE: '/static'
 }
 
 const FOLDERS = {
-  STATIC_FOLDER,
-  VIEWS_FOLDER
+  STATIC_FOLDER: './static',
+  VIEWS_FOLDER: './views'
 }
 
 export { SERVER, ROUTES, FOLDERS }
