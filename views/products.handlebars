@@ -7,7 +7,9 @@
 <p>Access level: User</p>
 {{/if}}
 
-<a href={{urlToCart}} data-cart={{userCart}} id="linkToCart" class="btn btn-primary" role="button">Go to my cart</a>
+{{#if userCart}}
+  <a href={{urlToCart}} data-cart={{userCart}} id="linkToCart" class="btn btn-primary" role="button">Go to my cart</a>
+{{/if}}
 <a href="/profile" class="btn btn-primary" role="button">Check my profile</a>
 
 

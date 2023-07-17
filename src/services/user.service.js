@@ -1,5 +1,5 @@
 // Models
-import { UserGithub, UserPassport } from '../models/user.model.js'
+import { ROLES, UserGithub, UserPassport } from '../models/user.model.js'
 
 // DAOs
 import { DB_USERS, DB_GITHUB_USERS } from '../dao/users.database.js'
@@ -49,11 +49,15 @@ class UserManager {
 
     const newPassword = await hashPassword(password)
 
-    const { cart } = await cartManager.createCart()
+    let cartID = null
+    if (role === ROLES.USER) {
+      const { cart } = await cartManager.createCart()
+      cartID = cart.id
+    }
 
     const newUser = new UserPassport({
       email,
-      cartID: cart.id,
+      cartID,
       password: newPassword,
       first_name,
       last_name,

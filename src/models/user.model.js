@@ -34,7 +34,7 @@ class UserPassport extends User {
   #age
   constructor ({
     email,
-    cartID,
+    cartID = null,
     role = ROLES.USER,
     password,
     first_name,

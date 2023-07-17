@@ -7,7 +7,7 @@ const usuarioSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
   age: { type: Number, required: true },
-  cartID: { type: Number, required: true },
+  cartID: { type: Number },
   role: { type: String, required: true }
 }, { versionKey: false })
 
