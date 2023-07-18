@@ -30,6 +30,12 @@ class CartManager {
     }
   }
 
+  async checkCart ({ cartID }) {
+    console.log('[ticket.service] cartID:', cartID)
+    const cart = await this.getCartById(cartID)
+    console.log('[ticket.service]: ', cart)
+  }
+
   async getCarts () {
     try {
       const carts = await DB_CARTS.getCarts()

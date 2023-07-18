@@ -14,14 +14,16 @@ class DB_TICKET_MANAGER {
   }
 
   getTicket () {
-    // TODO: pendiente de implementar
+    // TODO: logica de obtener el ticket
   }
 
-  deleteTicket () {
-    // TODO: pendiente de implementar
+  deleteTicket (id) {
+
   }
 
   createTicket () {
+    // creo el objeto ticket
+
     // TODO: pendiente de implementar
   }
 }
