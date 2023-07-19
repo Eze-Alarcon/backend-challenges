@@ -20,9 +20,14 @@ function logout (req, res) {
 }
 
 function saveJwtCookie (req, res, next) {
+  const now = new Date()
+  const minutes = 60 // Tiempo de expiración de la cookie en minutos
+  now.setTime(now.getTime() + minutes * 60 * 1000)
+
   res.cookie(COOKIE_NAME, generateToken(req.user), {
     signed: true,
-    httpOnly: true
+    httpOnly: true,
+    expires: now
   })
   next()
 }

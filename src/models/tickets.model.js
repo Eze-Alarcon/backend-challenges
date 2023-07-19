@@ -1,3 +1,5 @@
+import crypto from 'crypto'
+
 class Ticket {
   #Id
   #code
@@ -6,15 +8,11 @@ class Ticket {
   #purchaser
 
   constructor ({
-    Id,
-    code,
-    purchase_datetime,
     amount,
     purchaser
   }) {
-    this.#Id = Id
-    this.#code = code
-    this.#purchase_datetime = purchase_datetime
+    this.#code = crypto.randomUUID()
+    this.#purchase_datetime = new Intl.DateTimeFormat('en', { dateStyle: 'full', timeStyle: 'long' }).format()
     this.#amount = amount
     this.#purchaser = purchaser
   }

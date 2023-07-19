@@ -20,10 +20,10 @@ export const cartsRouter = Router()
 
 cartsRouter.use(express.json())
 
+// TODO: Pendientes de implementar (GET, POST, DELETE)
 cartsRouter
   .route('/:cid/ticket')
-  // TODO: Pendientes de implementar (GET, POST, DELETE)
-  .get() // ! ver si es necesario, leer ticket.manager.js
+  .get()
   .post(createTicket)
   .delete()
 

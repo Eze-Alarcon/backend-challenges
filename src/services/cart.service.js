@@ -31,9 +31,14 @@ class CartManager {
   }
 
   async checkCart ({ cartID }) {
-    console.log('[ticket.service] cartID:', cartID)
-    const cart = await this.getCartById(cartID)
-    console.log('[ticket.service]: ', cart)
+    const { cart } = await this.getCartById(cartID)
+    const productsAvailables = []
+    for (const item of cart.products) {
+      const { item: storeProduct } = await productManager.getProductById({ id: item.product.id })
+      if (item.quantity > storeProduct.stock) continue
+      productsAvailables.push({ ...item.product, quantity: item.quantity })
+    }
+    return { cart, productsAvailables }
   }
 
   async getCarts () {
