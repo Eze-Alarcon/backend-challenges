@@ -2,9 +2,9 @@
 
 <h3>Welcome {{name}}</h3>
 {{#if (eq role 'admin')}}
-<p>Access level: Admin</p>
+  <p>Access level: Admin</p>
 {{else}}
-<p>Access level: User</p>
+  <p>Access level: User</p>
 {{/if}}
 
 {{#if userCart}}
@@ -29,9 +29,16 @@
               <li class='list-group-item'>Description: {{this.description}}</li>
               <li class='list-group-item'>Price: ${{this.price}}</li>
               <li class='list-group-item'>Stock: {{this.stock}}</li>
-              <button type="button" onclick="addProductToCart(this.dataset.productid)" data-productid={{this.id}} class="list-group-item list-group-item-action active" aria-current="true">
-                Add product to cart
-              </button>
+              {{#if (eq role 'admin')}}
+                <button
+                type="button"
+                onclick="addProductToCart(this.dataset.productid)"
+                data-productid={{this.id}} class="list-group-item list-group-item-action active"
+                aria-current="true"
+                >
+                  Add product to cart
+                </button>
+              {{/if}}
             </ul>
           </div>
         </div>

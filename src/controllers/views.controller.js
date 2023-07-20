@@ -10,7 +10,7 @@ import { productManager } from '../services/product.service.js'
 import { cartManager } from '../services/cart.service.js'
 
 // Models
-import { ROLES } from '../models/user.model.js'
+import { ROLES } from '../utils/contans.js'
 
 // Middlewares
 import { verifyToken } from '../middleware/jwt.config.js'

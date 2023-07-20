@@ -8,7 +8,7 @@ import { ROUTES } from '../../config/server.config.js'
 import { productsPaginate, cartItems, login, profile, register } from '../../controllers/views.controller.js'
 
 // Middleware
-import { hasSession, alreadyHasSession } from '../../middleware/session.js'
+import { hasSession, alreadyHasSession } from '../../middleware/autentication.js'
 
 export const viewsRouter = Router()
 

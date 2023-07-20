@@ -1,7 +1,12 @@
 // Middlewares
 import { generateToken, verifyToken } from '../middleware/jwt.config.js'
 
+// Config
 import { COOKIE_NAME } from '../config/config.js'
+
+// Contans
+import { ROLES } from '../utils/contans.js'
+import { AUTH_ERROR } from '../utils/errors.messages.js'
 
 async function loginReponse (req, res, next) {
   return res.json({ message: 'Login success', isLog: true })
@@ -49,10 +54,24 @@ async function getCurrentUser (req, res, next) {
   res.json({ user: userData })
 }
 
+async function isAdmin (req, res, next) {
+  try {
+    const token = req.signedCookies[COOKIE_NAME]
+
+    const { role } = await verifyToken(token)
+
+    if (role !== ROLES.ADMIN) throw new Error(AUTH_ERROR.FORBIDDEN.ERROR_CODE)
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
+
 export {
   logout,
   loginReponse,
   registerResponse,
   saveJwtCookie,
-  getCurrentUser
+  getCurrentUser,
+  isAdmin
 }

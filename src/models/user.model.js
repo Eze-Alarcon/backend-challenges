@@ -1,7 +1,5 @@
-const ROLES = {
-  USER: 'user',
-  ADMIN: 'admin'
-}
+// Constans
+import { ROLES } from '../utils/contans.js'
 
 class User {
   #email

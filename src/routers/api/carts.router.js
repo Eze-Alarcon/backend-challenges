@@ -18,11 +18,12 @@ import {
 } from '../../controllers/ticket.controller.js'
 
 // Middleware
-import { hasSession } from '../../middleware/session.js'
+import { hasSession } from '../../middleware/autentication.js'
 
 export const cartsRouter = Router()
 
 cartsRouter.use(express.json())
+cartsRouter.use(hasSession)
 
 cartsRouter
   .route('/:cid/ticket')
@@ -32,15 +33,15 @@ cartsRouter
 
 cartsRouter
   .route('/:cid/product/:pid')
-  .put(hasSession, updateCartProducts)
-  .delete(hasSession, deleteCartProduct)
+  .put(updateCartProducts)
+  .delete(deleteCartProduct)
 
 cartsRouter
   .route('/:cid')
-  .get(hasSession, getCart)
-  .delete(hasSession, clearCartProducts)
+  .get(getCart)
+  .delete(clearCartProducts)
 
 cartsRouter
   .route('/')
-  .post(hasSession, createNewCart)
-  .get(hasSession, getAllCarts)
+  .post(createNewCart)
+  .get(getAllCarts)

@@ -146,6 +146,11 @@ const AUTH_ERROR = {
     MESSAGE: "[ERROR]: Authentication error. Invalid username and password",
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     ERROR_CODE: "WRONG_CREDENTIALS"
+  },
+  FORBIDDEN: {
+    MESSAGE: "[ERROR]: Login to continue",
+    STATUS: STATUS_CODE.CLIENT_ERROR.FORBIDDEN,
+    ERROR_CODE: "FORBIDDEN"
   }
 }
 

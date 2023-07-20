@@ -11,7 +11,7 @@ import {
 } from '../../controllers/session.controller.js'
 
 // Middlewares
-import { alreadyHasSession, hasSession } from '../../middleware/session.js'
+import { alreadyHasSession, hasSession } from '../../middleware/autentication.js'
 import {
   autenticacionUserLogin,
   autenticacionUserRegister,
