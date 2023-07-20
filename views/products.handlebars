@@ -40,14 +40,20 @@
                   Add product to cart
                 </button>
               {{else}}
-                <a
-                  type="button"
-                  class="list-group-item list-group-item-action active"
-                  aria-current="true"
-                  href="/products/{{this.id}}"
+                <li
+                  class="list-group-item list-group-item-action"
                 >
-                  Update this product
-                </a>
+                  <button
+                    class="btn btn-danger"
+                    data-productid={{this.id}}
+                    onclick="deleteProduct(this.dataset.productid)"
+                  >
+                    Delete Item
+                  </button>
+                  <a class="btn btn-primary" href="/products/{{this.id}}">
+                    Update product
+                  </a>
+                </li>
               {{/if}}
             </ul>
           </div>
