@@ -11,7 +11,11 @@ import {
   deleteCartProduct
 } from '../../controllers/cart.controller.js'
 
-import { createTicket } from '../../controllers/ticket.controller.js'
+import {
+  createTicket,
+  deleteTicket,
+  getTicket
+} from '../../controllers/ticket.controller.js'
 
 // Middleware
 import { hasSession } from '../../middleware/session.js'
@@ -20,12 +24,11 @@ export const cartsRouter = Router()
 
 cartsRouter.use(express.json())
 
-// TODO: Pendientes de implementar (GET, POST, DELETE)
 cartsRouter
   .route('/:cid/ticket')
-  .get()
+  .get(getTicket)
   .post(createTicket)
-  .delete()
+  .delete(deleteTicket)
 
 cartsRouter
   .route('/:cid/product/:pid')

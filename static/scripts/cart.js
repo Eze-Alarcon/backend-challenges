@@ -1,10 +1,19 @@
-const btnBuy = document.getElementById('btn-buy')
+/* eslint-disable no-unused-vars */
+const btnBuy = document.getElementById('btn-buy') ?? null
+let cartID = null
 
-const cartID = btnBuy.dataset.cart
+if (btnBuy !== null) {
+  cartID = btnBuy.dataset.cart
+}
 
-// eslint-disable-next-line no-unused-vars
 async function generateTicket () {
   const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/ticket`
   await fetch(FETCH_URL, { method: 'POST' })
+  window.location.reload()
+}
+
+async function clearCart () {
+  const FETCH_URL = `http://localhost:8080/api/carts/${cartID}`
+  await fetch(FETCH_URL, { method: 'DELETE' })
   window.location.reload()
 }

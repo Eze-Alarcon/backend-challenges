@@ -7,10 +7,6 @@ import { COOKIE_NAME } from '../config/config.js'
 // middleware
 import { verifyToken } from '../middleware/jwt.config.js'
 
-/*
-  * la idea de este controller es que sea un pasamanos, pasa la info a otros componentes y si otra cosa falla simplemente el controller pasa el error al middleware de error
-*/
-
 async function getTicket (req, res, next) {
   try {
     await ticketManager.getTicket()

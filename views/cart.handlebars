@@ -1,5 +1,10 @@
 <h2>{{mainTitle}}</h2>
-<a href={{urlToProducts}} class="btn btn-primary" role="button">Go to products</a>
+<button class="btn">
+  <a href={{urlToProducts}} class="btn btn-primary" role="button">Go to products</a>
+</button>
+<button class="btn btn-danger" onclick="clearCart()">Clear cart</button>
+<br>
+<br>
 
 {{#if listExist}}
   <button class="btn btn-primary" id="btn-buy" onclick="generateTicket()" data-cart={{userCart}}>Buy products</button>
