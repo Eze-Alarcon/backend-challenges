@@ -39,7 +39,14 @@ class ProductManager {
   async addProduct (fields) {
     try {
       const strictValidation = true
-      validateInputs(fields, strictValidation)
+      const mappedFields = {
+        description: fields.description,
+        thumbnail: fields.thumbnail ?? [],
+        title: fields.title,
+        price: parseFloat(fields.price),
+        stock: parseInt(fields.stock)
+      }
+      validateInputs(mappedFields, strictValidation)
 
       const lastItem = await DB_PRODUCTS.getLastProduct()
 
@@ -47,7 +54,7 @@ class ProductManager {
         ? this.#nextID = ++lastItem[0].id
         : this.#nextID = 1
 
-      const newProduct = new Product({ ...fields, id: this.#nextID })
+      const newProduct = new Product({ ...mappedFields, id: this.#nextID })
       await DB_PRODUCTS.createProduct(newProduct.getProductData())
 
       return {

@@ -21,7 +21,8 @@ const RENDER_PATH = {
   PROFILE: 'profile',
   REGISTER: 'register',
   PRODUCTS: 'products',
-  UPDATE_PRODUCT: 'update'
+  UPDATE_PRODUCT: 'update',
+  CRATE_PRODUCT: 'createProduct'
 }
 
 Handlebars.registerHelper('eq', function (a, b) { return a === b })
@@ -117,11 +118,19 @@ async function uptProducts (req, res, next) {
   })
 }
 
+async function createNewProduct (req, res, next) {
+  res.status(200).render(RENDER_PATH.CRATE_PRODUCT, {
+    headerTitle: 'HOME | Products',
+    mainTitle: 'Crate Product'
+  })
+}
+
 export {
   productsPaginate,
   uptProducts,
   cartItems,
   login,
   profile,
-  register
+  register,
+  createNewProduct
 }

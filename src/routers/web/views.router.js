@@ -11,11 +11,13 @@ import {
   login,
   profile,
   register,
-  uptProducts
+  uptProducts,
+  createNewProduct
 } from '../../controllers/views.controller.js'
 
 // Middleware
 import { hasSession, alreadyHasSession } from '../../middleware/autentication.js'
+import { isAdmin } from '../../controllers/session.controller.js'
 
 export const viewsRouter = Router()
 
@@ -32,8 +34,12 @@ viewsRouter
   .get(hasSession, profile)
 
 viewsRouter
+  .route(`${ROUTES.PRODUCTS_ROUTE}new`)
+  .get(hasSession, isAdmin, createNewProduct)
+
+viewsRouter
   .route(`${ROUTES.PRODUCTS_ROUTE}:pid`)
-  .get(hasSession, uptProducts)
+  .get(hasSession, isAdmin, uptProducts)
 
 viewsRouter
   .route(ROUTES.PRODUCTS_ROUTE)
