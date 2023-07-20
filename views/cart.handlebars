@@ -2,6 +2,7 @@
 <a href={{urlToProducts}} class="btn btn-primary" role="button">Go to products</a>
 
 {{#if listExist}}
+  <button class="btn btn-primary" id="btn-buy" onclick="generateTicket()" data-cart={{userCart}}>Buy products</button>
   <h4>My products:</h4>
   <div class='container text-center mb-5'>
     <div class='row row-gap-5'>
@@ -26,3 +27,5 @@
 {{else}}
   <p class=''>No Products...</p>
 {{/if}}
+
+<script src="/static/scripts/cart.js"></script>

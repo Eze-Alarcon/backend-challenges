@@ -13,9 +13,7 @@ import { verifyToken } from '../middleware/jwt.config.js'
 
 async function getTicket (req, res, next) {
   try {
-    // usar el ticketManager
-    // TODO: Pendiente de implementar
-    // ! TODA VALIDACION NECESARIA SE HARA EN ticket.manager.js
+    await ticketManager.getTicket()
   } catch (error) {
     next(error)
   }
@@ -23,13 +21,12 @@ async function getTicket (req, res, next) {
 
 async function createTicket (req, res, next) {
   try {
-    // const cartID = req.params.cid
-    // const token = req.signedCookies[COOKIE_NAME]
-    // const user = await verifyToken(token)
-    // console.log(user)
+    const cartID = req.params.cid
+    const token = req.signedCookies[COOKIE_NAME]
+    const user = await verifyToken(token)
 
-    // await ticketManager.createTicket({ cartID, email: user.email })
-    res.json('test 2')
+    const { ticket, cart, status } = await ticketManager.createTicket({ cartID, email: user.email })
+    res.status(status).json({ ticket, cart })
   } catch (error) {
     next(error)
   }
@@ -37,8 +34,7 @@ async function createTicket (req, res, next) {
 
 async function deleteTicket (req, res, next) {
   try {
-    // TODO: Pendiente de implementar
-    // ! TODA VALIDACION NECESARIA SE HARA EN ticket.manager.js
+    await ticketManager.deleteTicket()
   } catch (error) {
     next(error)
   }

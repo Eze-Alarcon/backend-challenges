@@ -13,15 +13,15 @@ class DB_TICKET_MANAGER {
     this.#model = model
   }
 
-  getTicket () {
+  getOne () {
     // TODO: logica de obtener el ticket
   }
 
-  deleteTicket (id) {
+  deleteOne (id) {
 
   }
 
-  createTicket () {
+  createOne () {
     // creo el objeto ticket
 
     // TODO: pendiente de implementar

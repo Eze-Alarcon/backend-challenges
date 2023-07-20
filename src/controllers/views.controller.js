@@ -57,6 +57,7 @@ async function cartItems (req, res, next) {
       headerTitle: 'Home | My cart',
       mainTitle: 'My list of products',
       info: myCart.cart.products,
+      userCart: myCart.cart.id,
       listExist: myCart.totalProducts > 0,
       urlToProducts: `${SERVER.BASE_URL}${ROUTES.PRODUCTS_ROUTE}`
     })

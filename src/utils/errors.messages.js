@@ -116,6 +116,14 @@ const CART_MANAGER_ERRORS = {
   }
 }
 
+const TICKET_MANAGER_ERRORS = {
+  CREATE_TICKET: {
+    MESSAGE: "[ERROR]: Something went wrong with the 'createTicket' method",
+    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
+    ERROR_CODE: "CREATE_TICKET"
+  }
+}
+
 /* ========== Errores de autenticacion ========== */
 
 const AUTH_ERROR = {
@@ -141,6 +149,7 @@ export {
   CART_MANAGER_ERRORS,
   CREATE_PRODUCT_ERRORS,
   PRODUCT_MANAGER_ERRORS,
+  TICKET_MANAGER_ERRORS,
   SERVER_ERROR,
   STATUS_CODE
 }
