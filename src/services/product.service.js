@@ -63,16 +63,19 @@ class ProductManager {
     try {
       const { item } = await this.getProductById(query)
 
-      validateInputs(fields)
+      const mappedFields = {
+        description: fields.description ?? item.description,
+        thumbnail: fields.thumbnail ?? item.thumbnail,
+        title: fields.title ?? item.title,
+        price: parseFloat(fields.price) ?? item.price,
+        stock: parseInt(fields.stock) ?? item.stock
+      }
+
+      validateInputs(mappedFields)
 
       const newProduct = {
         ...item,
-        description: fields.description ?? item.description,
-        thumbnail: fields.thumbnail ?? item.thumbnail,
-        category: fields.category ?? item.category,
-        title: fields.title ?? item.title,
-        price: fields.price ?? item.price,
-        stock: fields.stock ?? item.stock
+        ...mappedFields
       }
 
       await DB_PRODUCTS.updateProduct(query, newProduct)
@@ -81,6 +84,7 @@ class ProductManager {
         itemUpdated: newProduct
       }
     } catch (error) {
+      console.log(error)
       throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
     }
   }

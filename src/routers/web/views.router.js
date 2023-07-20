@@ -5,7 +5,14 @@ import { Router } from 'express'
 import { ROUTES } from '../../config/server.config.js'
 
 // controller
-import { productsPaginate, cartItems, login, profile, register } from '../../controllers/views.controller.js'
+import {
+  productsPaginate,
+  cartItems,
+  login,
+  profile,
+  register,
+  uptProducts
+} from '../../controllers/views.controller.js'
 
 // Middleware
 import { hasSession, alreadyHasSession } from '../../middleware/autentication.js'
@@ -23,6 +30,10 @@ viewsRouter
 viewsRouter
   .route(ROUTES.PROFILE)
   .get(hasSession, profile)
+
+viewsRouter
+  .route(`${ROUTES.PRODUCTS_ROUTE}:pid`)
+  .get(hasSession, uptProducts)
 
 viewsRouter
   .route(ROUTES.PRODUCTS_ROUTE)

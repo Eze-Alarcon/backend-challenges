@@ -20,7 +20,8 @@ const RENDER_PATH = {
   LOGIN: 'login',
   PROFILE: 'profile',
   REGISTER: 'register',
-  PRODUCTS: 'products'
+  PRODUCTS: 'products',
+  UPDATE_PRODUCT: 'update'
 }
 
 Handlebars.registerHelper('eq', function (a, b) { return a === b })
@@ -100,4 +101,27 @@ async function profile (req, res, next) {
   })
 }
 
-export { productsPaginate, cartItems, login, profile, register }
+async function uptProducts (req, res, next) {
+  const { pid: id } = req.params
+  const { item: product } = await productManager.getProductById({ id })
+
+  res.status(200).render(RENDER_PATH.UPDATE_PRODUCT, {
+    headerTitle: 'HOME | Products',
+    mainTitle: 'Update Product',
+    product: {
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      stock: product.stock
+    }
+  })
+}
+
+export {
+  productsPaginate,
+  uptProducts,
+  cartItems,
+  login,
+  profile,
+  register
+}

@@ -29,15 +29,25 @@
               <li class='list-group-item'>Description: {{this.description}}</li>
               <li class='list-group-item'>Price: ${{this.price}}</li>
               <li class='list-group-item'>Stock: {{this.stock}}</li>
-              {{#if (eq role 'admin')}}
+              {{#if (eq role 'user')}}
                 <button
-                type="button"
-                onclick="addProductToCart(this.dataset.productid)"
-                data-productid={{this.id}} class="list-group-item list-group-item-action active"
-                aria-current="true"
+                  type="button"
+                  class="list-group-item list-group-item-action active"
+                  onclick="addProductToCart(this.dataset.productid)"
+                  data-productid={{this.id}}
+                  aria-current="true"
                 >
                   Add product to cart
                 </button>
+              {{else}}
+                <a
+                  type="button"
+                  class="list-group-item list-group-item-action active"
+                  aria-current="true"
+                  href="/products/{{this.id}}"
+                >
+                  Update this product
+                </a>
               {{/if}}
             </ul>
           </div>

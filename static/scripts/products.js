@@ -1,6 +1,7 @@
-const link = document.getElementById('linkToCart')
+const link = document.getElementById('linkToCart') ?? null
+let cartID = null
 
-const cartID = link.dataset.cart
+if (link !== null) cartID = link.dataset.cart
 
 // eslint-disable-next-line no-unused-vars
 async function addProductToCart (productID) {
