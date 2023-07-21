@@ -8,8 +8,10 @@ if (btnBuy !== null) {
 
 async function generateTicket () {
   const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/ticket`
-  await fetch(FETCH_URL, { method: 'POST' })
-  window.location.reload()
+  const response = await fetch(FETCH_URL, { method: 'POST' })
+  const data = await response.json()
+  console.log(data)
+  // window.location.reload()
 }
 
 async function clearCart () {
@@ -17,3 +19,12 @@ async function clearCart () {
   await fetch(FETCH_URL, { method: 'DELETE' })
   window.location.reload()
 }
+
+// Modal
+const myModal = document.getElementById('myModal')
+const myInput = document.getElementById('myInput')
+const modalContent = document.getElementById('myModalContent')
+
+myModal.addEventListener('shown.bs.modal', () => {
+  myInput.focus()
+})

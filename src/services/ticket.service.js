@@ -38,7 +38,6 @@ class TicketManager {
 
       return {
         ticket: newTicket,
-        cart,
         status: STATUS_CODE.SUCCESS.CREATED
       }
     } catch (error) {

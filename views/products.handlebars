@@ -16,7 +16,6 @@
 {{/if}}
 <a href="/profile" class="btn btn-primary" role="button">Check my profile</a>
 
-
 {{#if listExist}}
   <h4>Products:</h4>
   <div class='container text-center mb-5'>
@@ -33,17 +32,7 @@
               <li class='list-group-item'>Description: {{this.description}}</li>
               <li class='list-group-item'>Price: ${{this.price}}</li>
               <li class='list-group-item'>Stock: {{this.stock}}</li>
-              {{#if (eq role 'user')}}
-                <button
-                  type="button"
-                  class="list-group-item list-group-item-action active"
-                  onclick="addProductToCart(this.dataset.productid)"
-                  data-productid={{this.id}}
-                  aria-current="true"
-                >
-                  Add product to cart
-                </button>
-              {{else}}
+              {{#if (eq ../role 'admin')}}
                 <li
                   class="list-group-item list-group-item-action"
                 >
@@ -58,7 +47,17 @@
                     Update product
                   </a>
                 </li>
-              {{/if}}
+                {{else}}
+                  <button
+                    type="button"
+                    class="list-group-item list-group-item-action active"
+                    onclick="addProductToCart(this.dataset.productid)"
+                    data-productid={{this.id}}
+                    aria-current="true"
+                  >
+                    Add product to cart
+                  </button>
+                {{/if}}
             </ul>
           </div>
         </div>
