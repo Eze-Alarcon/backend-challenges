@@ -21,8 +21,8 @@ async function createTicket (req, res, next) {
     const token = req.signedCookies[COOKIE_NAME]
     const user = await verifyToken(token)
 
-    const { ticket, status } = await ticketManager.createTicket({ cartID, email: user.email })
-    res.status(status).json({ ticket })
+    const { ticket, cart, status } = await ticketManager.createTicket({ cartID, email: user.email })
+    res.status(status).json({ ticket, cart })
   } catch (error) {
     next(error)
   }

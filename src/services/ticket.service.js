@@ -35,9 +35,11 @@ class TicketManager {
       })
 
       const newTicket = await DB_TICKET.createOne(ticketModel.DTO())
+      const { cart: newCart } = await cartManager.getCartById(cartID)
 
       return {
         ticket: newTicket,
+        cart: newCart,
         status: STATUS_CODE.SUCCESS.CREATED
       }
     } catch (error) {

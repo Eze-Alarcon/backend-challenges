@@ -4,7 +4,7 @@
 </button>
 <button class="btn btn-danger" onclick="clearCart()">Clear cart</button>
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+<button type="button" id="openModalBtn" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
   Ticket Test
 </button>
 <br>
@@ -14,7 +14,7 @@
   <button class="btn btn-primary" id="btn-buy" onclick="generateTicket()" data-cart={{userCart}}>Buy products</button>
   <h4>My products:</h4>
   <div class='container text-center mb-5'>
-    <div class='row row-gap-5'>
+    <div class='row row-gap-5' id="cart-products-container">
       {{#each info}}
         <div class='col-3'>
           <div class='card'>

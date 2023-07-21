@@ -74,8 +74,8 @@ class ProductManager {
         description: fields.description ?? item.description,
         thumbnail: fields.thumbnail ?? item.thumbnail,
         title: fields.title ?? item.title,
-        price: parseFloat(fields.price) ?? item.price,
-        stock: parseInt(fields.stock) ?? item.stock
+        price: (!isNaN(parseFloat(fields.price))) ? parseFloat(fields.price) : item.price,
+        stock: (!isNaN(parseInt(fields.stock))) ? parseInt(fields.stock) : item.stock
       }
 
       validateInputs(mappedFields)
