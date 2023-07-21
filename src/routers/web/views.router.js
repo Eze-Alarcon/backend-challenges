@@ -11,6 +11,7 @@ import {
   login,
   profile,
   register,
+  usersChat,
   uptProducts,
   createNewProduct
 } from '../../controllers/views.controller.js'
@@ -48,3 +49,7 @@ viewsRouter
 viewsRouter
   .route(`${ROUTES.CARTS_ROUTE}/:cid`)
   .get(hasSession, cartItems)
+
+viewsRouter
+  .route(ROUTES.CHAT)
+  .get(hasSession, usersChat)

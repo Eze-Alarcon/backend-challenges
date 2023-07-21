@@ -2,7 +2,7 @@
 import Handlebars from 'handlebars'
 
 // Config
-import { ROUTES, SERVER } from '../config/server.config.js'
+import { ROUTES, SERVER_CONFIG } from '../config/server.config.js'
 import { COOKIE_NAME } from '../config/config.js'
 
 // Services
@@ -17,6 +17,7 @@ import { verifyToken } from '../middleware/jwt.config.js'
 
 const RENDER_PATH = {
   CART: 'cart',
+  CHAT: 'chat',
   LOGIN: 'login',
   PROFILE: 'profile',
   REGISTER: 'register',
@@ -41,7 +42,7 @@ async function productsPaginate (req, res, next) {
       info: products,
       listExist: products.payload.length > 0,
       userCart: userInfo.cartID,
-      urlToCart: `${SERVER.BASE_URL}${ROUTES.CARTS_ROUTE}/${userInfo.cartID}`,
+      urlToCart: `${SERVER_CONFIG.BASE_URL}${ROUTES.CARTS_ROUTE}/${userInfo.cartID}`,
       name: `${userInfo.first_name} ${userInfo.last_name}`,
       role: userInfo.role
     })
@@ -61,7 +62,7 @@ async function cartItems (req, res, next) {
       info: myCart.cart.products,
       userCart: myCart.cart.id,
       listExist: myCart.totalProducts > 0,
-      urlToProducts: `${SERVER.BASE_URL}${ROUTES.PRODUCTS_ROUTE}`
+      urlToProducts: `${SERVER_CONFIG.BASE_URL}${ROUTES.PRODUCTS_ROUTE}`
     })
   } catch (error) {
     return next(error.message)
@@ -125,11 +126,24 @@ async function createNewProduct (req, res, next) {
   })
 }
 
+async function usersChat (req, res, next) {
+  const token = req.signedCookies[COOKIE_NAME]
+
+  const { email } = await verifyToken(token)
+
+  res.status(200).render(RENDER_PATH.CHAT, {
+    headerTitle: 'HOME | Chat',
+    mainTitle: 'Users Private Chat',
+    user: email.split('@').at(0)
+  })
+}
+
 export {
   productsPaginate,
   uptProducts,
   cartItems,
   login,
+  usersChat,
   profile,
   register,
   createNewProduct
