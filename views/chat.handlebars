@@ -1,9 +1,11 @@
 <h2>{{mainTitle}}</h2>
 
+<a href="/products" class="btn btn-secondary m-3" role="button">Go back to products</a>
+
 <ul id="message-list" data-user={{user}}>
 </ul>
 
-<input type="text" name="message" id="input-message" placeholder="Message">
-<button id="send-button">Send Message</button>
+<input class="mx-3 form-control" type="text" name="message" id="input-message" placeholder="Message">
+<button id="send-button" class="btn btn-primary m-3">Send Message</button>
 
 <script src="/static/scripts/chat.js"></script>
