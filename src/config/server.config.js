@@ -8,7 +8,7 @@ dotenv.config({
 // Server
 const PORT = process.env.PORT
 
-const SERVER = {
+const SERVER_CONFIG = {
   BASE_URL: `http://localhost:${PORT}`,
   PORT
 }
@@ -18,14 +18,16 @@ const API_ROUTES = {
   PRODUCTS_ROUTE: '/products/',
   SESSION_ROUTE: '/sessions',
   USER_ROUTE: '/users',
-  CARTS_ROUTE: '/carts'
+  CARTS_ROUTE: '/carts',
+  CHAT_ROUTE: '/chat'
 }
 
 const WEB_ROUTES = {
   HOME_ROUTES: '/',
   STATIC_ROUTE: '/static',
   REGISTER: '/register',
-  PROFILE: '/profile'
+  PROFILE: '/profile',
+  CHAT: '/chat'
 }
 
 const ROUTES = {
@@ -38,4 +40,4 @@ const FOLDERS = {
   VIEWS_FOLDER: './views'
 }
 
-export { SERVER, ROUTES, FOLDERS }
+export { SERVER_CONFIG, ROUTES, FOLDERS }

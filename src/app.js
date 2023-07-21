@@ -3,9 +3,10 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import { engine } from 'express-handlebars'
+import { Server } from 'socket.io'
 
 // Config files
-import { SERVER, FOLDERS, ROUTES } from './config/server.config.js'
+import { SERVER_CONFIG, FOLDERS, ROUTES } from './config/server.config.js'
 import { COOKIE_SECRET, URL_DB } from './config/config.js'
 
 // Middlewares
@@ -15,6 +16,9 @@ import { passportInitialize } from './middleware/passport.config.js'
 // Routers
 import { apiRouter } from './routers/api.routes.js'
 import { webRouter } from './routers/web.router.js'
+
+// Socket Controller
+import { newMessage, getAllMessages } from './controllers/chat.controller.js'
 
 // --> Server
 export const app = express()
@@ -40,4 +44,15 @@ app.use(webRouter)
 // --> ERROR HANDLING
 app.use(handleError)
 
-app.listen(SERVER.PORT, () => { console.log(`app on ${SERVER.BASE_URL}`) })
+const appServer = app.listen(SERVER_CONFIG.PORT, () => { console.log(`app on ${SERVER_CONFIG.BASE_URL}`) })
+
+export const io = new Server(appServer)
+
+io.on('connection', async client => {
+  console.log(`Nuevo cliente conectado: ${client.id}`)
+  await getAllMessages()
+  client.on('message', async (message) => {
+    console.log(message)
+    await newMessage({ message: message.text, user: message.user })
+  })
+})

@@ -1,5 +1,5 @@
 // Configs
-import { SERVER } from '../config/server.config.js'
+import { SERVER_CONFIG } from '../config/server.config.js'
 
 // Error messages
 import { STATUS_CODE } from '../utils/errors.messages.js'
@@ -65,7 +65,7 @@ class DB_PRODUCT_MANAGER {
         ...Object.entries(newOptions)
       ]).toString()
 
-      links.prevLink = `${SERVER.BASE_URL}/?${newParams}`
+      links.prevLink = `${SERVER_CONFIG.BASE_URL}/?${newParams}`
     }
 
     if (data.hasNextPage) {
@@ -77,7 +77,7 @@ class DB_PRODUCT_MANAGER {
         ...Object.entries(newOptions)
       ]).toString()
 
-      links.nextLink = `${SERVER.BASE_URL}/?${newParams}`
+      links.nextLink = `${SERVER_CONFIG.BASE_URL}/?${newParams}`
     }
     return links
   }

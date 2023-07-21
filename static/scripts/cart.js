@@ -1,6 +1,7 @@
-const btnBuy = document.getElementById('btn-buy') ?? null
 // eslint-disable-next-line no-undef
 const myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {})
+
+const btnBuy = document.getElementById('btn-buy') ?? null
 const modalContent = document.getElementById('myModalContent')
 const cartProducts = document.getElementById('cart-products-container')
 const errorContainer = document.getElementById('error-container')
