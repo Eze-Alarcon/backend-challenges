@@ -3,6 +3,8 @@ const btnBuy = document.getElementById('btn-buy') ?? null
 const myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {})
 const modalContent = document.getElementById('myModalContent')
 const cartProducts = document.getElementById('cart-products-container')
+const errorContainer = document.getElementById('error-container')
+const errorMessage = document.getElementById('error-message')
 let cartID = null
 
 if (btnBuy !== null) {
@@ -46,6 +48,15 @@ function updateModalContent ({ ticket }) {
 async function generateTicket () {
   const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/ticket`
   const response = await fetch(FETCH_URL, { method: 'POST' })
+  if (response.status === 204) {
+    errorContainer.classList.remove('d-none')
+    setTimeout(() => {
+      errorContainer.classList.add('d-none')
+    }, 8000)
+    errorMessage.innerText = 'No se concretado la compra porque no hay suficiente stock disponible'
+    return
+  }
+  errorContainer.classList.add('d-none')
   const { ticket, cart } = await response.json()
   reloadCartProducts({ products: cart.products })
   updateModalContent({ ticket })

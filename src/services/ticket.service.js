@@ -13,9 +13,8 @@ import { DB_TICKET } from '../dao/tickets.database.js'
 
 class TicketManager {
   async createTicket ({ cartID, email }) {
+    let subtotal = 0
     try {
-      let subtotal = 0
-
       const { cart } = await cartManager.getCartById(cartID)
 
       for (const item of cart.products) {
@@ -24,6 +23,14 @@ class TicketManager {
         subtotal += item.quantity * item.product.price
         await productManager.updateProduct({ id: item.product.id }, { stock: storeProduct.stock - item.quantity })
         await cartManager.deleteCartProduct({ cartID: cart.id, productID: item.product.id })
+      }
+
+      if (subtotal === 0) {
+        return {
+          ticket: {},
+          cart: {},
+          status: STATUS_CODE.SUCCESS.NO_CONTENT
+        }
       }
 
       const lastID = await DB_TICKET.getLastID()
