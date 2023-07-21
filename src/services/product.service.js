@@ -39,7 +39,14 @@ class ProductManager {
   async addProduct (fields) {
     try {
       const strictValidation = true
-      validateInputs(fields, strictValidation)
+      const mappedFields = {
+        description: fields.description,
+        thumbnail: fields.thumbnail ?? [],
+        title: fields.title,
+        price: parseFloat(fields.price),
+        stock: parseInt(fields.stock)
+      }
+      validateInputs(mappedFields, strictValidation)
 
       const lastItem = await DB_PRODUCTS.getLastProduct()
 
@@ -47,7 +54,7 @@ class ProductManager {
         ? this.#nextID = ++lastItem[0].id
         : this.#nextID = 1
 
-      const newProduct = new Product({ ...fields, id: this.#nextID })
+      const newProduct = new Product({ ...mappedFields, id: this.#nextID })
       await DB_PRODUCTS.createProduct(newProduct.getProductData())
 
       return {
@@ -63,16 +70,19 @@ class ProductManager {
     try {
       const { item } = await this.getProductById(query)
 
-      validateInputs(fields)
+      const mappedFields = {
+        description: fields.description ?? item.description,
+        thumbnail: fields.thumbnail ?? item.thumbnail,
+        title: fields.title ?? item.title,
+        price: (!isNaN(parseFloat(fields.price))) ? parseFloat(fields.price) : item.price,
+        stock: (!isNaN(parseInt(fields.stock))) ? parseInt(fields.stock) : item.stock
+      }
+
+      validateInputs(mappedFields)
 
       const newProduct = {
         ...item,
-        description: fields.description ?? item.description,
-        thumbnail: fields.thumbnail ?? item.thumbnail,
-        category: fields.category ?? item.category,
-        title: fields.title ?? item.title,
-        price: fields.price ?? item.price,
-        stock: fields.stock ?? item.stock
+        ...mappedFields
       }
 
       await DB_PRODUCTS.updateProduct(query, newProduct)
@@ -81,6 +91,7 @@ class ProductManager {
         itemUpdated: newProduct
       }
     } catch (error) {
+      console.log(error)
       throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
     }
   }

@@ -1,9 +1,16 @@
-const link = document.getElementById('linkToCart')
+/* eslint-disable no-unused-vars */
+const link = document.getElementById('linkToCart') ?? null
+let cartID = null
 
-const cartID = link.dataset.cart
+if (link !== null) cartID = link.dataset.cart
 
-// eslint-disable-next-line no-unused-vars
 async function addProductToCart (productID) {
   const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/product/${productID}`
   await fetch(FETCH_URL, { method: 'PUT' })
+}
+
+async function deleteProduct (productID) {
+  const FETCH_URL = `http://localhost:8080/api/products/${productID}`
+  await fetch(FETCH_URL, { method: 'DELETE' })
+  window.location.reload()
 }

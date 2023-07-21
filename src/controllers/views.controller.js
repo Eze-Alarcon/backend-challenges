@@ -10,7 +10,7 @@ import { productManager } from '../services/product.service.js'
 import { cartManager } from '../services/cart.service.js'
 
 // Models
-import { ROLES } from '../models/user.model.js'
+import { ROLES } from '../utils/contans.js'
 
 // Middlewares
 import { verifyToken } from '../middleware/jwt.config.js'
@@ -20,7 +20,9 @@ const RENDER_PATH = {
   LOGIN: 'login',
   PROFILE: 'profile',
   REGISTER: 'register',
-  PRODUCTS: 'products'
+  PRODUCTS: 'products',
+  UPDATE_PRODUCT: 'update',
+  CRATE_PRODUCT: 'createProduct'
 }
 
 Handlebars.registerHelper('eq', function (a, b) { return a === b })
@@ -57,6 +59,7 @@ async function cartItems (req, res, next) {
       headerTitle: 'Home | My cart',
       mainTitle: 'My list of products',
       info: myCart.cart.products,
+      userCart: myCart.cart.id,
       listExist: myCart.totalProducts > 0,
       urlToProducts: `${SERVER.BASE_URL}${ROUTES.PRODUCTS_ROUTE}`
     })
@@ -99,4 +102,35 @@ async function profile (req, res, next) {
   })
 }
 
-export { productsPaginate, cartItems, login, profile, register }
+async function uptProducts (req, res, next) {
+  const { pid: id } = req.params
+  const { item: product } = await productManager.getProductById({ id })
+
+  res.status(200).render(RENDER_PATH.UPDATE_PRODUCT, {
+    headerTitle: 'HOME | Products',
+    mainTitle: 'Update Product',
+    product: {
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      stock: product.stock
+    }
+  })
+}
+
+async function createNewProduct (req, res, next) {
+  res.status(200).render(RENDER_PATH.CRATE_PRODUCT, {
+    headerTitle: 'HOME | Products',
+    mainTitle: 'Crate Product'
+  })
+}
+
+export {
+  productsPaginate,
+  uptProducts,
+  cartItems,
+  login,
+  profile,
+  register,
+  createNewProduct
+}

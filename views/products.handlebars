@@ -2,16 +2,19 @@
 
 <h3>Welcome {{name}}</h3>
 {{#if (eq role 'admin')}}
-<p>Access level: Admin</p>
+  <p>Access level: Admin</p>
 {{else}}
-<p>Access level: User</p>
+  <p>Access level: User</p>
 {{/if}}
 
-{{#if userCart}}
+{{#if (eq role 'user')}}
   <a href={{urlToCart}} data-cart={{userCart}} id="linkToCart" class="btn btn-primary" role="button">Go to my cart</a>
 {{/if}}
-<a href="/profile" class="btn btn-primary" role="button">Check my profile</a>
 
+{{#if (eq role 'admin')}}
+  <a href="/products/new" class="btn btn-secondary" role="button">Add new Product</a>
+{{/if}}
+<a href="/profile" class="btn btn-primary" role="button">Check my profile</a>
 
 {{#if listExist}}
   <h4>Products:</h4>
@@ -28,10 +31,33 @@
               <li class='list-group-item'>Item ID: {{this.id}}</li>
               <li class='list-group-item'>Description: {{this.description}}</li>
               <li class='list-group-item'>Price: ${{this.price}}</li>
-              <li class='list-group-item'>Stock: {{this.stock}}</li> {{!-- this.dataset.productid --}}
-              <button type="button" onclick="addProductToCart(this.dataset.productid)" data-productid={{this.id}} class="list-group-item list-group-item-action active" aria-current="true">
-                Add product to cart
-              </button>
+              <li class='list-group-item'>Stock: {{this.stock}}</li>
+              {{#if (eq ../role 'admin')}}
+                <li
+                  class="list-group-item list-group-item-action"
+                >
+                  <button
+                    class="btn btn-danger"
+                    data-productid={{this.id}}
+                    onclick="deleteProduct(this.dataset.productid)"
+                  >
+                    Delete Item
+                  </button>
+                  <a class="btn btn-primary" href="/products/{{this.id}}">
+                    Update product
+                  </a>
+                </li>
+                {{else}}
+                  <button
+                    type="button"
+                    class="list-group-item list-group-item-action active"
+                    onclick="addProductToCart(this.dataset.productid)"
+                    data-productid={{this.id}}
+                    aria-current="true"
+                  >
+                    Add product to cart
+                  </button>
+                {{/if}}
             </ul>
           </div>
         </div>

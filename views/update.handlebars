@@ -1,0 +1,35 @@
+<h1>Update product</h1>
+
+<button class="btn">
+  <a href="/products" class="btn btn-primary" role="button">Go to products</a>
+</button>
+
+<form id="updateProductForm" onsubmit="updateProduct(event)">
+  {{!-- title --}}
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Title</span>
+    <input type="text" name="title" class="form-control" value="{{product.title}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+  </div>
+
+  {{!-- stock --}}
+  <div class="input-group mb-3">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Stock</span>
+    <input type="number" name="stock" class="form-control" min="0" value={{product.stock}} aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+  </div>
+
+  {{!-- Price --}}
+  <div class="input-group mb-3">
+    <span class="input-group-text">$</span>
+    <input type="number" name="price" class="form-control" min="0" value={{product.price}} aria-label="Dollar amount (with dot and two decimal places)">
+  </div>
+
+  {{!-- Description --}}
+  <div class="input-group">
+    <span class="input-group-text">Description</span>
+    <textarea class="form-control" name="description" aria-label="With textarea">{{product.description}}</textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
+
+<script src="/static/scripts/update.js"></script>

@@ -11,31 +11,37 @@ import {
   deleteCartProduct
 } from '../../controllers/cart.controller.js'
 
+import {
+  createTicket,
+  deleteTicket,
+  getTicket
+} from '../../controllers/ticket.controller.js'
+
 // Middleware
-import { hasSession } from '../../middleware/session.js'
+import { hasSession } from '../../middleware/autentication.js'
 
 export const cartsRouter = Router()
 
 cartsRouter.use(express.json())
-
-cartsRouter
-  .route('/:cid/product/:pid')
-  .put(hasSession, updateCartProducts)
-  .delete(hasSession, deleteCartProduct)
+cartsRouter.use(hasSession)
 
 cartsRouter
   .route('/:cid/ticket')
-  // TODO: Pendientes de implementar (GET, POST, DELETE)
-  .get(hasSession) // ! ver si es necesario, leer ticket.manager.js
-  .post(hasSession)
-  .delete(hasSession)
+  .get(getTicket)
+  .post(createTicket)
+  .delete(deleteTicket)
+
+cartsRouter
+  .route('/:cid/product/:pid')
+  .put(updateCartProducts)
+  .delete(deleteCartProduct)
 
 cartsRouter
   .route('/:cid')
-  .get(hasSession, getCart)
-  .delete(hasSession, clearCartProducts)
+  .get(getCart)
+  .delete(clearCartProducts)
 
 cartsRouter
   .route('/')
-  .post(hasSession, createNewCart)
-  .get(hasSession, getAllCarts)
+  .post(createNewCart)
+  .get(getAllCarts)

@@ -5,7 +5,6 @@ export class Product {
   #id
   #title
   #description
-  #category
   #price
   #status
   #thumbnail
@@ -16,7 +15,6 @@ export class Product {
     id,
     title,
     description,
-    category,
     price,
     code,
     status = true,
@@ -26,7 +24,6 @@ export class Product {
     this.#id = id
     this.#title = title
     this.#description = description
-    this.#category = category
     this.#price = price
     this.#status = status
     this.#thumbnail = thumbnail
@@ -39,7 +36,6 @@ export class Product {
       id: this.#id,
       title: this.#title,
       description: this.#description,
-      category: this.#category,
       price: this.#price,
       status: this.#status,
       thumbnail: this.#thumbnail,

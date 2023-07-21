@@ -116,6 +116,19 @@ const CART_MANAGER_ERRORS = {
   }
 }
 
+const TICKET_MANAGER_ERRORS = {
+  CREATE_TICKET_ERROR: {
+    MESSAGE: "[ERROR]: Something went wrong with the 'createTicket' method",
+    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
+    ERROR_CODE: "CREATE_TICKET_ERROR"
+  },
+  TICKET_NOT_FOUND: {
+    MESSAGE: "[ERROR]: Ticket not found",
+    STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
+    ERROR_CODE: "TICKET_NOT_FOUND"
+  }
+}
+
 /* ========== Errores de autenticacion ========== */
 
 const AUTH_ERROR = {
@@ -133,6 +146,11 @@ const AUTH_ERROR = {
     MESSAGE: "[ERROR]: Authentication error. Invalid username and password",
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     ERROR_CODE: "WRONG_CREDENTIALS"
+  },
+  FORBIDDEN: {
+    MESSAGE: "[ERROR]: Login to continue",
+    STATUS: STATUS_CODE.CLIENT_ERROR.FORBIDDEN,
+    ERROR_CODE: "FORBIDDEN"
   }
 }
 
@@ -141,6 +159,7 @@ export {
   CART_MANAGER_ERRORS,
   CREATE_PRODUCT_ERRORS,
   PRODUCT_MANAGER_ERRORS,
+  TICKET_MANAGER_ERRORS,
   SERVER_ERROR,
   STATUS_CODE
 }

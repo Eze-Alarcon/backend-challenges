@@ -1,11 +1,6 @@
-// Libraries
-import mongoose from 'mongoose'
-
+/* eslint-disable no-prototype-builtins */
 // Schemas
 import { ticketModel } from '../schemas/ticket.schema.js'
-
-// guiarse con algun otro archivo similar
-// ejemplo: carts.database.js
 
 class DB_TICKET_MANAGER {
   #model
@@ -13,16 +8,37 @@ class DB_TICKET_MANAGER {
     this.#model = model
   }
 
-  getTicket () {
-    // TODO: pendiente de implementar
+  #parseResponse (item) {
+    return JSON.parse(JSON.stringify(item))
   }
 
-  deleteTicket () {
-    // TODO: pendiente de implementar
+  async getLastID () {
+    const data = await this.#model
+      .find()
+      .sort({ id: 'desc' })
+      .limit(1)
+      .lean()
+
+    // Si no tiene la propiedad es porque no existe ningun carrito
+    if (data.length === 0 || !data[0].hasOwnProperty('id')) { return 1 }
+
+    return Number(data[0].id) + 1
   }
 
-  createTicket () {
-    // TODO: pendiente de implementar
+  async getOne (query) {
+    const response = await this.#model.find(query).lean()
+    return response
+  }
+
+  async deleteOne (query) {
+    const response = await this.#model.deleteOne(query)
+    return response
+  }
+
+  async createOne (item) {
+    const response = await this.#model.create(item)
+    const data = this.#parseResponse(response)
+    return data
   }
 }
 
