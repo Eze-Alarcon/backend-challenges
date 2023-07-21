@@ -1,4 +1,6 @@
 const btnBuy = document.getElementById('btn-buy') ?? null
+// eslint-disable-next-line no-undef
+const myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {})
 const modalContent = document.getElementById('myModalContent')
 const cartProducts = document.getElementById('cart-products-container')
 let cartID = null
@@ -28,12 +30,7 @@ function reloadCartProducts ({ products }) {
   cartProducts.innerHTML = template
 }
 
-// eslint-disable-next-line no-unused-vars
-async function generateTicket () {
-  const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/ticket`
-  const response = await fetch(FETCH_URL, { method: 'POST' })
-  const { ticket, cart } = await response.json()
-  reloadCartProducts({ products: cart.products })
+function updateModalContent ({ ticket }) {
   modalContent.innerHTML = `
     <div class="card">
       <ul class="list-group list-group-flush">
@@ -43,6 +40,16 @@ async function generateTicket () {
         <li class="list-group-item">Buyer: ${ticket.purchaser}</li>
       </ul>
     </div>`
+}
+
+// eslint-disable-next-line no-unused-vars
+async function generateTicket () {
+  const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/ticket`
+  const response = await fetch(FETCH_URL, { method: 'POST' })
+  const { ticket, cart } = await response.json()
+  reloadCartProducts({ products: cart.products })
+  updateModalContent({ ticket })
+  myModal.show()
 }
 
 // eslint-disable-next-line no-unused-vars
