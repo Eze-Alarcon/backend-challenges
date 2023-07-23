@@ -1,6 +1,6 @@
 // Services
-import { cartManager } from './cart.service.js'
-import { productManager } from './product.service.js'
+import { cartService } from './cart.service.js'
+import { productService } from './product.service.js'
 
 // Models
 import { Ticket } from '../models/tickets.model.js'
@@ -11,18 +11,18 @@ import { STATUS_CODE, TICKET_MANAGER_ERRORS } from '../utils/errors.messages.js'
 // DAO
 import { DB_TICKET } from '../dao/tickets.database.js'
 
-class TicketManager {
+class TicketService {
   async createTicket ({ cartID, email }) {
     let subtotal = 0
     try {
-      const { cart } = await cartManager.getCartById(cartID)
+      const { cart } = await cartService.getCartById(cartID)
 
       for (const item of cart.products) {
-        const { item: storeProduct } = await productManager.getProductById({ id: item.product.id })
+        const { item: storeProduct } = await productService.getProductById({ id: item.product.id })
         if (item.quantity > storeProduct.stock) continue
         subtotal += item.quantity * item.product.price
-        await productManager.updateProduct({ id: item.product.id }, { stock: storeProduct.stock - item.quantity })
-        await cartManager.deleteCartProduct({ cartID: cart.id, productID: item.product.id })
+        await productService.updateProduct({ id: item.product.id }, { stock: storeProduct.stock - item.quantity })
+        await cartService.deleteCartProduct({ cartID: cart.id, productID: item.product.id })
       }
 
       if (subtotal === 0) {
@@ -42,7 +42,7 @@ class TicketManager {
       })
 
       const newTicket = await DB_TICKET.createOne(ticketModel.DTO())
-      const { cart: newCart } = await cartManager.getCartById(cartID)
+      const { cart: newCart } = await cartService.getCartById(cartID)
 
       return {
         ticket: newTicket,
@@ -76,9 +76,9 @@ class TicketManager {
   }
 }
 
-const ticketManager = new TicketManager()
+const ticketService = new TicketService()
 
-export { ticketManager }
+export { ticketService }
 
 /*
   Acciones a implementar:

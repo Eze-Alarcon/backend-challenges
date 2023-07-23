@@ -2,15 +2,15 @@
 import { io } from '../app.js'
 
 // Services
-import { chatManager } from '../services/chat.service.js'
+import { chatService } from '../services/chat.service.js'
 
 async function getAllMessages () {
-  const messages = await chatManager.getAllChats()
+  const messages = await chatService.getAllChats()
   io.emit('getData', { messages })
 }
 
 async function newMessage ({ message, user }) {
-  const response = await chatManager.createChat({ message, user })
+  const response = await chatService.createChat({ message, user })
   io.emit('message', { user: response.user, message: response.message })
 }
 

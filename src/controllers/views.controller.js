@@ -6,8 +6,8 @@ import { ROUTES, SERVER_CONFIG } from '../config/server.config.js'
 import { COOKIE_NAME } from '../config/config.js'
 
 // Services
-import { productManager } from '../services/product.service.js'
-import { cartManager } from '../services/cart.service.js'
+import { productService } from '../services/product.service.js'
+import { cartService } from '../services/cart.service.js'
 
 // Models
 import { ROLES } from '../utils/contans.js'
@@ -30,7 +30,7 @@ Handlebars.registerHelper('eq', function (a, b) { return a === b })
 
 async function productsPaginate (req, res, next) {
   try {
-    const { products } = await productManager.getProducts(req.query)
+    const { products } = await productService.getProducts(req.query)
 
     const token = req.signedCookies[COOKIE_NAME]
 
@@ -54,7 +54,7 @@ async function productsPaginate (req, res, next) {
 async function cartItems (req, res, next) {
   try {
     const query = req.params.cid
-    const myCart = await cartManager.getCartById(query)
+    const myCart = await cartService.getCartById(query)
 
     res.status(myCart.status_code).render(RENDER_PATH.CART, {
       headerTitle: 'Home | My cart',
@@ -105,7 +105,7 @@ async function profile (req, res, next) {
 
 async function uptProducts (req, res, next) {
   const { pid: id } = req.params
-  const { item: product } = await productManager.getProductById({ id })
+  const { item: product } = await productService.getProductById({ id })
 
   res.status(200).render(RENDER_PATH.UPDATE_PRODUCT, {
     headerTitle: 'HOME | Products',

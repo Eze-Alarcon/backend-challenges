@@ -8,7 +8,7 @@ import { Product } from '../models/product.model.js'
 import { validateInputs } from '../utils/validations.js'
 import { STATUS_CODE, PRODUCT_MANAGER_ERRORS } from '../utils/errors.messages.js'
 
-class ProductManager {
+class ProductService {
   #nextID
   constructor () { this.#nextID = 0 }
 
@@ -110,6 +110,6 @@ class ProductManager {
   }
 }
 
-const productManager = new ProductManager()
+const productService = new ProductService()
 
-export { productManager }
+export { productService }

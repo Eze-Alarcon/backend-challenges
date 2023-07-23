@@ -2,7 +2,7 @@
 import { Cart } from '../models/cart.model.js'
 
 // Services
-import { productManager } from './product.service.js'
+import { productService } from './product.service.js'
 
 // DAOs
 import { DB_CARTS } from '../dao/carts.database.js'
@@ -13,7 +13,7 @@ import { STATUS_CODE, CART_MANAGER_ERRORS } from '../utils/errors.messages.js'
 
 /* -------------------------------------------- */
 
-class CartManager {
+class CartService {
   #parseData (value) {
     return JSON.parse(JSON.stringify(value))
   }
@@ -34,7 +34,7 @@ class CartManager {
     const { cart } = await this.getCartById(cartID)
     const productsAvailables = []
     for (const item of cart.products) {
-      const { item: storeProduct } = await productManager.getProductById({ id: item.product.id })
+      const { item: storeProduct } = await productService.getProductById({ id: item.product.id })
       if (item.quantity > storeProduct.stock) continue
       productsAvailables.push({ ...item.product, quantity: item.quantity })
     }
@@ -88,7 +88,7 @@ class CartManager {
     try {
       validateQuantity(quantityValue)
       const cart = await DB_CARTS.findCartByID({ id: cartID })
-      const { item: product } = await productManager.getProductById({ id: productID })
+      const { item: product } = await productService.getProductById({ id: productID })
       let response
 
       const parsedID = this.#parseData(product._id)
@@ -134,7 +134,7 @@ class CartManager {
 
   async deleteCartProduct ({ cartID, productID }) {
     try {
-      const { item: product } = await productManager.getProductById({ id: productID })
+      const { item: product } = await productService.getProductById({ id: productID })
       const parsedID = this.#parseData(product._id)
 
       const details = await DB_CARTS.deleteCartProduct({ id: cartID, productID: parsedID })
@@ -149,6 +149,6 @@ class CartManager {
   }
 }
 
-const cartManager = new CartManager()
+const cartService = new CartService()
 
-export { cartManager }
+export { cartService }

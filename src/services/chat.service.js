@@ -4,7 +4,7 @@ import { Chats } from '../models/chat.model.js'
 // DAOs
 import { DB_CHATS } from '../dao/chat.database.js'
 
-class ChatManager {
+class ChatService {
   async createChat ({ user, message }) {
     const newChat = new Chats({ user, message })
     const response = await DB_CHATS.createChat(newChat.DTO())
@@ -17,6 +17,6 @@ class ChatManager {
   }
 }
 
-const chatManager = new ChatManager()
+const chatService = new ChatService()
 
-export { chatManager }
+export { chatService }

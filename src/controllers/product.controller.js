@@ -1,10 +1,10 @@
 // Services
-import { productManager } from '../services/product.service.js'
+import { productService } from '../services/product.service.js'
 
 const getProducts = async (req, res, next) => {
   try {
     const id = { id: req.params.pid }
-    const response = await productManager.getProductById(id)
+    const response = await productService.getProductById(id)
 
     res.status(response.status_code).json({ product: response.item })
   } catch (error) {
@@ -15,7 +15,7 @@ const getProducts = async (req, res, next) => {
 const updateProduct = async (req, res, next) => {
   try {
     const id = { id: req.params.pid }
-    const response = await productManager.updateProduct(id, req.body)
+    const response = await productService.updateProduct(id, req.body)
 
     res.status(response.status_code).json(response.itemUpdated)
   } catch (error) {
@@ -26,7 +26,7 @@ const updateProduct = async (req, res, next) => {
 const deleteProduct = async (req, res, next) => {
   try {
     const id = { id: req.params.pid }
-    const response = await productManager.deleteProduct(id)
+    const response = await productService.deleteProduct(id)
 
     res.status(response.status_code).json({ product_deleted: response.itemDeleted })
   } catch (error) {
@@ -36,7 +36,7 @@ const deleteProduct = async (req, res, next) => {
 
 const getAllProducts = async (req, res, next) => {
   try {
-    const response = await productManager.getProducts(req.query)
+    const response = await productService.getProducts(req.query)
     res.status(response.status_code).json(response.products)
   } catch (error) {
     return next(error.message)
@@ -45,7 +45,7 @@ const getAllProducts = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
   try {
-    const response = await productManager.addProduct(req.body)
+    const response = await productService.addProduct(req.body)
     res.status(response.status_code).json(response.productAdded)
   } catch (error) {
     return next(error.message)

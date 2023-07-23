@@ -5,13 +5,13 @@ import { ROLES, UserGithub, UserPassport } from '../models/user.model.js'
 import { DB_USERS, DB_GITHUB_USERS } from '../dao/users.database.js'
 
 // Services
-import { cartManager } from './cart.service.js'
+import { cartService } from './cart.service.js'
 
 // Utils
 import { AUTH_ERROR, STATUS_CODE } from '../utils/errors.messages.js'
 import { comparePassword, hashPassword } from '../utils/hash.js'
 
-class UserManager {
+class UserService {
   async searchUser ({ email }) {
     const data = await DB_USERS.findUser({ email })
     const user = data.length > 0 ? data[0] : []
@@ -51,7 +51,7 @@ class UserManager {
 
     let cartID = null
     if (role === ROLES.USER) {
-      const { cart } = await cartManager.createCart()
+      const { cart } = await cartService.createCart()
       cartID = cart.id
     }
 
@@ -88,7 +88,7 @@ class UserManager {
 
     if (userExist) throw new Error(AUTH_ERROR.HAS_ACCOUNT.ERROR_CODE)
 
-    const { cart } = await cartManager.createCart()
+    const { cart } = await cartService.createCart()
 
     const newUser = new UserGithub({ email, cartID: cart.id })
 
@@ -101,6 +101,6 @@ class UserManager {
   }
 }
 
-const userManager = new UserManager()
+const userService = new UserService()
 
-export { userManager }
+export { userService }

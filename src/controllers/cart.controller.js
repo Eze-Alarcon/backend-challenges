@@ -1,5 +1,5 @@
 // Services
-import { cartManager } from '../services/cart.service.js'
+import { cartService } from '../services/cart.service.js'
 
 const updateCartProducts = async (req, res, next) => {
   try {
@@ -8,7 +8,7 @@ const updateCartProducts = async (req, res, next) => {
       productID: req.params.pid,
       quantityValue: req.body?.quantity ?? null
     }
-    const { operationDetails, status_code } = await cartManager.addProductToCart(query)
+    const { operationDetails, status_code } = await cartService.addProductToCart(query)
     res
       .status(status_code)
       .json({ details: operationDetails })
@@ -20,7 +20,7 @@ const updateCartProducts = async (req, res, next) => {
 const getCart = async (req, res, next) => {
   try {
     const query = req.params.cid
-    const { cart, status_code, totalProducts } = await cartManager.getCartById(query)
+    const { cart, status_code, totalProducts } = await cartService.getCartById(query)
     res
       .status(status_code)
       .json({ cart, totalProducts })
@@ -32,7 +32,7 @@ const getCart = async (req, res, next) => {
 const clearCartProducts = async (req, res, next) => {
   try {
     const query = req.params.cid
-    const { cartUpdated, status_code } = await cartManager.deleteAllCartProducts(query)
+    const { cartUpdated, status_code } = await cartService.deleteAllCartProducts(query)
     res
       .status(status_code)
       .json(cartUpdated)
@@ -43,7 +43,7 @@ const clearCartProducts = async (req, res, next) => {
 
 const createNewCart = async (req, res, next) => {
   try {
-    const { cart, status_code } = await cartManager.createCart()
+    const { cart, status_code } = await cartService.createCart()
     res
       .status(status_code)
       .json(cart)
@@ -54,7 +54,7 @@ const createNewCart = async (req, res, next) => {
 
 const getAllCarts = async (req, res, next) => {
   try {
-    const { carts, status_code } = await cartManager.getCarts()
+    const { carts, status_code } = await cartService.getCarts()
     res
       .status(status_code)
       .json(carts)
@@ -69,7 +69,7 @@ const deleteCartProduct = async (req, res, next) => {
       cartID: req.params.cid,
       productID: req.params.pid
     }
-    const { details, status_code } = await cartManager.deleteCartProduct(query)
+    const { details, status_code } = await cartService.deleteCartProduct(query)
     res
       .status(status_code)
       .json(details)
