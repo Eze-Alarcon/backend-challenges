@@ -2,7 +2,7 @@
 import { ROLES, UserGithub, UserPassport } from '../models/user.model.js'
 
 // DAOs
-import { DB_USERS, DB_GITHUB_USERS } from '../dao/users.database.js'
+import { DAO_USERS, DAO_GITHUB_USERS } from '../dao/users.database.js'
 
 // Services
 import { cartService } from './cart.service.js'
@@ -13,7 +13,7 @@ import { comparePassword, hashPassword } from '../utils/hash.js'
 
 class UserService {
   async searchUser ({ email }) {
-    const data = await DB_USERS.findUser({ email })
+    const data = await DAO_USERS.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
     return {
@@ -65,7 +65,7 @@ class UserService {
       role
     })
 
-    await DB_USERS.createUser(newUser.getUser())
+    await DAO_USERS.createUser(newUser.getUser())
 
     return {
       status: STATUS_CODE.SUCCESS.CREATED,
@@ -74,7 +74,7 @@ class UserService {
   }
 
   async searchGithubUser ({ email }) {
-    const data = await DB_GITHUB_USERS.findUser({ email })
+    const data = await DAO_GITHUB_USERS.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
     return {
@@ -92,7 +92,7 @@ class UserService {
 
     const newUser = new UserGithub({ email, cartID: cart.id })
 
-    await DB_GITHUB_USERS.createUser(newUser.getUserGithub())
+    await DAO_GITHUB_USERS.createUser(newUser.getUserGithub())
 
     return {
       status: STATUS_CODE.SUCCESS.CREATED,

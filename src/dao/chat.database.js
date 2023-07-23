@@ -23,6 +23,6 @@ class DB_CHAT_MANAGER {
   }
 }
 
-const DB_CHATS = new DB_CHAT_MANAGER(chatModel)
+const DAO_CHATS = new DB_CHAT_MANAGER(chatModel)
 
-export { DB_CHATS }
+export { DAO_CHATS }

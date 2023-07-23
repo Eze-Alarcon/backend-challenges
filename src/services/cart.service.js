@@ -5,7 +5,7 @@ import { Cart } from '../models/cart.model.js'
 import { productService } from './product.service.js'
 
 // DAOs
-import { DB_CARTS } from '../dao/carts.database.js'
+import { DAO_CARTS } from '../dao/carts.database.js'
 
 // Utils
 import { validateQuantity } from '../utils/validations.js'
@@ -43,7 +43,7 @@ class CartService {
 
   async getCarts () {
     try {
-      const carts = await DB_CARTS.getCarts()
+      const carts = await DAO_CARTS.getCarts()
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         carts
@@ -55,11 +55,11 @@ class CartService {
 
   async createCart () {
     try {
-      const newCartID = await DB_CARTS.getLastID()
+      const newCartID = await DAO_CARTS.getLastID()
 
       const newCart = new Cart({ id: newCartID })
 
-      await DB_CARTS.createCart(newCart.getCartData())
+      await DAO_CARTS.createCart(newCart.getCartData())
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -72,7 +72,7 @@ class CartService {
 
   async getCartById (query) {
     try {
-      const cart = await DB_CARTS.findCartByID({ id: query })
+      const cart = await DAO_CARTS.findCartByID({ id: query })
       const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -87,7 +87,7 @@ class CartService {
   async addProductToCart ({ cartID, productID, quantityValue = null }) {
     try {
       validateQuantity(quantityValue)
-      const cart = await DB_CARTS.findCartByID({ id: cartID })
+      const cart = await DAO_CARTS.findCartByID({ id: cartID })
       const { item: product } = await productService.getProductById({ id: productID })
       let response
 
@@ -95,7 +95,7 @@ class CartService {
       const { exist, index } = this.#findIndex(cart, parsedID)
 
       if (!exist) {
-        response = await DB_CARTS.addProductToCart({ id: cartID, productID: product._id })
+        response = await DAO_CARTS.addProductToCart({ id: cartID, productID: product._id })
       }
 
       if (exist) {
@@ -107,7 +107,7 @@ class CartService {
           quantity: newValue
         }
 
-        response = await DB_CARTS.updateCartProductQuantity(updateInfo)
+        response = await DAO_CARTS.updateCartProductQuantity(updateInfo)
       }
 
       return {
@@ -121,7 +121,7 @@ class CartService {
 
   async deleteAllCartProducts (query) {
     try {
-      const cartUpdated = await DB_CARTS.deleteAllCartProducts({ id: query })
+      const cartUpdated = await DAO_CARTS.deleteAllCartProducts({ id: query })
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -137,7 +137,7 @@ class CartService {
       const { item: product } = await productService.getProductById({ id: productID })
       const parsedID = this.#parseData(product._id)
 
-      const details = await DB_CARTS.deleteCartProduct({ id: cartID, productID: parsedID })
+      const details = await DAO_CARTS.deleteCartProduct({ id: cartID, productID: parsedID })
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,

@@ -1,5 +1,5 @@
 // DAOs
-import { DB_PRODUCTS } from '../dao/products.database.js'
+import { DAO_PRODUCTS } from '../dao/products.database.js'
 
 // Models
 import { Product } from '../models/product.model.js'
@@ -14,7 +14,7 @@ class ProductService {
 
   async getProducts (options = {}) {
     try {
-      const products = await DB_PRODUCTS.getProducts(options)
+      const products = await DAO_PRODUCTS.getProducts(options)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         products
@@ -26,7 +26,7 @@ class ProductService {
 
   async getProductById (query) {
     try {
-      const product = await DB_PRODUCTS.findProducts(query)
+      const product = await DAO_PRODUCTS.findProducts(query)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         item: product[0]
@@ -48,14 +48,14 @@ class ProductService {
       }
       validateInputs(mappedFields, strictValidation)
 
-      const lastItem = await DB_PRODUCTS.getLastProduct()
+      const lastItem = await DAO_PRODUCTS.getLastProduct()
 
       lastItem.length > 0
         ? this.#nextID = ++lastItem[0].id
         : this.#nextID = 1
 
       const newProduct = new Product({ ...mappedFields, id: this.#nextID })
-      await DB_PRODUCTS.createProduct(newProduct.getProductData())
+      await DAO_PRODUCTS.createProduct(newProduct.getProductData())
 
       return {
         status_code: STATUS_CODE.SUCCESS.CREATED,
@@ -85,7 +85,7 @@ class ProductService {
         ...mappedFields
       }
 
-      await DB_PRODUCTS.updateProduct(query, newProduct)
+      await DAO_PRODUCTS.updateProduct(query, newProduct)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         itemUpdated: newProduct
@@ -98,7 +98,7 @@ class ProductService {
 
   async deleteProduct (query) {
     try {
-      const itemDeleted = await DB_PRODUCTS.deleteProduct({ id: query })
+      const itemDeleted = await DAO_PRODUCTS.deleteProduct({ id: query })
 
       return {
         status_code: STATUS_CODE.SUCCESS.NO_CONTENT,

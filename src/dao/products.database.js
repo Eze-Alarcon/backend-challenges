@@ -137,6 +137,6 @@ class DB_PRODUCT_MANAGER {
   }
 }
 
-const DB_PRODUCTS = new DB_PRODUCT_MANAGER(productModel)
+const DAO_PRODUCTS = new DB_PRODUCT_MANAGER(productModel)
 
-export { DB_PRODUCTS }
+export { DAO_PRODUCTS }

@@ -113,6 +113,6 @@ class DB_CART_MANAGER {
   }
 }
 
-const DB_CARTS = new DB_CART_MANAGER(cartModel)
+const DAO_CARTS = new DB_CART_MANAGER(cartModel)
 
-export { DB_CARTS }
+export { DAO_CARTS }

@@ -42,6 +42,6 @@ class DB_TICKET_MANAGER {
   }
 }
 
-const DB_TICKET = new DB_TICKET_MANAGER(ticketModel)
+const DAO_TICKET = new DB_TICKET_MANAGER(ticketModel)
 
-export { DB_TICKET }
+export { DAO_TICKET }
