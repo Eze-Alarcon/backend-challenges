@@ -1,6 +1,8 @@
 // Services
 import { productService } from '../services/product.service.js'
 
+import { createMockProducts } from '../mocks/product.mock.js'
+
 const getProducts = async (req, res, next) => {
   try {
     const id = { id: req.params.pid }
@@ -52,10 +54,20 @@ const createProduct = async (req, res, next) => {
   }
 }
 
+const productsMock = async (req, res, next) => {
+  try {
+    const testResults = await createMockProducts()
+    res.status(201).json({ message: 'test completed', products: testResults })
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
 export {
   getProducts,
   updateProduct,
   deleteProduct,
   getAllProducts,
-  createProduct
+  createProduct,
+  productsMock
 }

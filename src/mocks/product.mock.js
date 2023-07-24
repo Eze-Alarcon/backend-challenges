@@ -33,14 +33,20 @@ const DAO = new DAO_TEST()
 
 const mockProductService = new ProductService({ DAO })
 
-for (let i = 0; i < 50; i++) {
-  const fields = {
-    title: faker.commerce.productName(),
-    description: faker.commerce.productDescription(),
-    thumbnail: [],
-    price: faker.commerce.price(),
-    stock: Math.ceil(Math.random() * 50)
+async function createMockProducts () {
+  const products = []
+  for (let i = 0; i < 50; i++) {
+    const fields = {
+      title: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      thumbnail: [],
+      price: faker.commerce.price(),
+      stock: Math.ceil(Math.random() * 50)
+    }
+    const product = await mockProductService.addProduct(fields)
+    products.push(product)
   }
-  const product = await mockProductService.addProduct(fields)
-  console.log(product)
+  return products
 }
+
+export { createMockProducts }
