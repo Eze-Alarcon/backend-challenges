@@ -353,7 +353,7 @@ En esta vista, se encontrara el desgloce de los productos de un carrito en parti
 
 ✅ - Además, el logger deberá enviar en un transporte de archivos a partir del nivel de error en un nombre “errors.log”
 
-- Agregar logs de valor alto en los puntos importantes de tu servidor (errores, advertencias, etc) y modificar los console.log() habituales que tenemos para que muestren todo a partir de winston.
+✅ - Agregar logs de valor alto en los puntos importantes de tu servidor (errores, advertencias, etc) y modificar los console.log() habituales que tenemos para que muestren todo a partir de winston.
 
 - Crear un endpoint /loggerTest que permita probar todos los logs
 
