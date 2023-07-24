@@ -5,7 +5,7 @@ import { SERVER_CONFIG } from '../config/server.config.js'
 import { STATUS_CODE } from '../utils/errors.messages.js'
 
 // Schemas
-import { productModel } from '../schemas/products.schema.js'
+import { productModel } from '../schemas/mongoose/products.schema.js'
 
 class DB_PRODUCT_MANAGER {
   #model

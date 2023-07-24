@@ -3,7 +3,7 @@
 import mongoose from 'mongoose'
 
 // Schemas
-import { cartModel } from '../schemas/cart.schema.js'
+import { cartModel } from '../schemas/mongoose/cart.schema.js'
 
 class DB_CART_MANAGER {
   #model

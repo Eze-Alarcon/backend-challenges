@@ -1,5 +1,5 @@
 // Schemas
-import { chatModel } from '../schemas/chat.schema.js'
+import { chatModel } from '../schemas/mongoose/chat.schema.js'
 
 class DB_CHAT_MANAGER {
   #model

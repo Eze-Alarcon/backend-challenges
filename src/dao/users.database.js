@@ -1,5 +1,5 @@
 // Schemas
-import { userModel, githubUserModel } from '../schemas/users.schema.js'
+import { userModel, githubUserModel } from '../schemas/mongoose/users.schema.js'
 
 // ===== Local DB Manager =====
 

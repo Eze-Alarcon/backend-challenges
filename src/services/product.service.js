@@ -3,10 +3,17 @@ import { DAO_PRODUCTS } from '../dao/products.database.js'
 
 // Models
 import { Product } from '../models/product.model.js'
+import { CustomError } from '../models/error.model.js'
 
-// Utils
-import { validateInputs } from '../utils/validations.js'
-import { STATUS_CODE, PRODUCT_MANAGER_ERRORS } from '../utils/errors.messages.js'
+// Joi
+import { validation } from '../schemas/joi/products.joi.schema.js'
+
+// Error messages
+import {
+  STATUS_CODE,
+  PRODUCT_MANAGER_ERRORS,
+  JOI_ERRORS
+} from '../utils/errors.messages.js'
 
 class ProductService {
   #nextID
@@ -20,7 +27,11 @@ class ProductService {
         products
       }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.NO_PRODUCTS_PARAMETERS.ERROR_CODE)
+      throw new CustomError({
+        status: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.STATUS,
+        type: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.TYPE,
+        cause: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.MESSAGE
+      })
     }
   }
 
@@ -32,13 +43,16 @@ class ProductService {
         item: product[0]
       }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+      throw new CustomError({
+        status: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.STATUS,
+        type: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.TYPE,
+        cause: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.MESSAGE
+      })
     }
   }
 
   async addProduct (fields) {
     try {
-      const strictValidation = true
       const mappedFields = {
         description: fields.description,
         thumbnail: fields.thumbnail ?? [],
@@ -46,7 +60,16 @@ class ProductService {
         price: parseFloat(fields.price),
         stock: parseInt(fields.stock)
       }
-      validateInputs(mappedFields, strictValidation)
+
+      const { error, value: validFields } = validation({ data: mappedFields })
+
+      if (error !== undefined) {
+        throw new CustomError({
+          status: JOI_ERRORS.STATUS,
+          type: JOI_ERRORS.TYPE,
+          cause: error
+        })
+      }
 
       const lastItem = await DAO_PRODUCTS.getLastProduct()
 
@@ -54,7 +77,7 @@ class ProductService {
         ? this.#nextID = ++lastItem[0].id
         : this.#nextID = 1
 
-      const newProduct = new Product({ ...mappedFields, id: this.#nextID })
+      const newProduct = new Product({ ...validFields, id: this.#nextID })
       await DAO_PRODUCTS.createProduct(newProduct.getProductData())
 
       return {
@@ -62,7 +85,11 @@ class ProductService {
         productAdded: newProduct
       }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.CREATE_PRODUCT.ERROR_CODE)
+      throw new CustomError({
+        status: PRODUCT_MANAGER_ERRORS.CREATE_PRODUCT.STATUS,
+        type: PRODUCT_MANAGER_ERRORS.CREATE_PRODUCT.TYPE,
+        cause: PRODUCT_MANAGER_ERRORS.CREATE_PRODUCT.MESSAGE
+      })
     }
   }
 
@@ -78,11 +105,19 @@ class ProductService {
         stock: (!isNaN(parseInt(fields.stock))) ? parseInt(fields.stock) : item.stock
       }
 
-      validateInputs(mappedFields)
+      const { error, value: validFields } = validation({ data: mappedFields })
+
+      if (error !== undefined) {
+        throw new CustomError({
+          status: JOI_ERRORS.STATUS,
+          type: JOI_ERRORS.TYPE,
+          cause: error
+        })
+      }
 
       const newProduct = {
         ...item,
-        ...mappedFields
+        ...validFields
       }
 
       await DAO_PRODUCTS.updateProduct(query, newProduct)
@@ -92,7 +127,11 @@ class ProductService {
       }
     } catch (error) {
       console.log(error)
-      throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+      throw new CustomError({
+        status: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.STATUS,
+        type: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.TYPE,
+        cause: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.MESSAGE
+      })
     }
   }
 
@@ -105,7 +144,11 @@ class ProductService {
         itemDeleted
       }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+      throw new CustomError({
+        status: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.STATUS,
+        type: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.TYPE,
+        cause: PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.MESSAGE
+      })
     }
   }
 }

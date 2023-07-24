@@ -5,6 +5,16 @@ class CustomError extends Error {
     this.cause = cause
     this.status = status
   }
+
+  DTO () {
+    return {
+      type: this.type,
+      cause: this.cause,
+      status: this.status,
+      message: super.message,
+      stack: super.stack
+    }
+  }
 }
 
 export { CustomError }
