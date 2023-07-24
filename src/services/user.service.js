@@ -55,7 +55,7 @@ class UserService {
       age,
       role
     })
-    if (error !== undefined) CustomError.JOI_ERRORS(error)
+    if (error !== undefined) CustomError.userError(error)
 
     const { userExist } = await this.searchUser({ email })
     if (userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)

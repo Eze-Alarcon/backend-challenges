@@ -1,3 +1,5 @@
+import { USER_ERROR } from '../utils/errors.messages.js'
+
 class CustomError extends Error {
   constructor (error) {
     super()
@@ -14,6 +16,14 @@ class CustomError extends Error {
       message: super.message,
       stack: super.stack
     }
+  }
+
+  static userError (CAUSE) {
+    throw new CustomError({
+      TYPE: USER_ERROR.TYPE,
+      STATUS: USER_ERROR.STATUS,
+      CAUSE
+    })
   }
 }
 

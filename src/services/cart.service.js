@@ -1,5 +1,6 @@
 // Models
 import { Cart } from '../models/cart.model.js'
+import { CustomError } from '../models/error.model.js'
 
 // Services
 import { productService } from './product.service.js'
@@ -86,7 +87,9 @@ class CartService {
 
   async addProductToCart ({ cartID, productID, quantityValue = null }) {
     try {
-      validateQuantity(quantityValue)
+      const { error } = validateQuantity(quantityValue)
+      if (error !== undefined) CustomError.userError(error)
+
       const cart = await DAO_CARTS.findCartByID({ id: cartID })
       const { item: product } = await productService.getProductById({ id: productID })
       let response

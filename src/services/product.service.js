@@ -53,7 +53,7 @@ class ProductService {
 
     const { error, value: validFields } = validProduct({ data: mappedFields })
 
-    if (error !== undefined) CustomError.JOI_ERRORS(error)
+    if (error !== undefined) CustomError.userError(error)
 
     try {
       const lastItem = await DAO_PRODUCTS.getLastProduct()
@@ -88,7 +88,7 @@ class ProductService {
 
       const { error, value: validFields } = validProduct({ data: mappedFields })
 
-      if (error !== undefined) CustomError.JOI_ERRORS(error)
+      if (error !== undefined) CustomError.userError(error)
 
       const newProduct = {
         ...item,

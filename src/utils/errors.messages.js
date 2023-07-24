@@ -114,7 +114,7 @@ const AUTH_ERROR = {
 
 /* ========== Errores de Verificacion ========== */
 
-const JOI_ERRORS = {
+const USER_ERROR = {
   STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
   TYPE: 'User Error'
 }
@@ -126,5 +126,5 @@ export {
   TICKET_MANAGER_ERRORS,
   SERVER_ERROR,
   STATUS_CODE,
-  JOI_ERRORS
+  USER_ERROR
 }

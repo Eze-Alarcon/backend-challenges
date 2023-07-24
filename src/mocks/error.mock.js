@@ -1,4 +1,4 @@
-import { JOI_ERRORS } from '../utils/errors.messages.js'
+import { USER_ERROR } from '../utils/errors.messages.js'
 
 class CustomError extends Error {
   constructor (error) {
@@ -18,16 +18,16 @@ class CustomError extends Error {
     }
   }
 
-  static joiError (CAUSE) {
+  static userError (CAUSE) {
     throw new CustomError({
-      TYPE: JOI_ERRORS.TYPE,
-      STATUS: JOI_ERRORS.STATUS,
+      TYPE: USER_ERROR.TYPE,
+      STATUS: USER_ERROR.STATUS,
       CAUSE
     })
   }
 }
 
-const test = CustomError.joiError('TEST')
+const test = CustomError.userError('TEST')
 
 console.log(test instanceof CustomError)
 console.log(test.DTO())

@@ -10,7 +10,7 @@ import { SERVER_CONFIG, FOLDERS, ROUTES } from './config/server.config.js'
 import { COOKIE_SECRET, URL_DB } from './config/config.js'
 
 // Middlewares
-import { handleError } from './middleware/errors.js'
+import { handleError } from './middleware/errorHandler.js'
 import { passportInitialize } from './middleware/passport.config.js'
 
 // Routers
