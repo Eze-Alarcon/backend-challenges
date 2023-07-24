@@ -12,6 +12,11 @@ import { STATUS_CODE, TICKET_MANAGER_ERRORS } from '../utils/errors.messages.js'
 import { DAO_TICKET } from '../dao/tickets.database.js'
 
 class TicketService {
+  #dao
+  constructor ({ DAO }) {
+    this.#dao = DAO
+  }
+
   async createTicket ({ cartID, email }) {
     let subtotal = 0
     try {
@@ -33,7 +38,7 @@ class TicketService {
         }
       }
 
-      const lastID = await DAO_TICKET.getLastID()
+      const lastID = await this.#dao.getLastID()
 
       const ticketModel = new Ticket({
         id: lastID,
@@ -41,7 +46,7 @@ class TicketService {
         purchaser: email
       })
 
-      const newTicket = await DAO_TICKET.createOne(ticketModel.DTO())
+      const newTicket = await this.#dao.createOne(ticketModel.DTO())
       const { cart: newCart } = await cartService.getCartById(cartID)
 
       return {
@@ -57,7 +62,7 @@ class TicketService {
 
   async getTicket ({ ticketID }) {
     try {
-      const ticket = await DAO_TICKET.getOne({ id: ticketID })
+      const ticket = await this.#dao.getOne({ id: ticketID })
       return { ticket, status: STATUS_CODE.SUCCESS.OK }
     } catch (error) {
       console.log(error)
@@ -67,7 +72,7 @@ class TicketService {
 
   async deleteTicket ({ ticketID }) {
     try {
-      const deletedTicket = await DAO_TICKET.deleteOne({ id: ticketID })
+      const deletedTicket = await this.#dao.deleteOne({ id: ticketID })
       return { deletedTicket, status: STATUS_CODE.SUCCESS.NO_CONTENT }
     } catch (error) {
       console.log(error)
@@ -76,6 +81,6 @@ class TicketService {
   }
 }
 
-const ticketService = new TicketService()
+const ticketService = new TicketService({ DAO: DAO_TICKET })
 
 export { ticketService }

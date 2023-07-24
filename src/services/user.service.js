@@ -16,8 +16,15 @@ import { comparePassword, hashPassword } from '../utils/hash.js'
 import { validation as userValidation } from '../schemas/joi/users.joi.schema.js'
 
 class UserService {
+  #daoUsers
+  #daoGH
+  constructor ({ DAO_USERS, DAO_GH }) {
+    this.#daoUsers = DAO_USERS
+    this.#daoGH = DAO_GH
+  }
+
   async searchUser ({ email }) {
-    const data = await DAO_USERS.findUser({ email })
+    const data = await this.#daoUsers.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
     return {
@@ -78,7 +85,7 @@ class UserService {
       role
     })
 
-    await DAO_USERS.createUser(newUser.getUser())
+    await this.#daoUsers.createUser(newUser.getUser())
 
     return {
       status: STATUS_CODE.SUCCESS.CREATED,
@@ -87,7 +94,7 @@ class UserService {
   }
 
   async searchGithubUser ({ email }) {
-    const data = await DAO_GITHUB_USERS.findUser({ email })
+    const data = await this.#daoGH.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
     return {
@@ -104,7 +111,7 @@ class UserService {
 
     const newUser = new UserGithub({ email, cartID: cart.id })
 
-    await DAO_GITHUB_USERS.createUser(newUser.getUserGithub())
+    await this.#daoGH.createUser(newUser.getUserGithub())
 
     return {
       status: STATUS_CODE.SUCCESS.CREATED,
@@ -113,6 +120,6 @@ class UserService {
   }
 }
 
-const userService = new UserService()
+const userService = new UserService({ DAO_USERS, DAO_GH: DAO_GITHUB_USERS })
 
 export { userService }

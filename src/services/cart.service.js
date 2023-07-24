@@ -15,6 +15,11 @@ import { STATUS_CODE, CART_MANAGER_ERRORS } from '../utils/errors.messages.js'
 /* -------------------------------------------- */
 
 class CartService {
+  #dao
+  constructor ({ DAO }) {
+    this.#dao = DAO
+  }
+
   #parseData (value) {
     return JSON.parse(JSON.stringify(value))
   }
@@ -44,7 +49,7 @@ class CartService {
 
   async getCarts () {
     try {
-      const carts = await DAO_CARTS.getCarts()
+      const carts = await this.#dao.getCarts()
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         carts
@@ -56,11 +61,11 @@ class CartService {
 
   async createCart () {
     try {
-      const newCartID = await DAO_CARTS.getLastID()
+      const newCartID = await this.#dao.getLastID()
 
       const newCart = new Cart({ id: newCartID })
 
-      await DAO_CARTS.createCart(newCart.getCartData())
+      await this.#dao.createCart(newCart.getCartData())
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -73,7 +78,7 @@ class CartService {
 
   async getCartById (query) {
     try {
-      const cart = await DAO_CARTS.findCartByID({ id: query })
+      const cart = await this.#dao.findCartByID({ id: query })
       const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -90,7 +95,7 @@ class CartService {
       const { error } = validateQuantity(quantityValue)
       if (error !== undefined) CustomError.userError(error)
 
-      const cart = await DAO_CARTS.findCartByID({ id: cartID })
+      const cart = await this.#dao.findCartByID({ id: cartID })
       const { item: product } = await productService.getProductById({ id: productID })
       let response
 
@@ -98,7 +103,7 @@ class CartService {
       const { exist, index } = this.#findIndex(cart, parsedID)
 
       if (!exist) {
-        response = await DAO_CARTS.addProductToCart({ id: cartID, productID: product._id })
+        response = await this.#dao.addProductToCart({ id: cartID, productID: product._id })
       }
 
       if (exist) {
@@ -110,7 +115,7 @@ class CartService {
           quantity: newValue
         }
 
-        response = await DAO_CARTS.updateCartProductQuantity(updateInfo)
+        response = await this.#dao.updateCartProductQuantity(updateInfo)
       }
 
       return {
@@ -124,7 +129,7 @@ class CartService {
 
   async deleteAllCartProducts (query) {
     try {
-      const cartUpdated = await DAO_CARTS.deleteAllCartProducts({ id: query })
+      const cartUpdated = await this.#dao.deleteAllCartProducts({ id: query })
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -140,7 +145,7 @@ class CartService {
       const { item: product } = await productService.getProductById({ id: productID })
       const parsedID = this.#parseData(product._id)
 
-      const details = await DAO_CARTS.deleteCartProduct({ id: cartID, productID: parsedID })
+      const details = await this.#dao.deleteCartProduct({ id: cartID, productID: parsedID })
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -152,6 +157,6 @@ class CartService {
   }
 }
 
-const cartService = new CartService()
+const cartService = new CartService({ DAO: DAO_CARTS })
 
 export { cartService }

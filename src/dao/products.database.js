@@ -105,14 +105,19 @@ class DB_PRODUCT_MANAGER {
     }
   }
 
-  async getLastProduct () {
+  async getLastID () {
     const data = await this.#model.paginate({}, {
       limit: 1,
       sort: { id: -1 },
       projection: { _id: 0 },
       lean: true
     })
-    return data.docs
+    let id = 0
+    data.length > 0
+      ? id = ++data[0].id
+      : id = 1
+
+    return id
   }
 
   async findProducts (query) {

@@ -16,7 +16,7 @@ const productSchema = Joi.object({
 
   stock: Joi.number()
     .required()
-    .positive()
+    // .positive()
     .min(0),
 
   thumbnail: Joi.array()

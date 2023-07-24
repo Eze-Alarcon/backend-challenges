@@ -31,7 +31,7 @@ export class Product {
     this.#code = code ?? `code-${crypto.randomUUID()}`
   }
 
-  getProductData () {
+  DTO () {
     return {
       id: this.#id,
       title: this.#title,

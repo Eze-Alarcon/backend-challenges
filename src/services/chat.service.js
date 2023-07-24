@@ -5,18 +5,23 @@ import { Chats } from '../models/chat.model.js'
 import { DAO_CHATS } from '../dao/chat.database.js'
 
 class ChatService {
+  #dao
+  constructor ({ DAO }) {
+    this.#dao = DAO
+  }
+
   async createChat ({ user, message }) {
     const newChat = new Chats({ user, message })
-    const response = await DAO_CHATS.createChat(newChat.DTO())
+    const response = await this.#dao.createChat(newChat.DTO())
     return response
   }
 
   async getAllChats () {
-    const response = await DAO_CHATS.getChats()
+    const response = await this.#dao.getChats()
     return response
   }
 }
 
-const chatService = new ChatService()
+const chatService = new ChatService({ DAO: DAO_CHATS })
 
 export { chatService }

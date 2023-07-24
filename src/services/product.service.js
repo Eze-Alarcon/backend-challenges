@@ -16,11 +16,15 @@ import {
 
 class ProductService {
   #nextID
-  constructor () { this.#nextID = 0 }
+  #dao
+  constructor ({ DAO }) {
+    this.#nextID = 0
+    this.#dao = DAO
+  }
 
   async getProducts (options = {}) {
     try {
-      const products = await DAO_PRODUCTS.getProducts(options)
+      const products = await this.#dao.getProducts(options)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         products
@@ -32,7 +36,7 @@ class ProductService {
 
   async getProductById (query) {
     try {
-      const product = await DAO_PRODUCTS.findProducts(query)
+      const product = await this.#dao.findProducts(query)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         item: product[0]
@@ -56,18 +60,13 @@ class ProductService {
     if (error !== undefined) CustomError.userError(error)
 
     try {
-      const lastItem = await DAO_PRODUCTS.getLastProduct()
-
-      lastItem.length > 0
-        ? this.#nextID = ++lastItem[0].id
-        : this.#nextID = 1
+      this.#nextID = await this.#dao.getLastID()
 
       const newProduct = new Product({ ...validFields, id: this.#nextID })
-      await DAO_PRODUCTS.createProduct(newProduct.getProductData())
-
+      await this.#dao.createProduct(newProduct.DTO())
       return {
         status_code: STATUS_CODE.SUCCESS.CREATED,
-        productAdded: newProduct
+        productAdded: newProduct.DTO()
       }
     } catch (error) {
       throw new CustomError(PRODUCT_MANAGER_ERRORS.CREATE_PRODUCT)
@@ -95,7 +94,7 @@ class ProductService {
         ...validFields
       }
 
-      await DAO_PRODUCTS.updateProduct(query, newProduct)
+      await this.#dao.updateProduct(query, newProduct)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         itemUpdated: newProduct
@@ -107,7 +106,7 @@ class ProductService {
 
   async deleteProduct (query) {
     try {
-      const itemDeleted = await DAO_PRODUCTS.deleteProduct({ id: query })
+      const itemDeleted = await this.#dao.deleteProduct({ id: query })
 
       return {
         status_code: STATUS_CODE.SUCCESS.NO_CONTENT,
@@ -119,6 +118,6 @@ class ProductService {
   }
 }
 
-const productService = new ProductService()
+const productService = new ProductService({ DAO: DAO_PRODUCTS })
 
-export { productService }
+export { productService, ProductService }

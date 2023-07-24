@@ -19,11 +19,12 @@ class CustomError extends Error {
   }
 
   static userError (CAUSE) {
-    throw new CustomError({
+    const err = new CustomError({
       TYPE: USER_ERROR.TYPE,
       STATUS: USER_ERROR.STATUS,
       CAUSE
     })
+    throw err.DTO()
   }
 }
 
