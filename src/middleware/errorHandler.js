@@ -5,16 +5,21 @@ import { SERVER_ERROR } from '../utils/errors.messages.js'
 export function handleError (error, req, res, next) {
   console.log('\n=========\n[errorHandler.js] Error log\n=========\n')
 
-  if (!(error instanceof CustomError)) {
-    const unknowError = new CustomError({
-      type: 'Server Error',
-      cause: SERVER_ERROR.SERVER_ERROR.MESSAGE,
-      status: SERVER_ERROR.SERVER_ERROR.STATUS
-    })
-    console.log(unknowError)
-    return res.status(unknowError.status).json({ type: unknowError.type, cause: unknowError.cause })
+  if (error instanceof CustomError) {
+    const errorData = error.DTO()
+    return res
+      .status(errorData.status)
+      .json({ type: errorData.type, cause: errorData.cause })
   }
 
-  console.log(error)
-  return res.status(error.status).json({ type: error.type, cause: error.cause })
+  const newError = new CustomError({
+    TYPE: 'Server Error',
+    CAUSE: SERVER_ERROR.SERVER_ERROR.MESSAGE,
+    STATUS: SERVER_ERROR.SERVER_ERROR.STATUS
+  })
+
+  const newErrorDTO = newError.DTO()
+
+  console.log(newErrorDTO)
+  return res.status(newErrorDTO.status).json({ type: newErrorDTO.type, cause: newErrorDTO.cause })
 }

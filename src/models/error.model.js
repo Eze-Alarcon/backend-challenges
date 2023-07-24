@@ -1,9 +1,9 @@
 class CustomError extends Error {
-  constructor ({ type, cause, status }) {
+  constructor (error) {
     super()
-    this.type = type
-    this.cause = cause
-    this.status = status
+    this.type = error.TYPE
+    this.cause = error.CAUSE
+    this.status = error.STATUS
   }
 
   DTO () {

@@ -1,5 +1,6 @@
 // Models
 import { ROLES, UserGithub, UserPassport } from '../models/user.model.js'
+import { CustomError } from '../models/error.model.js'
 
 // DAOs
 import { DAO_USERS, DAO_GITHUB_USERS } from '../dao/users.database.js'
@@ -10,6 +11,9 @@ import { cartService } from './cart.service.js'
 // Utils
 import { AUTH_ERROR, STATUS_CODE } from '../utils/errors.messages.js'
 import { comparePassword, hashPassword } from '../utils/hash.js'
+
+// Joi
+import { validation as userValidation } from '../schemas/joi/users.joi.schema.js'
 
 class UserService {
   async searchUser ({ email }) {
@@ -24,10 +28,10 @@ class UserService {
 
   async logUser ({ email, password }) {
     const { user, userExist } = await this.searchUser({ email })
-    if (!userExist) throw new Error(AUTH_ERROR.HAS_ACCOUNT.ERROR_CODE)
+    if (!userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
 
     const samePassword = await comparePassword({ password, hashPassword: user.password })
-    if (!samePassword) throw new Error(AUTH_ERROR.WRONG_CREDENTIALS.ERROR_CODE)
+    if (!samePassword) throw new CustomError(AUTH_ERROR.WRONG_CREDENTIALS)
 
     return {
       user,
@@ -43,9 +47,18 @@ class UserService {
     age,
     role
   }) {
-    const { userExist } = await this.searchUser({ email })
+    const { error } = userValidation({
+      email,
+      password,
+      first_name,
+      last_name,
+      age,
+      role
+    })
+    if (error !== undefined) CustomError.JOI_ERRORS(error)
 
-    if (userExist) throw new Error(AUTH_ERROR.HAS_ACCOUNT.ERROR_CODE)
+    const { userExist } = await this.searchUser({ email })
+    if (userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
 
     const newPassword = await hashPassword(password)
 
@@ -85,8 +98,7 @@ class UserService {
 
   async createGithubUser ({ email }) {
     const { userExist } = await this.searchUser({ email })
-
-    if (userExist) throw new Error(AUTH_ERROR.HAS_ACCOUNT.ERROR_CODE)
+    if (userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
 
     const { cart } = await cartService.createCart()
 

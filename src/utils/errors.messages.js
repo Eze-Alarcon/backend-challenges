@@ -20,12 +20,12 @@ const STATUS_CODE = {
 
 const SERVER_ERROR = {
   SERVER_ERROR: {
-    MESSAGE: 'Something fail, contact maintenance.',
+    CAUSE: 'Something fail, contact maintenance.',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     TYPE: 'Server Error'
   },
   FEATURE_NOT_IMPLEMENTED: {
-    MESSAGE: 'Feature not available at the moment, available in future releases.',
+    CAUSE: 'Feature not available at the moment, available in future releases.',
     STATUS: STATUS_CODE.SERVER_ERROR.NOT_IMPLEMENTED,
     TYPE: 'Feature not available'
   }
@@ -35,22 +35,22 @@ const SERVER_ERROR = {
 
 const PRODUCT_MANAGER_ERRORS = {
   REQUIRED_OBJECT: {
-    MESSAGE: '[ERROR]: Expected object.',
+    CAUSE: '[ERROR]: Expected object.',
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
     TYPE: 'Type error'
   },
   PRODUCT_EXIST: {
-    MESSAGE: '[ERROR]: Product already exists in the database',
+    CAUSE: '[ERROR]: Product already exists in the database',
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
     TYPE: 'Product not created'
   },
   PRODUCT_NOT_FOUND: {
-    MESSAGE: '[ERROR]: Product not found',
+    CAUSE: '[ERROR]: Product not found',
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
     TYPE: 'Product not found'
   },
   CREATE_PRODUCT: {
-    MESSAGE: '[ERROR]: Product not created',
+    CAUSE: '[ERROR]: Product not created',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     TYPE: 'Server error'
   }
@@ -58,17 +58,17 @@ const PRODUCT_MANAGER_ERRORS = {
 
 const CART_MANAGER_ERRORS = {
   CREATE_CARTS: {
-    MESSAGE: '[ERROR]: Cart not created',
+    CAUSE: '[ERROR]: Cart not created',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     TYPE: 'Server Error'
   },
   ADD_PRODUCT_TO_CART: {
-    MESSAGE: '[ERROR]: Product not added properly',
+    CAUSE: '[ERROR]: Product not added properly',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     TYPE: 'Server Error'
   },
   CART_NOT_FOUND: {
-    MESSAGE: '[ERROR]: Cart not found',
+    CAUSE: '[ERROR]: Cart not found',
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
     TYPE: 'Cart not found'
   }
@@ -76,12 +76,12 @@ const CART_MANAGER_ERRORS = {
 
 const TICKET_MANAGER_ERRORS = {
   CREATE_TICKET_ERROR: {
-    MESSAGE: '[ERROR]: Ticket not created',
+    CAUSE: '[ERROR]: Ticket not created',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     TYPE: 'Server Error'
   },
   TICKET_NOT_FOUND: {
-    MESSAGE: '[ERROR]: Ticket not found',
+    CAUSE: '[ERROR]: Ticket not found',
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
     TYPE: 'Ticket not found'
   }
@@ -91,22 +91,22 @@ const TICKET_MANAGER_ERRORS = {
 
 const AUTH_ERROR = {
   NO_SESSION: {
-    MESSAGE: '[ERROR]: Login to continue',
+    CAUSE: '[ERROR]: Login to continue',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     TYPE: 'User not logged'
   },
   HAS_ACCOUNT: {
-    MESSAGE: '[ERROR]: Authentication error. If you already have an account, please try to log in or register',
+    CAUSE: '[ERROR]: Authentication error. If you already have an account, please try to log in or register with another email',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     TYPE: 'User has account'
   },
   WRONG_CREDENTIALS: {
-    MESSAGE: '[ERROR]: Authentication error.',
+    CAUSE: '[ERROR]: Authentication error.',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     TYPE: 'Invalid username and password'
   },
   FORBIDDEN: {
-    MESSAGE: '[ERROR]: Autorization error',
+    CAUSE: '[ERROR]: Autorization error',
     STATUS: STATUS_CODE.CLIENT_ERROR.FORBIDDEN,
     TYPE: 'Wrong credentials'
   }

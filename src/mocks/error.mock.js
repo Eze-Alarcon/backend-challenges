@@ -1,14 +1,33 @@
+import { JOI_ERRORS } from '../utils/errors.messages.js'
+
 class CustomError extends Error {
-  constructor ({ type, cause, status }) {
+  constructor (error) {
     super()
-    this.type = type
-    this.cause = cause
-    this.status = status
+    this.type = error.TYPE
+    this.cause = error.CAUSE
+    this.status = error.STATUS
+  }
+
+  DTO () {
+    return {
+      type: this.type,
+      cause: this.cause,
+      status: this.status,
+      message: super.message,
+      stack: super.stack
+    }
+  }
+
+  static joiError (CAUSE) {
+    throw new CustomError({
+      TYPE: JOI_ERRORS.TYPE,
+      STATUS: JOI_ERRORS.STATUS,
+      CAUSE
+    })
   }
 }
 
-const bla = new CustomError({ type: 'User Error', cause: 'test de class CustomError', status: 404 })
+const test = CustomError.joiError('TEST')
 
-console.log(bla instanceof CustomError)
-
-console.log(bla)
+console.log(test instanceof CustomError)
+console.log(test.DTO())
