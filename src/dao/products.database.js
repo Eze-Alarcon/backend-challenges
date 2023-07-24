@@ -5,7 +5,7 @@ import { SERVER_CONFIG } from '../config/server.config.js'
 import { STATUS_CODE } from '../utils/errors.messages.js'
 
 // Schemas
-import { productModel } from '../schemas/products.schema.js'
+import { productModel } from '../schemas/mongoose/products.schema.js'
 
 class DB_PRODUCT_MANAGER {
   #model
@@ -105,14 +105,19 @@ class DB_PRODUCT_MANAGER {
     }
   }
 
-  async getLastProduct () {
+  async getLastID () {
     const data = await this.#model.paginate({}, {
       limit: 1,
       sort: { id: -1 },
       projection: { _id: 0 },
       lean: true
     })
-    return data.docs
+    let id = 0
+    data.length > 0
+      ? id = ++data[0].id
+      : id = 1
+
+    return id
   }
 
   async findProducts (query) {
@@ -137,6 +142,6 @@ class DB_PRODUCT_MANAGER {
   }
 }
 
-const DB_PRODUCTS = new DB_PRODUCT_MANAGER(productModel)
+const DAO_PRODUCTS = new DB_PRODUCT_MANAGER(productModel)
 
-export { DB_PRODUCTS }
+export { DAO_PRODUCTS }

@@ -1,5 +1,3 @@
-/* eslint quotes: ["error", "double"] */
-
 const STATUS_CODE = {
   CLIENT_ERROR: {
     BAD_REQUEST: 400,
@@ -18,114 +16,74 @@ const STATUS_CODE = {
   }
 }
 
-/* ========== Errores de productos ========== */
-
-const CREATE_PRODUCT_ERRORS = {
-  REQUIRED_OBJECT: {
-    MESSAGE: "[ERROR]: Expected object.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "REQUIRED_OBJECT"
-  },
-  REQUIRED_FIELDS: {
-    MESSAGE: "[ERROR]: Expected object with properties: title, description, thumbnail, price and stock",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "REQUIRED_FIELDS"
-  },
-  UPDATE_MORE_FIELDS: {
-    MESSAGE: "[ERROR]: Expected object with one or more properties to change (title, description, thumbnail, price, stock)",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "UPDATE_MORE_FIELDS"
-  },
-  INCORRECT_FIELD_TYPE_STRING: {
-    MESSAGE: "[ERROR]: The fields 'title, code, thumbnail and description' must be strings.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "INCORRECT_FIELD_TYPE_STRING"
-  },
-  INCORRECT_FIELD_TYPE_NUMBER: {
-    MESSAGE: "[ERROR]: The fields 'price, stock and quantity' must be numbers.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "INCORRECT_FIELD_TYPE_NUMBER"
-  },
-  FIELD_STATUS: {
-    MESSAGE: "[ERROR]: The field 'stock' must be a boolean.",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "FIELD_STATUS"
-  },
-  PRODUCT_EXIST: {
-    MESSAGE: "[ERROR]: Product already exists in the database",
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
-    ERROR_CODE: "PRODUCT_EXIST"
-  }
-}
-
 /* ========== Errores del server ========== */
 
 const SERVER_ERROR = {
   SERVER_ERROR: {
-    MESSAGE: "Something has happened, contact maintenance.",
+    CAUSE: 'Something fail, contact maintenance.',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    ERROR_CODE: "SERVER_ERROR"
+    TYPE: 'Server Error'
   },
   FEATURE_NOT_IMPLEMENTED: {
-    MESSAGE: "Feature not available at the moment, available in future releases.",
+    CAUSE: 'Feature not available at the moment, available in future releases.',
     STATUS: STATUS_CODE.SERVER_ERROR.NOT_IMPLEMENTED,
-    ERROR_CODE: "FEATURE_NOT_IMPLEMENTED"
+    TYPE: 'Feature not available'
   }
 }
 
 /* ========== Errores de los managers ========== */
 
 const PRODUCT_MANAGER_ERRORS = {
-  PRODUCT_NOT_FOUND: {
-    MESSAGE: "[ERROR]: Product not found",
-    STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
-    ERROR_CODE: "PRODUCT_NOT_FOUND"
+  REQUIRED_OBJECT: {
+    CAUSE: '[ERROR]: Expected object.',
+    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
+    TYPE: 'Type error'
   },
-  NO_PRODUCTS_PARAMETERS: {
-    MESSAGE: "[ERROR]: No products were found with these search query parameters",
-    STATUS: STATUS_CODE.SUCCESS.OK,
-    ERROR_CODE: "NO_PRODUCTS_PARAMETERS"
+  PRODUCT_EXIST: {
+    CAUSE: '[ERROR]: Product already exists in the database',
+    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
+    TYPE: 'Product not created'
+  },
+  PRODUCT_NOT_FOUND: {
+    CAUSE: '[ERROR]: Product not found',
+    STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
+    TYPE: 'Product not found'
   },
   CREATE_PRODUCT: {
-    MESSAGE: "Something went wrong with the 'addProduct' method",
+    CAUSE: '[ERROR]: Product not created',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    ERROR_CODE: "CREATE_PRODUCT"
+    TYPE: 'Server error'
   }
 }
 
 const CART_MANAGER_ERRORS = {
-  GET_CARTS: {
-    MESSAGE: "[ERROR]: Something went wrong with the 'getCarts' method",
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    ERROR_CODE: "GET_CARTS"
-  },
   CREATE_CARTS: {
-    MESSAGE: "[ERROR]: Something went wrong with the 'createCart' method",
+    CAUSE: '[ERROR]: Cart not created',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    ERROR_CODE: "CREATE_CARTS"
+    TYPE: 'Server Error'
   },
   ADD_PRODUCT_TO_CART: {
-    MESSAGE: "[ERROR]: Something went wrong with the 'addProductToCart' method",
+    CAUSE: '[ERROR]: Product not added properly',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    ERROR_CODE: "ADD_PRODUCT_TO_CART"
+    TYPE: 'Server Error'
   },
   CART_NOT_FOUND: {
-    MESSAGE: "[ERROR]: Cart not found",
+    CAUSE: '[ERROR]: Cart not found',
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
-    ERROR_CODE: "CART_NOT_FOUND"
+    TYPE: 'Cart not found'
   }
 }
 
 const TICKET_MANAGER_ERRORS = {
   CREATE_TICKET_ERROR: {
-    MESSAGE: "[ERROR]: Something went wrong with the 'createTicket' method",
+    CAUSE: '[ERROR]: Ticket not created',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    ERROR_CODE: "CREATE_TICKET_ERROR"
+    TYPE: 'Server Error'
   },
   TICKET_NOT_FOUND: {
-    MESSAGE: "[ERROR]: Ticket not found",
+    CAUSE: '[ERROR]: Ticket not found',
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
-    ERROR_CODE: "TICKET_NOT_FOUND"
+    TYPE: 'Ticket not found'
   }
 }
 
@@ -133,33 +91,40 @@ const TICKET_MANAGER_ERRORS = {
 
 const AUTH_ERROR = {
   NO_SESSION: {
-    MESSAGE: "[ERROR]: Login to continue",
+    CAUSE: '[ERROR]: Login to continue',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
-    ERROR_CODE: "NO_SESSION"
+    TYPE: 'User not logged'
   },
   HAS_ACCOUNT: {
-    MESSAGE: "[ERROR]: Authentication error. If you already have an account, please try to log in or register",
+    CAUSE: '[ERROR]: Authentication error. If you already have an account, please try to log in or register with another email',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
-    ERROR_CODE: "HAS_ACCOUNT"
+    TYPE: 'User has account'
   },
   WRONG_CREDENTIALS: {
-    MESSAGE: "[ERROR]: Authentication error. Invalid username and password",
+    CAUSE: '[ERROR]: Authentication error.',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
-    ERROR_CODE: "WRONG_CREDENTIALS"
+    TYPE: 'Invalid username and password'
   },
   FORBIDDEN: {
-    MESSAGE: "[ERROR]: Login to continue",
+    CAUSE: '[ERROR]: Autorization error',
     STATUS: STATUS_CODE.CLIENT_ERROR.FORBIDDEN,
-    ERROR_CODE: "FORBIDDEN"
+    TYPE: 'Wrong credentials'
   }
+}
+
+/* ========== Errores de Verificacion ========== */
+
+const USER_ERROR = {
+  STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
+  TYPE: 'User Error'
 }
 
 export {
   AUTH_ERROR,
   CART_MANAGER_ERRORS,
-  CREATE_PRODUCT_ERRORS,
   PRODUCT_MANAGER_ERRORS,
   TICKET_MANAGER_ERRORS,
   SERVER_ERROR,
-  STATUS_CODE
+  STATUS_CODE,
+  USER_ERROR
 }

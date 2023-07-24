@@ -1,5 +1,5 @@
 // Schemas
-import { userModel, githubUserModel } from '../schemas/users.schema.js'
+import { userModel, githubUserModel } from '../schemas/mongoose/users.schema.js'
 
 // ===== Local DB Manager =====
 
@@ -39,7 +39,7 @@ class DB_USER_GITHUB_MANAGER {
   }
 }
 
-const DB_USERS = new DB_USER_MANAGER(userModel)
-const DB_GITHUB_USERS = new DB_USER_GITHUB_MANAGER(githubUserModel)
+const DAO_USERS = new DB_USER_MANAGER(userModel)
+const DAO_GITHUB_USERS = new DB_USER_GITHUB_MANAGER(githubUserModel)
 
-export { DB_USERS, DB_GITHUB_USERS }
+export { DAO_USERS, DAO_GITHUB_USERS }

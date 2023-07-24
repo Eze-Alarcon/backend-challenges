@@ -1,6 +1,6 @@
 // Services
-import { cartManager } from './cart.service.js'
-import { productManager } from './product.service.js'
+import { cartService } from './cart.service.js'
+import { productService } from './product.service.js'
 
 // Models
 import { Ticket } from '../models/tickets.model.js'
@@ -9,20 +9,25 @@ import { Ticket } from '../models/tickets.model.js'
 import { STATUS_CODE, TICKET_MANAGER_ERRORS } from '../utils/errors.messages.js'
 
 // DAO
-import { DB_TICKET } from '../dao/tickets.database.js'
+import { DAO_TICKET } from '../dao/tickets.database.js'
 
-class TicketManager {
+class TicketService {
+  #dao
+  constructor ({ DAO }) {
+    this.#dao = DAO
+  }
+
   async createTicket ({ cartID, email }) {
     let subtotal = 0
     try {
-      const { cart } = await cartManager.getCartById(cartID)
+      const { cart } = await cartService.getCartById(cartID)
 
       for (const item of cart.products) {
-        const { item: storeProduct } = await productManager.getProductById({ id: item.product.id })
+        const { item: storeProduct } = await productService.getProductById({ id: item.product.id })
         if (item.quantity > storeProduct.stock) continue
         subtotal += item.quantity * item.product.price
-        await productManager.updateProduct({ id: item.product.id }, { stock: storeProduct.stock - item.quantity })
-        await cartManager.deleteCartProduct({ cartID: cart.id, productID: item.product.id })
+        await productService.updateProduct({ id: item.product.id }, { stock: storeProduct.stock - item.quantity })
+        await cartService.deleteCartProduct({ cartID: cart.id, productID: item.product.id })
       }
 
       if (subtotal === 0) {
@@ -33,7 +38,7 @@ class TicketManager {
         }
       }
 
-      const lastID = await DB_TICKET.getLastID()
+      const lastID = await this.#dao.getLastID()
 
       const ticketModel = new Ticket({
         id: lastID,
@@ -41,8 +46,8 @@ class TicketManager {
         purchaser: email
       })
 
-      const newTicket = await DB_TICKET.createOne(ticketModel.DTO())
-      const { cart: newCart } = await cartManager.getCartById(cartID)
+      const newTicket = await this.#dao.createOne(ticketModel.DTO())
+      const { cart: newCart } = await cartService.getCartById(cartID)
 
       return {
         ticket: newTicket,
@@ -57,7 +62,7 @@ class TicketManager {
 
   async getTicket ({ ticketID }) {
     try {
-      const ticket = await DB_TICKET.getOne({ id: ticketID })
+      const ticket = await this.#dao.getOne({ id: ticketID })
       return { ticket, status: STATUS_CODE.SUCCESS.OK }
     } catch (error) {
       console.log(error)
@@ -67,7 +72,7 @@ class TicketManager {
 
   async deleteTicket ({ ticketID }) {
     try {
-      const deletedTicket = await DB_TICKET.deleteOne({ id: ticketID })
+      const deletedTicket = await this.#dao.deleteOne({ id: ticketID })
       return { deletedTicket, status: STATUS_CODE.SUCCESS.NO_CONTENT }
     } catch (error) {
       console.log(error)
@@ -76,18 +81,6 @@ class TicketManager {
   }
 }
 
-const ticketManager = new TicketManager()
+const ticketService = new TicketService({ DAO: DAO_TICKET })
 
-export { ticketManager }
-
-/*
-  Acciones a implementar:
-
-    - Crear Ticket (apoyarse con el ticket.class.js)
-
-    - Borrar Tickets
-
-    - Obtener Ticket (ver si es necesario*)
-
-    * Digo ver si es necesario porque al crear el ticket simplemente le devolvemos el ticket creado al usuario y listo pero por si acaso no viene mal tener esa funcion
-*/
+export { ticketService }

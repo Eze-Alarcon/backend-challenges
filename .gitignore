@@ -1,6 +1,7 @@
 # My files
 
 pnpm-lock.yaml
+*.drawio
 
 # Created by https://www.toptal.com/developers/gitignore/api/images,node,macos,linux,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=images,node,macos,linux,windows

@@ -1,5 +1,5 @@
 // DAOs
-import { ticketManager } from '../services/ticket.service.js'
+import { ticketService } from '../services/ticket.service.js'
 
 // config
 import { COOKIE_NAME } from '../config/config.js'
@@ -9,7 +9,7 @@ import { verifyToken } from '../middleware/jwt.config.js'
 
 async function getTicket (req, res, next) {
   try {
-    await ticketManager.getTicket()
+    await ticketService.getTicket()
   } catch (error) {
     next(error)
   }
@@ -21,7 +21,7 @@ async function createTicket (req, res, next) {
     const token = req.signedCookies[COOKIE_NAME]
     const user = await verifyToken(token)
 
-    const { ticket, cart, status } = await ticketManager.createTicket({ cartID, email: user.email })
+    const { ticket, cart, status } = await ticketService.createTicket({ cartID, email: user.email })
     res.status(status).json({ ticket, cart })
   } catch (error) {
     next(error)
@@ -30,7 +30,7 @@ async function createTicket (req, res, next) {
 
 async function deleteTicket (req, res, next) {
   try {
-    await ticketManager.deleteTicket()
+    await ticketService.deleteTicket()
   } catch (error) {
     next(error)
   }

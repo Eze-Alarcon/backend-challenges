@@ -1,11 +1,12 @@
 // Models
 import { Cart } from '../models/cart.model.js'
+import { CustomError } from '../models/error.model.js'
 
 // Services
-import { productManager } from './product.service.js'
+import { productService } from './product.service.js'
 
 // DAOs
-import { DB_CARTS } from '../dao/carts.database.js'
+import { DAO_CARTS } from '../dao/carts.database.js'
 
 // Utils
 import { validateQuantity } from '../utils/validations.js'
@@ -13,7 +14,12 @@ import { STATUS_CODE, CART_MANAGER_ERRORS } from '../utils/errors.messages.js'
 
 /* -------------------------------------------- */
 
-class CartManager {
+class CartService {
+  #dao
+  constructor ({ DAO }) {
+    this.#dao = DAO
+  }
+
   #parseData (value) {
     return JSON.parse(JSON.stringify(value))
   }
@@ -34,7 +40,7 @@ class CartManager {
     const { cart } = await this.getCartById(cartID)
     const productsAvailables = []
     for (const item of cart.products) {
-      const { item: storeProduct } = await productManager.getProductById({ id: item.product.id })
+      const { item: storeProduct } = await productService.getProductById({ id: item.product.id })
       if (item.quantity > storeProduct.stock) continue
       productsAvailables.push({ ...item.product, quantity: item.quantity })
     }
@@ -43,7 +49,7 @@ class CartManager {
 
   async getCarts () {
     try {
-      const carts = await DB_CARTS.getCarts()
+      const carts = await this.#dao.getCarts()
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         carts
@@ -55,11 +61,11 @@ class CartManager {
 
   async createCart () {
     try {
-      const newCartID = await DB_CARTS.getLastID()
+      const newCartID = await this.#dao.getLastID()
 
       const newCart = new Cart({ id: newCartID })
 
-      await DB_CARTS.createCart(newCart.getCartData())
+      await this.#dao.createCart(newCart.getCartData())
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -72,7 +78,7 @@ class CartManager {
 
   async getCartById (query) {
     try {
-      const cart = await DB_CARTS.findCartByID({ id: query })
+      const cart = await this.#dao.findCartByID({ id: query })
       const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -86,16 +92,18 @@ class CartManager {
 
   async addProductToCart ({ cartID, productID, quantityValue = null }) {
     try {
-      validateQuantity(quantityValue)
-      const cart = await DB_CARTS.findCartByID({ id: cartID })
-      const { item: product } = await productManager.getProductById({ id: productID })
+      const { error } = validateQuantity(quantityValue)
+      if (error !== undefined) CustomError.userError(error)
+
+      const cart = await this.#dao.findCartByID({ id: cartID })
+      const { item: product } = await productService.getProductById({ id: productID })
       let response
 
       const parsedID = this.#parseData(product._id)
       const { exist, index } = this.#findIndex(cart, parsedID)
 
       if (!exist) {
-        response = await DB_CARTS.addProductToCart({ id: cartID, productID: product._id })
+        response = await this.#dao.addProductToCart({ id: cartID, productID: product._id })
       }
 
       if (exist) {
@@ -107,7 +115,7 @@ class CartManager {
           quantity: newValue
         }
 
-        response = await DB_CARTS.updateCartProductQuantity(updateInfo)
+        response = await this.#dao.updateCartProductQuantity(updateInfo)
       }
 
       return {
@@ -121,7 +129,7 @@ class CartManager {
 
   async deleteAllCartProducts (query) {
     try {
-      const cartUpdated = await DB_CARTS.deleteAllCartProducts({ id: query })
+      const cartUpdated = await this.#dao.deleteAllCartProducts({ id: query })
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -134,10 +142,10 @@ class CartManager {
 
   async deleteCartProduct ({ cartID, productID }) {
     try {
-      const { item: product } = await productManager.getProductById({ id: productID })
+      const { item: product } = await productService.getProductById({ id: productID })
       const parsedID = this.#parseData(product._id)
 
-      const details = await DB_CARTS.deleteCartProduct({ id: cartID, productID: parsedID })
+      const details = await this.#dao.deleteCartProduct({ id: cartID, productID: parsedID })
 
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
@@ -149,6 +157,6 @@ class CartManager {
   }
 }
 
-const cartManager = new CartManager()
+const cartService = new CartService({ DAO: DAO_CARTS })
 
-export { cartManager }
+export { cartService }

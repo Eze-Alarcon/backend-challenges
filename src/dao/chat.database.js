@@ -1,5 +1,5 @@
 // Schemas
-import { chatModel } from '../schemas/chat.schema.js'
+import { chatModel } from '../schemas/mongoose/chat.schema.js'
 
 class DB_CHAT_MANAGER {
   #model
@@ -23,6 +23,6 @@ class DB_CHAT_MANAGER {
   }
 }
 
-const DB_CHATS = new DB_CHAT_MANAGER(chatModel)
+const DAO_CHATS = new DB_CHAT_MANAGER(chatModel)
 
-export { DB_CHATS }
+export { DAO_CHATS }

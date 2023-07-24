@@ -1,6 +1,6 @@
 /* eslint-disable no-prototype-builtins */
 // Schemas
-import { ticketModel } from '../schemas/ticket.schema.js'
+import { ticketModel } from '../schemas/mongoose/ticket.schema.js'
 
 class DB_TICKET_MANAGER {
   #model
@@ -42,6 +42,6 @@ class DB_TICKET_MANAGER {
   }
 }
 
-const DB_TICKET = new DB_TICKET_MANAGER(ticketModel)
+const DAO_TICKET = new DB_TICKET_MANAGER(ticketModel)
 
-export { DB_TICKET }
+export { DAO_TICKET }

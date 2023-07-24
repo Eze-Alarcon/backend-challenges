@@ -1,68 +1,75 @@
 // DAOs
-import { DB_PRODUCTS } from '../dao/products.database.js'
+import { DAO_PRODUCTS } from '../dao/products.database.js'
 
 // Models
 import { Product } from '../models/product.model.js'
+import { CustomError } from '../models/error.model.js'
 
-// Utils
-import { validateInputs } from '../utils/validations.js'
-import { STATUS_CODE, PRODUCT_MANAGER_ERRORS } from '../utils/errors.messages.js'
+// Joi
+import { validation as validProduct } from '../schemas/joi/products.joi.schema.js'
 
-class ProductManager {
+// Error messages
+import {
+  STATUS_CODE,
+  PRODUCT_MANAGER_ERRORS
+} from '../utils/errors.messages.js'
+
+class ProductService {
   #nextID
-  constructor () { this.#nextID = 0 }
+  #dao
+  constructor ({ DAO }) {
+    this.#nextID = 0
+    this.#dao = DAO
+  }
 
   async getProducts (options = {}) {
     try {
-      const products = await DB_PRODUCTS.getProducts(options)
+      const products = await this.#dao.getProducts(options)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         products
       }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.NO_PRODUCTS_PARAMETERS.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 
   async getProductById (query) {
     try {
-      const product = await DB_PRODUCTS.findProducts(query)
+      const product = await this.#dao.findProducts(query)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         item: product[0]
       }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 
   async addProduct (fields) {
+    const mappedFields = {
+      description: fields.description,
+      thumbnail: fields.thumbnail ?? [],
+      title: fields.title,
+      price: parseFloat(fields.price),
+      stock: parseInt(fields.stock)
+    }
+
+    const { error, value: validFields } = validProduct({ data: mappedFields })
+
+    if (error !== undefined) CustomError.userError(error)
+
     try {
-      const strictValidation = true
-      const mappedFields = {
-        description: fields.description,
-        thumbnail: fields.thumbnail ?? [],
-        title: fields.title,
-        price: parseFloat(fields.price),
-        stock: parseInt(fields.stock)
-      }
-      validateInputs(mappedFields, strictValidation)
+      this.#nextID = await this.#dao.getLastID()
 
-      const lastItem = await DB_PRODUCTS.getLastProduct()
-
-      lastItem.length > 0
-        ? this.#nextID = ++lastItem[0].id
-        : this.#nextID = 1
-
-      const newProduct = new Product({ ...mappedFields, id: this.#nextID })
-      await DB_PRODUCTS.createProduct(newProduct.getProductData())
-
+      const newProduct = new Product({ ...validFields, id: this.#nextID })
+      await this.#dao.createProduct(newProduct.DTO())
       return {
         status_code: STATUS_CODE.SUCCESS.CREATED,
-        productAdded: newProduct
+        productAdded: newProduct.DTO()
       }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.CREATE_PRODUCT.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.CREATE_PRODUCT)
     }
   }
 
@@ -78,38 +85,39 @@ class ProductManager {
         stock: (!isNaN(parseInt(fields.stock))) ? parseInt(fields.stock) : item.stock
       }
 
-      validateInputs(mappedFields)
+      const { error, value: validFields } = validProduct({ data: mappedFields })
+
+      if (error !== undefined) CustomError.userError(error)
 
       const newProduct = {
         ...item,
-        ...mappedFields
+        ...validFields
       }
 
-      await DB_PRODUCTS.updateProduct(query, newProduct)
+      await this.#dao.updateProduct(query, newProduct)
       return {
         status_code: STATUS_CODE.SUCCESS.OK,
         itemUpdated: newProduct
       }
     } catch (error) {
-      console.log(error)
-      throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 
   async deleteProduct (query) {
     try {
-      const itemDeleted = await DB_PRODUCTS.deleteProduct({ id: query })
+      const itemDeleted = await this.#dao.deleteProduct({ id: query })
 
       return {
         status_code: STATUS_CODE.SUCCESS.NO_CONTENT,
         itemDeleted
       }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 }
 
-const productManager = new ProductManager()
+const productService = new ProductService({ DAO: DAO_PRODUCTS })
 
-export { productManager }
+export { productService, ProductService }
