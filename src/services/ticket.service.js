@@ -4,9 +4,11 @@ import { productService } from './product.service.js'
 
 // Models
 import { Ticket } from '../models/tickets.model.js'
+import { CustomError } from '../models/error.model.js'
 
 // Utils
 import { STATUS_CODE, TICKET_MANAGER_ERRORS } from '../utils/errors.messages.js'
+import { winstonLogger as logger } from '../utils/logger.js'
 
 // DAO
 import { DAO_TICKET } from '../dao/tickets.database.js'
@@ -55,8 +57,8 @@ class TicketService {
         status: STATUS_CODE.SUCCESS.CREATED
       }
     } catch (error) {
-      console.log(error)
-      throw new Error(TICKET_MANAGER_ERRORS.CREATE_TICKET_ERROR.ERROR_CODE)
+      logger.error(error)
+      throw new CustomError(TICKET_MANAGER_ERRORS.CREATE_TICKET_ERROR)
     }
   }
 
@@ -65,8 +67,8 @@ class TicketService {
       const ticket = await this.#dao.getOne({ id: ticketID })
       return { ticket, status: STATUS_CODE.SUCCESS.OK }
     } catch (error) {
-      console.log(error)
-      throw new Error(TICKET_MANAGER_ERRORS.TICKET_NOT_FOUND.ERROR_CODE)
+      logger.error(error)
+      throw new CustomError(TICKET_MANAGER_ERRORS.TICKET_NOT_FOUND)
     }
   }
 
@@ -75,8 +77,8 @@ class TicketService {
       const deletedTicket = await this.#dao.deleteOne({ id: ticketID })
       return { deletedTicket, status: STATUS_CODE.SUCCESS.NO_CONTENT }
     } catch (error) {
-      console.log(error)
-      throw new Error(TICKET_MANAGER_ERRORS.TICKET_NOT_FOUND.ERROR_CODE)
+      logger.error(error)
+      throw new CustomError(TICKET_MANAGER_ERRORS.TICKET_NOT_FOUND)
     }
   }
 }

@@ -3,7 +3,7 @@ import { CustomError } from '../models/error.model.js'
 import { SERVER_ERROR } from '../utils/errors.messages.js'
 
 export function handleError (error, req, res, next) {
-  console.log('\n=========\n[errorHandler.js] Error log\n=========\n')
+  req.logger.info('\n=========\n[errorHandler.js] Error log\n=========\n')
 
   if (error instanceof CustomError) {
     const errorData = error.DTO()
@@ -20,6 +20,6 @@ export function handleError (error, req, res, next) {
 
   const newErrorDTO = newError.DTO()
 
-  console.log(newErrorDTO)
+  req.logger.error(newErrorDTO)
   return res.status(newErrorDTO.status).json({ type: newErrorDTO.type, cause: newErrorDTO.cause })
 }
