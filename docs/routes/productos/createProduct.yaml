@@ -1,5 +1,16 @@
 paths:
-  /productos:
+  /api/products/:
+    get:
+      summary: Get all products
+      tags:
+        - Productos
+      responses:
+        "200":
+          description: All products.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
     post:
       summary: Creates a new product
       tags:

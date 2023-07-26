@@ -12,5 +12,5 @@ async function updateProduct (event) {
       body: JSON.stringify(data),
       headers: { 'Content-type': 'application/json; charset=UTF-8' }
     }
-  )
+  ).then(console.log('completado'))
 }

@@ -48,11 +48,6 @@ const PRODUCT_MANAGER_ERRORS = {
     CAUSE: '[ERROR]: Product not found',
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
     TYPE: 'Product not found'
-  },
-  CREATE_PRODUCT: {
-    CAUSE: '[ERROR]: Product not created',
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    TYPE: 'Server error'
   }
 }
 

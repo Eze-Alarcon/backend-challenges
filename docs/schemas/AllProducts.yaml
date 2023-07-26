@@ -1,0 +1,78 @@
+# AllProducts
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - payload
+        - status
+        - totalPages
+        - prevPage
+        - nextPage
+        - page
+        - hasPrevPage
+        - hasNextPage
+        - prevLink
+        - nextLink
+      properties:
+        payload:
+          type: array
+          description: Collection of products.
+        status:
+          type: number
+          description: HTTP status code.
+        totalPages:
+          type: number
+          description: Number of pages.
+        prevPage:
+          type: string
+          description: .
+        nextPage:
+          type: string
+          description: .
+        page:
+          type: number
+          description: .
+        hasPrevPage:
+          type: string
+          description: .
+        hasNextPage:
+          type: string
+          description: .
+        prevLink:
+          type: string
+          description: .
+        nextLink:
+          type: string
+          description: .
+        
+      example:
+         id: 4ughd7-3658fn-sk85d-h58sk
+         title: desktop computer
+         price: 123.78
+         thumbnail: http://photo.url.png
+
+
+# {
+#   "payload": [
+#     {
+#       "id": 9,
+#       "code": "code-bd65ad34-4fb4-4dfe-8ce5-4d875f9773e7",
+#       "title": "producto 19",
+#       "description": "nsakdnskfndhks",
+#       "price": 10,
+#       "status": true,
+#       "stock": 16,
+#       "thumbnail": []
+#     }
+#   ],
+#   "status": 200,
+#   "totalPages": 1,
+#   "prevPage": null,
+#   "nextPage": null,
+#   "page": 1,
+#   "hasPrevPage": false,
+#   "hasNextPage": false,
+#   "prevLink": null,
+#   "nextLink": null
+# }

@@ -69,7 +69,7 @@ class ProductService {
         productAdded: newProduct.DTO()
       }
     } catch (error) {
-      throw new CustomError(PRODUCT_MANAGER_ERRORS.CREATE_PRODUCT)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_EXIST)
     }
   }
 
