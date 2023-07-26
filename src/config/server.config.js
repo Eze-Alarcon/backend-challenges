@@ -23,7 +23,8 @@ const API_ROUTES = {
   SESSION_ROUTE: '/sessions',
   USER_ROUTE: '/users',
   CARTS_ROUTE: '/carts',
-  CHAT_ROUTE: '/chat'
+  CHAT_ROUTE: '/chat',
+  DOCS_ROUTE: '/docs'
 }
 
 const WEB_ROUTES = {
