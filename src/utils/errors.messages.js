@@ -73,8 +73,8 @@ const CART_MANAGER_ERRORS = {
 const TICKET_MANAGER_ERRORS = {
   CREATE_TICKET_ERROR: {
     CAUSE: '[ERROR]: Ticket not created',
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    TYPE: 'Server Error'
+    STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
+    TYPE: 'Ticket not created'
   },
   TICKET_NOT_FOUND: {
     CAUSE: '[ERROR]: Ticket not found',

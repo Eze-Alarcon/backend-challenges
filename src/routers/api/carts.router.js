@@ -27,9 +27,9 @@ cartsRouter.use(express.json())
 
 cartsRouter
   .route('/:cid/ticket')
-  .get(getTicket)
   .post(createTicket)
-  .delete(deleteTicket)
+// .get(getTicket) // not implemented
+// .delete(deleteTicket) // not implemented
 
 cartsRouter
   .route('/:cid/product/:pid')

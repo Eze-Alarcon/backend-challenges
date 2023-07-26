@@ -1,0 +1,33 @@
+# Ticket
+components:
+  schemas:
+    Ticket:
+      type: object
+      required:
+        - id
+        - code
+        - amount
+        - purchaser
+        - purchase_datetime
+      properties:
+        id:
+          type: number
+          description: The auto-generated id of the ticket.
+        code:
+          type: string
+          description: The auto-generated code of the ticket..
+        amount:
+          type: number 
+          description: Total of the buy..
+        purchaser:
+          type: string
+          description: User email.
+        purchase_datetime:
+          type: string
+          description: Date of the generated ticket.
+      example:
+        id: 1
+        code: "e78a286b-290b-4532-970c-0bc52fa4830f"
+        amount: 10
+        purchaser: "test@test.com" 
+        purchase_datetime: "Monday, July 24, 2023 at 3:05:24 PM GMT+2"
