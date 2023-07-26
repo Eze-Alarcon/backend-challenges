@@ -1,4 +1,4 @@
-# Product
+# Cart
 components:
   schemas:
     Carts:
@@ -9,18 +9,10 @@ components:
       properties:
         id:
           type: number
-          description: The auto-generated id of the product.
+          description: The auto-generated id of the cart.
         products:
           type: array
           description: Array of products in the cart.
       example:
         id: 1
         products: []
-
-
-
-
-# {
-#   "id": 1,
-#   "products": []
-# }

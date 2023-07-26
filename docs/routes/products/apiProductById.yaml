@@ -1,11 +1,11 @@
 paths:
-  /productos/{id}:
+  api/products/{pid}:
     get:
       summary: Gets the product with given id
       tags:
         - Productos
       parameters:
-      - name: id
+      - name: pid
         in: path
         description: path parameter takes the product id
         required: true
@@ -24,7 +24,7 @@ paths:
       tags:
         - Productos
       parameters:
-      - name: id
+      - name: pid
         in: path
         description: path parameter takes the product id
         required: true

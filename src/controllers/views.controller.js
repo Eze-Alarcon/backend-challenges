@@ -47,7 +47,7 @@ async function productsPaginate (req, res, next) {
       role: userInfo.role
     })
   } catch (error) {
-    return next(error.message)
+    return next(error)
   }
 }
 
@@ -65,7 +65,7 @@ async function cartItems (req, res, next) {
       urlToProducts: `${SERVER_CONFIG.BASE_URL}${ROUTES.PRODUCTS_ROUTE}`
     })
   } catch (error) {
-    return next(error.message)
+    return next(error)
   }
 }
 

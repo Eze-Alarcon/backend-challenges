@@ -13,7 +13,7 @@ const updateCartProducts = async (req, res, next) => {
       .status(status_code)
       .json({ details: operationDetails })
   } catch (error) {
-    next(error.message)
+    next(error)
   }
 }
 
@@ -25,7 +25,7 @@ const getCart = async (req, res, next) => {
       .status(status_code)
       .json({ cart, totalProducts })
   } catch (error) {
-    next(error.message)
+    next(error)
   }
 }
 
@@ -37,7 +37,7 @@ const clearCartProducts = async (req, res, next) => {
       .status(status_code)
       .json(cartUpdated)
   } catch (error) {
-    next(error.message)
+    next(error)
   }
 }
 
@@ -48,7 +48,7 @@ const createNewCart = async (req, res, next) => {
       .status(status_code)
       .json(cart)
   } catch (error) {
-    next(error.message)
+    next(error)
   }
 }
 
@@ -59,7 +59,7 @@ const getAllCarts = async (req, res, next) => {
       .status(status_code)
       .json(carts)
   } catch (error) {
-    next(error.message)
+    next(error)
   }
 }
 
@@ -74,7 +74,7 @@ const deleteCartProduct = async (req, res, next) => {
       .status(status_code)
       .json(details)
   } catch (error) {
-    next(error.message)
+    next(error)
   }
 }
 
