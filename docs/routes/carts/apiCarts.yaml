@@ -1,0 +1,32 @@
+paths:
+  /api/carts/:
+    get:
+      summary: Get all carts
+      tags:
+        - Carrito
+      responses:
+        "200":
+          description: All carts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Carts'
+        "409":
+          description: Error - Cart not created
+    post:
+      summary: Creates a new cart
+      tags:
+        - Carrito
+      responses:
+        "201":
+          description: The created cart.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
+        "400":
+          description: Error - User try to send wrong data types (more info in error response)
+        "409":
+          description: Error - Cart not created

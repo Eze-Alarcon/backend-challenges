@@ -55,13 +55,13 @@ const PRODUCT_MANAGER_ERRORS = {
 const CART_MANAGER_ERRORS = {
   CREATE_CARTS: {
     CAUSE: '[ERROR]: Cart not created',
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    TYPE: 'Server Error'
+    STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
+    TYPE: 'Cart not created'
   },
   ADD_PRODUCT_TO_CART: {
     CAUSE: '[ERROR]: Product not added properly',
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    TYPE: 'Server Error'
+    STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
+    TYPE: 'Product not added'
   },
   CART_NOT_FOUND: {
     CAUSE: '[ERROR]: Cart not found',

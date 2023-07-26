@@ -55,7 +55,7 @@ class CartService {
         carts
       }
     } catch (err) {
-      throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(CART_MANAGER_ERRORS.CART_NOT_FOUND)
     }
   }
 
@@ -72,7 +72,7 @@ class CartService {
         cart: newCart.getCartData()
       }
     } catch (err) {
-      throw new Error(CART_MANAGER_ERRORS.CREATE_CARTS.ERROR_CODE)
+      throw new CustomError(CART_MANAGER_ERRORS.CREATE_CARTS)
     }
   }
 
@@ -86,7 +86,7 @@ class CartService {
         cart
       }
     } catch (err) {
-      throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(CART_MANAGER_ERRORS.CART_NOT_FOUND)
     }
   }
 
@@ -123,7 +123,7 @@ class CartService {
         operationDetails: response
       }
     } catch (err) {
-      throw new Error(CART_MANAGER_ERRORS.ADD_PRODUCT_TO_CART.ERROR_CODE)
+      throw new CustomError(CART_MANAGER_ERRORS.ADD_PRODUCT_TO_CART)
     }
   }
 
@@ -136,7 +136,7 @@ class CartService {
         cartUpdated
       }
     } catch (err) {
-      throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(CART_MANAGER_ERRORS.CART_NOT_FOUND)
     }
   }
 
@@ -152,7 +152,7 @@ class CartService {
         details
       }
     } catch (err) {
-      throw new Error(CART_MANAGER_ERRORS.CART_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(CART_MANAGER_ERRORS.CART_NOT_FOUND)
     }
   }
 }
