@@ -3,7 +3,8 @@ const STATUS_CODE = {
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     FORBIDDEN: 403,
-    NOT_FOUND: 404
+    NOT_FOUND: 404,
+    CONFLICT: 409
   },
   SUCCESS: {
     OK: 200,
@@ -41,7 +42,7 @@ const PRODUCT_MANAGER_ERRORS = {
   },
   PRODUCT_EXIST: {
     CAUSE: '[ERROR]: Product already exists in the database',
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
+    STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
     TYPE: 'Product not created'
   },
   PRODUCT_NOT_FOUND: {

@@ -5,24 +5,44 @@ components:
       type: object
       required:
         - id
+        - code
         - title
+        - description
         - price
+        - status
+        - stock
         - thumbnail
       properties:
         id:
-          type: string
+          type: number
           description: The auto-generated id of the product.
+        code:
+          type: string
+          description: The auto-generated code of the product.
         title:
           type: string
           description: The title of the product.
+        description:
+          type: string
+          description: The description of the product.
         price:
           type: number
           description: The price of the product.
+        status:
+          type: boolean
+          description: atribute requested in challenge, it is not used right now for any purpose.
+        stock:
+          type: number
+          description: The stock of the product.
         thumbnail:
-          type: string
-          description: The URL of the product thumbnail.
+          type: array
+          description: Array with he URL of the product thumbnail.
       example:
-         id: 4ughd7-3658fn-sk85d-h58sk
-         title: desktop computer
-         price: 123.78
-         thumbnail: http://photo.url.png
+        id: 1
+        code: example code
+        title: example title
+        description: example description
+        price: 10
+        status: true
+        stock: 15
+        thumbnail: []

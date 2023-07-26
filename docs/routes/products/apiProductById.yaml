@@ -1,0 +1,48 @@
+paths:
+  /productos/{id}:
+    get:
+      summary: Gets the product with given id
+      tags:
+        - Productos
+      parameters:
+      - name: id
+        in: path
+        description: path parameter takes the product id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: The product with given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Error - Product not found Error
+    put:
+      summary: update a given product (authorization may be required)
+      tags:
+        - Productos
+      parameters:
+      - name: id
+        in: path
+        description: path parameter takes the product id
+        required: true
+        type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/UpdateProduct'
+      responses:
+        "200":
+          description: Update the product with given id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: Error - User try to send wrong data types (more info in error response)
+        "404":
+          description: Error - Product not found

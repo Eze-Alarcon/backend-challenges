@@ -10,9 +10,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/AllProducts'
     post:
-      summary: Creates a new product
+      summary: Creates a new product (authorization may be required)
       tags:
         - Productos
       requestBody:
@@ -28,3 +28,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        "400":
+          description: Error - User try to send wrong data types (more info in error response)
+        "409":
+          description: Error - Product already exists in the database

@@ -6,7 +6,7 @@ components:
       required:
         - title
         - price
-        - thumbnail
+        - description
       properties:
         title:
           type: string
@@ -14,10 +14,10 @@ components:
         price:
           type: number
           description: The price of the product.
-        thumbnail:
+        description:
           type: string
-          description: The URL of the product thumbnail.
+          description: The description of the product.
       example:
          title: desktop computer
          price: 123.78
-         thumbnail: http://photo.url.png
+         description: lorem ipsum

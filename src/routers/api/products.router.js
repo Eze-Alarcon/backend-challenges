@@ -12,13 +12,9 @@ import {
   productsMock
 } from '../../controllers/product.controller.js'
 
-// Middleware
-import { hasSession } from '../../middleware/autentication.js'
-
 export const productsRouter = Router()
 
 productsRouter.use(express.json())
-productsRouter.use(hasSession)
 
 productsRouter
   .route('/mockingproducts')
