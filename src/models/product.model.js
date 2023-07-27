@@ -1,5 +1,5 @@
-// Libraries
-import crypto from 'crypto'
+// Utils
+import { generateID } from '../utils/hash.js'
 
 export class Product {
   #id
@@ -16,7 +16,6 @@ export class Product {
     title,
     description,
     price,
-    code,
     status = true,
     stock = 0,
     thumbnail = []
@@ -28,7 +27,7 @@ export class Product {
     this.#status = status
     this.#thumbnail = thumbnail
     this.#stock = stock
-    this.#code = code ?? `code-${crypto.randomUUID()}`
+    this.#code = generateID()
   }
 
   DTO () {

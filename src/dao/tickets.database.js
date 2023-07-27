@@ -8,16 +8,17 @@ class DB_TICKET_MANAGER {
     this.#model = model
   }
 
-  #parseResponse (item) {
+  #toPOJO (item) {
     return JSON.parse(JSON.stringify(item))
   }
 
   async getLastID () {
-    const data = await this.#model
+    const response = await this.#model
       .find()
       .sort({ id: 'desc' })
       .limit(1)
-      .lean()
+
+    const data = this.#toPOJO(response)
 
     // Si no tiene la propiedad es porque no existe ningun carrito
     if (data.length === 0 || !data[0].hasOwnProperty('id')) { return 1 }
@@ -26,18 +27,20 @@ class DB_TICKET_MANAGER {
   }
 
   async getOne (query) {
-    const response = await this.#model.find(query).lean()
-    return response
+    const response = await this.#model.find(query)
+    const data = this.#toPOJO(response)
+    return data
   }
 
   async deleteOne (query) {
     const response = await this.#model.deleteOne(query)
-    return response
+    const data = this.#toPOJO(response)
+    return data
   }
 
   async createOne (item) {
     const response = await this.#model.create(item)
-    const data = this.#parseResponse(response)
+    const data = this.#toPOJO(response)
     return data
   }
 }

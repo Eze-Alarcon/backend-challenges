@@ -1,9 +1,12 @@
+// Utils
+import { generateID } from '../utils/hash.js'
+
 class Cart {
   #id
   #products
 
-  constructor ({ id }) {
-    this.#id = id
+  constructor () {
+    this.#id = generateID()
     this.#products = []
   }
 

@@ -5,8 +5,8 @@
   "description": "desafios de coderhouse",
   "main": "./src/app.js",
   "scripts": {
-    "test": "NODE_ENV=production node .",
-    "dev": "nodemon -e 'js,handlebars, yaml' .",
+    "start": "node .",
+    "dev": "NODE_ENV=development nodemon -e 'js,handlebars,yaml' .",
     "lint": "standard . --fix",
     "git-add": "sh -c 'git add .'",
     "commit": "npm run git-add && cz"

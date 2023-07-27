@@ -20,14 +20,14 @@ class CartService {
     this.#dao = DAO
   }
 
-  #parseData (value) {
+  #toPOJO (value) {
     return JSON.parse(JSON.stringify(value))
   }
 
   #findIndex (arr, searchedValue) {
     const productIndex = arr.products.findIndex((el) => {
       const parseElement = el.product._id
-      const productID = this.#parseData(parseElement)
+      const productID = this.#toPOJO(parseElement)
       return productID === searchedValue
     })
     return {
@@ -61,9 +61,7 @@ class CartService {
 
   async createCart () {
     try {
-      const newCartID = await this.#dao.getLastID()
-
-      const newCart = new Cart({ id: newCartID })
+      const newCart = new Cart()
 
       await this.#dao.createCart(newCart.getCartData())
 
@@ -99,7 +97,7 @@ class CartService {
       const { item: product } = await productService.getProductById({ id: productID })
       let response
 
-      const parsedID = this.#parseData(product._id)
+      const parsedID = this.#toPOJO(product._id)
       const { exist, index } = this.#findIndex(cart, parsedID)
 
       if (!exist) {
@@ -143,7 +141,7 @@ class CartService {
   async deleteCartProduct ({ cartID, productID }) {
     try {
       const { item: product } = await productService.getProductById({ id: productID })
-      const parsedID = this.#parseData(product._id)
+      const parsedID = this.#toPOJO(product._id)
 
       const details = await this.#dao.deleteCartProduct({ id: cartID, productID: parsedID })
 

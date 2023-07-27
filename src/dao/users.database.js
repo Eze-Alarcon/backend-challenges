@@ -9,9 +9,13 @@ class DB_USER_MANAGER {
     this.#model = model
   }
 
-  async findUser (query) {
-    const user = await this.#model.find(query, { _id: 0 }).lean()
+  #toPOJO (item) {
+    return JSON.parse(JSON.stringify(item))
+  }
 
+  async findUser (query) {
+    const response = await this.#model.find(query, { _id: 0 })
+    const user = this.#toPOJO(response)
     return [...user]
   }
 
@@ -28,9 +32,13 @@ class DB_USER_GITHUB_MANAGER {
     this.#model = model
   }
 
-  async findUser (query) {
-    const user = await this.#model.find(query, { _id: 0 }).lean()
+  #toPOJO (item) {
+    return JSON.parse(JSON.stringify(item))
+  }
 
+  async findUser (query) {
+    const response = await this.#model.find(query, { _id: 0 })
+    const user = this.#toPOJO(response)
     return [...user]
   }
 

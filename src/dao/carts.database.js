@@ -11,26 +11,14 @@ class DB_CART_MANAGER {
     this.#model = model
   }
 
-  #parseResponse (item) {
+  #toPOJO (item) {
     return JSON.parse(JSON.stringify(item))
   }
 
-  async getLastID () {
-    const data = await this.#model
-      .find()
-      .sort({ id: 'desc' })
-      .limit(1)
-      .lean()
-
-    // Si no tiene la propiedad es porque no existe ningun carrito
-    if (data.length === 0 || !data[0].hasOwnProperty('id')) { return 1 }
-
-    return Number(data[0].id) + 1
-  }
-
   async getCarts () {
-    const response = await this.#model.find({}, { _id: 0, products: { _id: 0 } }).lean()
-    return response
+    const response = await this.#model.find({}, { _id: 0, products: { _id: 0 } })
+    const carts = this.#toPOJO(response)
+    return carts
   }
 
   async findCartByID ({ id }) {
@@ -43,18 +31,23 @@ class DB_CART_MANAGER {
           path: 'products.product',
           select: '-stock'
         })
-      .lean()
 
-    if (response.length === 0) throw new Error()
+    const carts = this.#toPOJO(response)
+
+    if (carts.length === 0) throw new Error()
 
     // me trae un array, de esta forma obtengo el valor que busco
-    return response[0]
+    return carts[0]
   }
 
   async createCart (item) {
-    const response = await this.#model.create(item)
-    const data = this.#parseResponse(response)
-    return data
+    try {
+      const response = await this.#model.create(item)
+      const data = this.#toPOJO(response)
+      return data
+    } catch (error) {
+      throw new Error()
+    }
   }
 
   async addProductToCart ({ id, productID }) {

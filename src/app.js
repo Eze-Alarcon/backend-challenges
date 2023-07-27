@@ -27,11 +27,9 @@ import { winstonLogger as log } from './utils/logger.js'
 // --> Server
 export const app = express()
 
-// --> Middlewares
 app.use(express.json())
 app.use(logger)
 
-// --> DB
 await mongoose.connect(URL_DB)
 
 // --> USER SESSIONS
@@ -44,7 +42,7 @@ app.set('views', FOLDERS.VIEWS_FOLDER)
 app.set('view engine', 'handlebars')
 app.use(ROUTES.STATIC_ROUTE, express.static(FOLDERS.STATIC_FOLDER))
 
-// --> routes
+// --> ROUTES
 app.use(ROUTES.API_ROUTE, apiRouter)
 app.use(webRouter)
 

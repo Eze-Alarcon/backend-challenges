@@ -5,7 +5,7 @@ dotenv.config({
   path: 'src/config/.env'
 })
 
-const URL_DB = process.env.URL_DB
+const URL_DB = process.env.NODE_ENV === 'production' ? process.env.URL_DB : process.env.URL_DB_TEST
 
 const SALT = process.env.SALT
 

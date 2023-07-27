@@ -13,7 +13,7 @@ class DB_PRODUCT_MANAGER {
     this.#model = model
   }
 
-  #parseResponse (item) {
+  #toPOJO (item) {
     return JSON.parse(JSON.stringify(item))
   }
 
@@ -128,7 +128,7 @@ class DB_PRODUCT_MANAGER {
   async createProduct (item) {
     try {
       const response = await this.#model.create(item)
-      const data = this.#parseResponse(response)
+      const data = this.#toPOJO(response)
       return data
     } catch (error) {
       throw new Error()

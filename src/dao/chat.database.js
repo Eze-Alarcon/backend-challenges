@@ -7,18 +7,19 @@ class DB_CHAT_MANAGER {
     this.#model = model
   }
 
-  #parseResponse (item) {
+  #toPOJO (item) {
     return JSON.parse(JSON.stringify(item))
   }
 
   async getChats () {
-    const response = await this.#model.find({}, { _id: 0 }).lean()
-    return response
+    const response = await this.#model.find({}, { _id: 0 })
+    const data = this.#toPOJO(response)
+    return data
   }
 
   async createChat (item) {
     const response = await this.#model.create(item)
-    const data = this.#parseResponse(response)
+    const data = this.#toPOJO(response)
     return data
   }
 }
