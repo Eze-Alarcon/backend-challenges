@@ -1,0 +1,58 @@
+paths:
+  /api/carts/{cid}/product/{pid}:
+    put:
+      summary: Update specific product in a cart
+      tags:
+        - Carrito
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/Quantity'
+      parameters:
+      - name: cid
+        in: path
+        description: path parameter takes the cart id
+        required: true
+        type: string
+      - name: pid
+        in: path
+        description: path parameter takes the product id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Update products with the given pid in a cart with the given cid
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/CartProductUpdate'
+        "400":
+          description: Error - Quantity must be a number
+        "404":
+          description: Error - Cart not found
+    delete:
+      summary: Delete specific product in a cart
+      tags:
+        - Carrito
+      parameters:
+      - name: cid
+        in: path
+        description: path parameter takes the cart id
+        required: true
+        type: string
+      - name: pid
+        in: path
+        description: path parameter takes the product id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Delete products with the given pid in a cart with the given cid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carts'
+        "404":
+          description: Error - Cart not found

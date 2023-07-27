@@ -3,7 +3,8 @@ const STATUS_CODE = {
     BAD_REQUEST: 400,
     UNAUTHORIZED: 401,
     FORBIDDEN: 403,
-    NOT_FOUND: 404
+    NOT_FOUND: 404,
+    CONFLICT: 409
   },
   SUCCESS: {
     OK: 200,
@@ -41,31 +42,26 @@ const PRODUCT_MANAGER_ERRORS = {
   },
   PRODUCT_EXIST: {
     CAUSE: '[ERROR]: Product already exists in the database',
-    STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
+    STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
     TYPE: 'Product not created'
   },
   PRODUCT_NOT_FOUND: {
     CAUSE: '[ERROR]: Product not found',
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
     TYPE: 'Product not found'
-  },
-  CREATE_PRODUCT: {
-    CAUSE: '[ERROR]: Product not created',
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    TYPE: 'Server error'
   }
 }
 
 const CART_MANAGER_ERRORS = {
   CREATE_CARTS: {
     CAUSE: '[ERROR]: Cart not created',
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    TYPE: 'Server Error'
+    STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
+    TYPE: 'Cart not created'
   },
   ADD_PRODUCT_TO_CART: {
     CAUSE: '[ERROR]: Product not added properly',
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    TYPE: 'Server Error'
+    STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
+    TYPE: 'Product not added'
   },
   CART_NOT_FOUND: {
     CAUSE: '[ERROR]: Cart not found',
@@ -77,8 +73,8 @@ const CART_MANAGER_ERRORS = {
 const TICKET_MANAGER_ERRORS = {
   CREATE_TICKET_ERROR: {
     CAUSE: '[ERROR]: Ticket not created',
-    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
-    TYPE: 'Server Error'
+    STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
+    TYPE: 'Ticket not created'
   },
   TICKET_NOT_FOUND: {
     CAUSE: '[ERROR]: Ticket not found',

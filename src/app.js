@@ -12,6 +12,7 @@ import { COOKIE_SECRET, URL_DB } from './config/config.js'
 // Middlewares
 import { handleError } from './middleware/errorHandler.js'
 import { passportInitialize } from './middleware/passport.config.js'
+import { logger } from './middleware/logger.js'
 
 // Routers
 import { apiRouter } from './routers/api.routes.js'
@@ -20,9 +21,15 @@ import { webRouter } from './routers/web.router.js'
 // Socket Controller
 import { newMessage, getAllMessages } from './controllers/chat.controller.js'
 
+// Utils
+import { winstonLogger as log } from './utils/logger.js'
+
 // --> Server
 export const app = express()
+
+// --> Middlewares
 app.use(express.json())
+app.use(logger)
 
 // --> DB
 await mongoose.connect(URL_DB)
@@ -44,15 +51,16 @@ app.use(webRouter)
 // --> ERROR HANDLING
 app.use(handleError)
 
-const appServer = app.listen(SERVER_CONFIG.PORT, () => { console.log(`app on ${SERVER_CONFIG.BASE_URL}`) })
+const appServer = app.listen(SERVER_CONFIG.PORT, () => { log.info(`app on ${SERVER_CONFIG.BASE_URL}`) })
 
+// --> Socket io
 export const io = new Server(appServer)
 
 io.on('connection', async client => {
-  console.log(`Nuevo cliente conectado: ${client.id}`)
+  log.info(`Nuevo cliente conectado: ${client.id}`)
   await getAllMessages()
   client.on('message', async (message) => {
-    console.log(message)
+    log.debug(message)
     await newMessage({ message: message.text, user: message.user })
   })
 })

@@ -1,0 +1,38 @@
+# Product
+components:
+  requestBodies:
+    UpdateProduct:
+      type: object
+      required:
+        - title
+        - description
+        - price
+        - status
+        - stock
+        - thumbnail
+      properties:
+        title:
+          type: string
+          description: (optional) The title of the product.
+        description:
+          type: string
+          description: (optional) The description of the product.
+        price:
+          type: number
+          description: (optional) The price of the product.
+        status:
+          type: boolean
+          description: (optional) atribute requested in challenge, it is not used right now for any purpose.
+        stock:
+          type: number
+          description: (optional) The stock of the product.
+        thumbnail:
+          type: array
+          description: (optional) Array with he URL of the product thumbnail.
+      example:
+        title: update title
+        description: update description
+        price: 10
+        status: true
+        stock: 15
+        thumbnail: []

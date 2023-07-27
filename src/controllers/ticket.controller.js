@@ -7,9 +7,10 @@ import { COOKIE_NAME } from '../config/config.js'
 // middleware
 import { verifyToken } from '../middleware/jwt.config.js'
 
+// not implemented
 async function getTicket (req, res, next) {
   try {
-    await ticketService.getTicket()
+    await ticketService.getTicket({ ticketID: req.body })
   } catch (error) {
     next(error)
   }
@@ -28,6 +29,7 @@ async function createTicket (req, res, next) {
   }
 }
 
+// not implemented
 async function deleteTicket (req, res, next) {
   try {
     await ticketService.deleteTicket()

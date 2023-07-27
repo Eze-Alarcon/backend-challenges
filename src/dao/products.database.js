@@ -1,5 +1,5 @@
 // Configs
-import { SERVER_CONFIG } from '../config/server.config.js'
+import { ROUTES, SERVER_CONFIG } from '../config/server.config.js'
 
 // Error messages
 import { STATUS_CODE } from '../utils/errors.messages.js'
@@ -65,7 +65,7 @@ class DB_PRODUCT_MANAGER {
         ...Object.entries(newOptions)
       ]).toString()
 
-      links.prevLink = `${SERVER_CONFIG.BASE_URL}/?${newParams}`
+      links.prevLink = `${SERVER_CONFIG.BASE_URL}${ROUTES.PRODUCTS_ROUTE}?${newParams}`
     }
 
     if (data.hasNextPage) {
@@ -77,7 +77,7 @@ class DB_PRODUCT_MANAGER {
         ...Object.entries(newOptions)
       ]).toString()
 
-      links.nextLink = `${SERVER_CONFIG.BASE_URL}/?${newParams}`
+      links.nextLink = `${SERVER_CONFIG.BASE_URL}${ROUTES.PRODUCTS_ROUTE}?${newParams}`
     }
     return links
   }
@@ -113,8 +113,8 @@ class DB_PRODUCT_MANAGER {
       lean: true
     })
     let id = 0
-    data.length > 0
-      ? id = ++data[0].id
+    data.docs?.length !== 0
+      ? id = ++data.docs.at(0).id
       : id = 1
 
     return id
@@ -126,9 +126,13 @@ class DB_PRODUCT_MANAGER {
   }
 
   async createProduct (item) {
-    const response = await this.#model.create(item)
-    const data = this.#parseResponse(response)
-    return data
+    try {
+      const response = await this.#model.create(item)
+      const data = this.#parseResponse(response)
+      return data
+    } catch (error) {
+      throw new Error()
+    }
   }
 
   async updateProduct ({ id }, updates) {

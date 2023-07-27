@@ -1,0 +1,66 @@
+# AllProducts
+components:
+  schemas:
+    AllProducts:
+      type: object
+      required:
+        - payload
+        - status
+        - totalPages
+        - prevPage
+        - nextPage
+        - page
+        - hasPrevPage
+        - hasNextPage
+        - prevLink
+        - nextLink
+      properties:
+        payload:
+          type: collection
+          description: Collection of products.
+        status:
+          type: number
+          description: HTTP status code.
+        totalPages:
+          type: number
+          description: Number of pages.
+        prevPage:
+          type: null | number
+          description: Number of the previuos page or null if not.
+        nextPage:
+          type: null | number
+          description: Number of the next page or null if not.
+        page:
+          type: number
+          description: Current number page.
+        hasPrevPage:
+          type: boolean
+          description: Boolean if the page has a prev page.
+        hasNextPage:
+          type: boolean
+          description: Boolean if the page has a next page.
+        prevLink:
+          type: null | string
+          description: Link to previous page or null if not.
+        nextLink:
+          type: null | string
+          description: Link to next page or null if not.
+      example:
+        payload:
+          - id: 1
+          - code: example code
+          - title: example title
+          - description: example description
+          - price: 10
+          - status: true
+          - stock: 15
+          - thumbnail: []
+        status: 200
+        totalPages: 1
+        prevPage: null
+        nextPage: null
+        page: 1
+        hasPrevPage: false
+        hasNextPage: false
+        prevLink: null
+        nextLink: null

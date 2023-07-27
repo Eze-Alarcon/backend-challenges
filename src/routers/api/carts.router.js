@@ -23,13 +23,13 @@ import { hasSession } from '../../middleware/autentication.js'
 export const cartsRouter = Router()
 
 cartsRouter.use(express.json())
-cartsRouter.use(hasSession)
+// cartsRouter.use(hasSession)
 
 cartsRouter
   .route('/:cid/ticket')
-  .get(getTicket)
   .post(createTicket)
-  .delete(deleteTicket)
+// .get(getTicket) // not implemented
+// .delete(deleteTicket) // not implemented
 
 cartsRouter
   .route('/:cid/product/:pid')
