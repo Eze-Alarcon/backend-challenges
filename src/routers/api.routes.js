@@ -13,13 +13,7 @@ import { cartsRouter } from './api/carts.router.js'
 // Utils
 import { swaggerSpecs } from '../utils/swagger.js'
 
-// Test Logger
-import { checkLogs } from '../controllers/logger.controller.js'
-
 export const apiRouter = Router()
-
-// Mock - Just for challenge
-apiRouter.use('/loggerTest', checkLogs)
 
 apiRouter.use(ROUTES.SESSION_ROUTE, sessionRouter)
 apiRouter.use(ROUTES.PRODUCTS_ROUTE, productsRouter)

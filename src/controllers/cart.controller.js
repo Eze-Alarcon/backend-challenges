@@ -1,5 +1,41 @@
+// Utils
+import { STATUS_CODE } from '../utils/errors.messages.js'
+
 // Services
 import { cartService } from '../services/cart.service.js'
+
+const getAllCarts = async (req, res, next) => {
+  try {
+    const { carts } = await cartService.getMany()
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json(carts)
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getCart = async (req, res, next) => {
+  try {
+    const { cart, total_products } = await cartService.getOne({ id: req.params.cid })
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json({ cart, total: total_products })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const createNewCart = async (req, res, next) => {
+  try {
+    const { cart } = await cartService.createOne()
+    res
+      .status(STATUS_CODE.SUCCESS.CREATED)
+      .json(cart)
+  } catch (error) {
+    next(error)
+  }
+}
 
 const updateCartProducts = async (req, res, next) => {
   try {
@@ -8,22 +44,10 @@ const updateCartProducts = async (req, res, next) => {
       productID: req.params.pid,
       quantityValue: req.body?.quantity ?? null
     }
-    const { operationDetails, status_code } = await cartService.addProductToCart(query)
+    const { details } = await cartService.createCartProduct(query)
     res
-      .status(status_code)
-      .json({ details: operationDetails })
-  } catch (error) {
-    next(error)
-  }
-}
-
-const getCart = async (req, res, next) => {
-  try {
-    const query = req.params.cid
-    const { cart, status_code, totalProducts } = await cartService.getCartById(query)
-    res
-      .status(status_code)
-      .json({ cart, totalProducts })
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json({ details })
   } catch (error) {
     next(error)
   }
@@ -31,33 +55,10 @@ const getCart = async (req, res, next) => {
 
 const clearCartProducts = async (req, res, next) => {
   try {
-    const query = req.params.cid
-    const { cartUpdated, status_code } = await cartService.deleteAllCartProducts(query)
+    const { cart_updated } = await cartService.deleteManyCartProducts({ id: req.params.cid })
     res
-      .status(status_code)
-      .json(cartUpdated)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const createNewCart = async (req, res, next) => {
-  try {
-    const { cart, status_code } = await cartService.createCart()
-    res
-      .status(status_code)
-      .json(cart)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const getAllCarts = async (req, res, next) => {
-  try {
-    const { carts, status_code } = await cartService.getCarts()
-    res
-      .status(status_code)
-      .json(carts)
+      .status(STATUS_CODE.SUCCESS.NO_CONTENT)
+      .json(cart_updated)
   } catch (error) {
     next(error)
   }
@@ -69,10 +70,10 @@ const deleteCartProduct = async (req, res, next) => {
       cartID: req.params.cid,
       productID: req.params.pid
     }
-    const { details, status_code } = await cartService.deleteCartProduct(query)
+    const { product_removed } = await cartService.deleteOneCartProduct(query)
     res
-      .status(status_code)
-      .json(details)
+      .status(STATUS_CODE.SUCCESS.NO_CONTENT)
+      .json(product_removed)
   } catch (error) {
     next(error)
   }

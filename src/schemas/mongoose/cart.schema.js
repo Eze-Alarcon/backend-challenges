@@ -1,18 +1,27 @@
 // Libraries
-import mongoose, { Schema } from 'mongoose'
+import mongoose from 'mongoose'
 
-const cartSchema = new Schema({
-  id: { type: Number, required: true, unique: true },
+const cartSchema = new mongoose.Schema({
+  code: { type: String, required: true, unique: true },
   products: {
     type: [
       {
-        product: { type: Schema.Types.ObjectId, ref: 'products' },
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'products' },
         quantity: { type: Number }
       }
     ],
     default: []
   }
 }, { versionKey: false })
+
+cartSchema.add({ id: mongoose.Types.ObjectId })
+
+cartSchema.pre('save', function (next) {
+  if (!this.id) {
+    this.id = JSON.parse(JSON.stringify(this._id))
+  }
+  next()
+})
 
 const cartModel = mongoose.model('carts', cartSchema)
 

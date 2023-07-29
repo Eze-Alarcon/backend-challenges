@@ -1,60 +1,68 @@
 // Services
 import { productService } from '../services/product.service.js'
 
+// Utils
+import { STATUS_CODE } from '../utils/errors.messages.js'
+
 import { createMockProducts } from '../mocks/product.mock.js'
 
-const getProducts = async (req, res, next) => {
+async function getProduct (req, res, next) {
   try {
-    const id = { id: req.params.pid }
-    const response = await productService.getProductById(id)
-
-    res.status(response.status_code).json({ product: response.item })
+    console.log('product.controller.js req.params.pid:', req.params.pid)
+    const { product } = await productService.getOne({ id: req.params.pid })
+    res.status(STATUS_CODE.SUCCESS.OK).json({ product })
   } catch (error) {
     return next(error)
   }
 }
 
-const updateProduct = async (req, res, next) => {
+async function getProducts (req, res, next) {
   try {
-    const id = { id: req.params.pid }
-    const response = await productService.updateProduct(id, req.body)
-
-    res.status(response.status_code).json(response.itemUpdated)
+    const { products } = await productService.getMany(req.query ?? {})
+    res.status(STATUS_CODE.SUCCESS.OK).json({ products })
   } catch (error) {
     return next(error)
   }
 }
 
-const deleteProduct = async (req, res, next) => {
+async function createProduct (req, res, next) {
   try {
-    const id = { id: req.params.pid }
-    const response = await productService.deleteProduct(id)
-
-    res.status(response.status_code).json({ product_deleted: response.itemDeleted })
+    const fields = {
+      description: req.body.description,
+      thumbnail: req.body.thumbnail ?? [],
+      title: req.body.title,
+      price: parseFloat(req.body.price),
+      stock: parseInt(req.body.stock)
+    }
+    const { product } = await productService.createOne(fields)
+    res.status(STATUS_CODE.SUCCESS.CREATED).json({ product })
   } catch (error) {
     return next(error)
   }
 }
 
-const getAllProducts = async (req, res, next) => {
+async function updateProduct (req, res, next) {
   try {
-    const response = await productService.getProducts(req.query)
-    res.status(response.status_code).json(response.products)
+    const { product_updated } = await productService.updateOne({ id: req.params.pid }, req.body)
+    res.status(STATUS_CODE.SUCCESS.OK).json({ product_updated })
   } catch (error) {
     return next(error)
   }
 }
 
-const createProduct = async (req, res, next) => {
+async function deleteProduct (req, res, next) {
   try {
-    const response = await productService.addProduct(req.body)
-    res.status(response.status_code).json(response.productAdded)
+    const { product_deleted } = await productService.deleteOne({ id: req.params.pid })
+    res.status(STATUS_CODE.SUCCESS.NO_CONTENT).json({ product_deleted })
   } catch (error) {
     return next(error)
   }
 }
 
-const productsMock = async (req, res, next) => {
+// // ! testing
+// // TODO: ELIMNAR ESTO
+
+async function productsMock (req, res, next) {
   try {
     const testResults = await createMockProducts()
     res.status(201).json({ message: 'test completed', products: testResults })
@@ -64,10 +72,10 @@ const productsMock = async (req, res, next) => {
 }
 
 export {
+  getProduct,
   getProducts,
+  createProduct,
   updateProduct,
   deleteProduct,
-  getAllProducts,
-  createProduct,
   productsMock
 }

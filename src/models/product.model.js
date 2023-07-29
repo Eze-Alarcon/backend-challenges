@@ -2,7 +2,6 @@
 import { generateID } from '../utils/hash.js'
 
 export class Product {
-  #id
   #title
   #description
   #price
@@ -12,7 +11,6 @@ export class Product {
   #code
 
   constructor ({
-    id,
     title,
     description,
     price,
@@ -20,19 +18,17 @@ export class Product {
     stock = 0,
     thumbnail = []
   }) {
-    this.#id = id
+    this.#code = generateID()
     this.#title = title
     this.#description = description
     this.#price = price
     this.#status = status
     this.#thumbnail = thumbnail
     this.#stock = stock
-    this.#code = generateID()
   }
 
   DTO () {
     return {
-      id: this.#id,
       title: this.#title,
       description: this.#description,
       price: this.#price,

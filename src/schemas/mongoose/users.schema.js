@@ -7,14 +7,14 @@ const usuarioSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
   age: { type: Number, required: true },
-  cartID: { type: Number },
+  cartID: { type: String },
   role: { type: String, required: true }
 }, { versionKey: false })
 
 const githubUserSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
-    cartID: { type: Number, required: true },
+    cartID: { type: String, required: true },
     role: { type: String, required: true },
     first_name: { type: String },
     last_name: { type: String },

@@ -1,9 +1,9 @@
 // Error Messages
 import { CustomError } from '../models/error.model.js'
-import { SERVER_ERROR } from '../utils/errors.messages.js'
+import { SERVER_ERROR, AUTH_ERROR } from '../utils/errors.messages.js'
 
 export function handleError (error, req, res, next) {
-  req.logger.info('\n=========\n[errorHandler.js] Error log\n=========\n')
+  req.logger.info('========= [errorHandler.js] Error log =========')
 
   if (error instanceof CustomError) {
     const errorData = error.DTO()
@@ -12,14 +12,18 @@ export function handleError (error, req, res, next) {
       .json({ type: errorData.type, cause: errorData.cause })
   }
 
-  const newError = new CustomError({
-    TYPE: 'Server Error',
-    CAUSE: SERVER_ERROR.SERVER_ERROR.MESSAGE,
-    STATUS: SERVER_ERROR.SERVER_ERROR.STATUS
-  })
+  if (error.message === 'Unauthorized') {
+    const newError = new CustomError(AUTH_ERROR.WRONG_CREDENTIALS)
 
-  const newErrorDTO = newError.DTO()
+    const { cause, status, type } = newError.DTO()
 
-  req.logger.error(newErrorDTO)
-  return res.status(newErrorDTO.status).json({ type: newErrorDTO.type, cause: newErrorDTO.cause })
+    req.logger.error({ cause, status, type })
+    return res.status(status).json({ type, cause })
+  }
+
+  const newError = new CustomError(SERVER_ERROR.SERVER_ERROR)
+  const { cause, status, type } = newError.DTO()
+
+  req.logger.error({ cause, status, type })
+  return res.status(status).json({ type, cause })
 }

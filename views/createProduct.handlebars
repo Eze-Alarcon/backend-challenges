@@ -20,7 +20,7 @@
   {{!-- Price --}}
   <div class="input-group mb-3">
     <span class="input-group-text">$</span>
-    <input type="number" name="price" required value="0" class="form-control" min="0" aria-label="Dollar amount (with dot and two decimal places)">
+    <input type="number" name="price" required value="0" class="form-control" min="1" aria-label="Dollar amount (with dot and two decimal places)">
   </div>
 
   {{!-- Description --}}
@@ -31,5 +31,16 @@
 
   <button type="submit" class="btn btn-primary mt-3">Submit</button>
 </form>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast align-items-center text-bg-secondary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        Product created.
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
 
 <script src="/static/scripts/createProduct.js"></script>

@@ -1,18 +1,26 @@
 // Libraries
-import mongoose, { Schema } from 'mongoose'
+import mongoose from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
 
-const productSchema = new Schema({
-  id: { type: Number, required: true, unique: true },
+const productSchema = new mongoose.Schema({
   code: { type: String, required: true },
   title: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
   status: { type: Boolean, required: true },
   stock: { type: Number, required: true },
-  thumbnail: { type: Array, default: [] },
+  thumbnail: { type: [String], default: [] },
   category: { type: String }
 }, { versionKey: false })
+
+productSchema.add({ id: mongoose.Types.ObjectId })
+
+productSchema.pre('save', function (next) {
+  if (!this.id) {
+    this.id = JSON.parse(JSON.stringify(this._id))
+  }
+  next()
+})
 
 productSchema.plugin(mongoosePaginate)
 

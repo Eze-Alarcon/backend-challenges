@@ -22,9 +22,9 @@ class CustomError extends Error {
     const err = new CustomError({
       TYPE: USER_ERROR.TYPE,
       STATUS: USER_ERROR.STATUS,
-      CAUSE
+      CAUSE: CAUSE.replaceAll('"', '\'')
     })
-    throw err.DTO()
+    throw err
   }
 }
 

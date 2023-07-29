@@ -49,12 +49,19 @@ passport.use('register', new LocalStrategy(
   { passReqToCallback: true, usernameField: 'email' },
   async (req, _u, _p, done) => {
     try {
-      const { email, password, age, first_name, last_name, role } = req.body
+      const userInfo = {
+        email: req.body.email,
+        password: req.body.password,
+        age: req.body.age,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        role: req.body.role
+      }
 
-      const { user } = await userService.createUser({ email, password, age, first_name, last_name, role })
+      const { user } = await userService.createUser(userInfo)
       done(null, user)
     } catch (err) {
-      done(err.message)
+      done(err)
     }
   }
 ))

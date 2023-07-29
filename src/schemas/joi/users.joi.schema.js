@@ -33,8 +33,8 @@ function validation ({ data }) {
   const { error, value } = userSchema.validate(data)
 
   if (error !== undefined) {
-    if (!error.details) return { error: error.message, value }
-    return { error, value }
+    if (error.details) return { error: error.details.at(0).message, value }
+    return { error: error.message, value }
   }
   return { error: undefined, value }
 }

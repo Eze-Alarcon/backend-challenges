@@ -3,11 +3,12 @@ import express, { Router } from 'express'
 
 // Controller
 import { isAdmin } from '../../controllers/session.controller.js'
+
 import {
-  getProducts,
+  getProduct,
   updateProduct,
   deleteProduct,
-  getAllProducts,
+  getProducts,
   createProduct,
   productsMock
 } from '../../controllers/product.controller.js'
@@ -23,11 +24,11 @@ productsRouter
 
 productsRouter
   .route('/:pid')
-  .get(getProducts)
+  .get(getProduct)
   .put(isAdmin, updateProduct)
   .delete(isAdmin, deleteProduct)
 
 productsRouter
   .route('/')
-  .get(getAllProducts)
-  .post(isAdmin, createProduct)
+  .get(getProducts)
+  .post(createProduct)

@@ -7,7 +7,7 @@ import { Ticket } from '../models/tickets.model.js'
 import { CustomError } from '../models/error.model.js'
 
 // Utils
-import { STATUS_CODE, TICKET_MANAGER_ERRORS } from '../utils/errors.messages.js'
+import { TICKET_MANAGER_ERRORS } from '../utils/errors.messages.js'
 import { winstonLogger as logger } from '../utils/logger.js'
 
 // DAO
@@ -22,42 +22,35 @@ class TicketService {
   async createTicket ({ cartID, email }) {
     let subtotal = 0
     try {
-      const { cart } = await cartService.getCartById(cartID)
+      const { cart } = await cartService.getOne({ id: cartID })
 
       for (const item of cart.products) {
-        const { item: storeProduct } = await productService.getProductById({ id: item.product.id })
-        if (item.quantity > storeProduct.stock) continue
+        const { product } = await productService.getOne({ id: item.product.id })
+        if (item.quantity > product.stock) continue
         subtotal += item.quantity * item.product.price
-        await productService.updateProduct({ id: item.product.id }, { stock: storeProduct.stock - item.quantity })
-        await cartService.deleteCartProduct({ cartID: cart.id, productID: item.product.id })
+        await productService.updateOne({ id: item.product.id }, { stock: product.stock - item.quantity })
+        await cartService.deleteOneCartProduct({ cartID: cart.id, productID: item.product.id })
       }
 
-      if (subtotal === 0) {
-        return {
-          ticket: {},
-          cart: {},
-          status: STATUS_CODE.SUCCESS.NO_CONTENT
-        }
-      }
-
-      const lastID = await this.#dao.getLastID()
+      if (subtotal === 0) { throw new Error('empty_ticket') }
 
       const ticketModel = new Ticket({
-        id: lastID,
         amount: subtotal,
         purchaser: email
       })
 
       const newTicket = await this.#dao.createOne(ticketModel.DTO())
-      const { cart: newCart } = await cartService.getCartById(cartID)
+      const { cart: newCart } = await cartService.getOne({ id: cartID })
 
       return {
         ticket: newTicket,
-        cart: newCart,
-        status: STATUS_CODE.SUCCESS.CREATED
+        cart: newCart
       }
     } catch (error) {
       logger.error(error)
+      if (error.message === 'empty_ticket') {
+        throw new CustomError(TICKET_MANAGER_ERRORS.EMPTY_TICKET_ERROR)
+      }
       throw new CustomError(TICKET_MANAGER_ERRORS.CREATE_TICKET_ERROR)
     }
   }
@@ -65,7 +58,7 @@ class TicketService {
   async getTicket ({ ticketID }) {
     try {
       const ticket = await this.#dao.getOne({ id: ticketID })
-      return { ticket, status: STATUS_CODE.SUCCESS.OK }
+      return { ticket }
     } catch (error) {
       logger.error(error)
       throw new CustomError(TICKET_MANAGER_ERRORS.TICKET_NOT_FOUND)
@@ -75,7 +68,7 @@ class TicketService {
   async deleteTicket ({ ticketID }) {
     try {
       const deletedTicket = await this.#dao.deleteOne({ id: ticketID })
-      return { deletedTicket, status: STATUS_CODE.SUCCESS.NO_CONTENT }
+      return { deleted_ticket: deletedTicket }
     } catch (error) {
       logger.error(error)
       throw new CustomError(TICKET_MANAGER_ERRORS.TICKET_NOT_FOUND)

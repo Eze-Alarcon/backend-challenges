@@ -9,80 +9,56 @@ import { CustomError } from '../models/error.model.js'
 import { validation as validProduct } from '../schemas/joi/products.joi.schema.js'
 
 // Error messages
-import {
-  STATUS_CODE,
-  PRODUCT_MANAGER_ERRORS
-} from '../utils/errors.messages.js'
+import { PRODUCT_MANAGER_ERRORS } from '../utils/errors.messages.js'
 
 class ProductService {
-  #nextID
   #dao
   constructor ({ DAO }) {
-    this.#nextID = 0
     this.#dao = DAO
   }
 
-  async getProducts (options = {}) {
+  async getMany (options) {
     try {
-      const products = await this.#dao.getProducts(options)
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        products
-      }
+      const products = await this.#dao.getMany(options)
+      return { products }
     } catch (error) {
       throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 
-  async getProductById (query) {
+  async getOne (query) {
     try {
-      const product = await this.#dao.findProducts(query)
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        item: product[0]
-      }
+      const product = await this.#dao.getOne(query)
+      return { product: product[0] }
     } catch (error) {
       throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 
-  async addProduct (fields) {
-    const mappedFields = {
-      description: fields.description,
-      thumbnail: fields.thumbnail ?? [],
-      title: fields.title,
-      price: parseFloat(fields.price),
-      stock: parseInt(fields.stock)
-    }
-
-    const { error, value: validFields } = validProduct({ data: mappedFields })
+  async createOne (fields) {
+    const { error, value: validFields } = validProduct({ data: fields })
 
     if (error !== undefined) CustomError.userError(error)
 
     try {
-      this.#nextID = await this.#dao.getLastID()
-
-      const newProduct = new Product({ ...validFields, id: this.#nextID })
-      await this.#dao.createProduct(newProduct.DTO())
-      return {
-        status_code: STATUS_CODE.SUCCESS.CREATED,
-        productAdded: newProduct.DTO()
-      }
+      const productModel = new Product({ ...validFields })
+      const newProduct = await this.#dao.createOne(productModel.DTO())
+      return { product: newProduct }
     } catch (error) {
       throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_EXIST)
     }
   }
 
-  async updateProduct (query, fields) {
+  async updateOne (query, fields) {
     try {
-      const { item } = await this.getProductById(query)
+      const { product } = await this.getOne(query)
 
       const mappedFields = {
-        description: fields.description ?? item.description,
-        thumbnail: fields.thumbnail ?? item.thumbnail,
-        title: fields.title ?? item.title,
-        price: (!isNaN(parseFloat(fields.price))) ? parseFloat(fields.price) : item.price,
-        stock: (!isNaN(parseInt(fields.stock))) ? parseInt(fields.stock) : item.stock
+        description: fields.description ?? product.description,
+        thumbnail: fields.thumbnail ?? product.thumbnail,
+        title: fields.title ?? product.title,
+        price: (!isNaN(parseFloat(fields.price))) ? parseFloat(fields.price) : product.price,
+        stock: (!isNaN(parseInt(fields.stock))) ? parseInt(fields.stock) : product.stock
       }
 
       const { error, value: validFields } = validProduct({ data: mappedFields })
@@ -90,28 +66,22 @@ class ProductService {
       if (error !== undefined) CustomError.userError(error)
 
       const newProduct = {
-        ...item,
+        ...product,
         ...validFields
       }
 
-      await this.#dao.updateProduct(query, newProduct)
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        itemUpdated: newProduct
-      }
+      await this.#dao.updateOne(query, newProduct)
+      return { product_updated: newProduct }
     } catch (error) {
       throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 
-  async deleteProduct (query) {
+  async deleteOne (query) {
     try {
-      const itemDeleted = await this.#dao.deleteProduct({ id: query })
+      const itemDeleted = await this.#dao.deleteOne(query)
 
-      return {
-        status_code: STATUS_CODE.SUCCESS.NO_CONTENT,
-        itemDeleted
-      }
+      return { product_deleted: itemDeleted }
     } catch (error) {
       throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }

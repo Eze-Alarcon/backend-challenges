@@ -22,5 +22,5 @@ async function postData (data) {
   const response = await sendForm.json()
 
   if (response.isLog) window.location.assign('/products')
-  else msgContainer.innerText = response.message
+  else msgContainer.innerText = `Error: ${response.cause}`
 }

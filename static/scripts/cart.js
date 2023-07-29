@@ -46,10 +46,14 @@ function updateModalContent ({ ticket }) {
 }
 
 // eslint-disable-next-line no-unused-vars
-async function generateTicket () {
+async function generateTicket (event) {
+  const btnBuy = event.srcElement
+  const btnClear = btnBuy.previousElementSibling
+  btnBuy.disabled = true
+  btnClear.disabled = true
   const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/ticket`
   const response = await fetch(FETCH_URL, { method: 'POST' })
-  if (response.status === 204) {
+  if (response.status !== 201) {
     errorContainer.classList.remove('d-none')
     setTimeout(() => {
       errorContainer.classList.add('d-none')
@@ -57,6 +61,8 @@ async function generateTicket () {
     errorMessage.innerText = 'No se concretado la compra porque no hay suficiente stock disponible'
     return
   }
+  btnBuy.remove()
+  btnClear.remove()
   errorContainer.classList.add('d-none')
   const { ticket, cart } = await response.json()
   reloadCartProducts({ products: cart.products })

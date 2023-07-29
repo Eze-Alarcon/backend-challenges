@@ -12,20 +12,6 @@ class DB_TICKET_MANAGER {
     return JSON.parse(JSON.stringify(item))
   }
 
-  async getLastID () {
-    const response = await this.#model
-      .find()
-      .sort({ id: 'desc' })
-      .limit(1)
-
-    const data = this.#toPOJO(response)
-
-    // Si no tiene la propiedad es porque no existe ningun carrito
-    if (data.length === 0 || !data[0].hasOwnProperty('id')) { return 1 }
-
-    return Number(data[0].id) + 1
-  }
-
   async getOne (query) {
     const response = await this.#model.find(query)
     const data = this.#toPOJO(response)

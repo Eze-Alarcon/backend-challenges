@@ -1,11 +1,10 @@
-// Configs
-import { ROUTES, SERVER_CONFIG } from '../config/server.config.js'
-
 // Error messages
 import { STATUS_CODE } from '../utils/errors.messages.js'
 
 // Schemas
 import { productModel } from '../schemas/mongoose/products.schema.js'
+
+// TODO: eliminar comentarios
 
 class DB_PRODUCT_MANAGER {
   #model
@@ -17,6 +16,7 @@ class DB_PRODUCT_MANAGER {
     return JSON.parse(JSON.stringify(item))
   }
 
+  // TODO: ver como cambiar esto
   #handleQueries (options) {
     const pageOptions = {
       limit: options.limit || 10,
@@ -50,46 +50,10 @@ class DB_PRODUCT_MANAGER {
     return { pageOptions, pageQuery }
   }
 
-  #generateLinks (options, data) {
-    const links = {
-      prevLink: null,
-      nextLink: null
-    }
-
-    if (data.hasPrevPage) {
-      const newOptions = {
-        ...options,
-        page: data.prevPage
-      }
-      const newParams = new URLSearchParams([
-        ...Object.entries(newOptions)
-      ]).toString()
-
-      links.prevLink = `${SERVER_CONFIG.BASE_URL}${ROUTES.PRODUCTS_ROUTE}?${newParams}`
-    }
-
-    if (data.hasNextPage) {
-      const newOptions = {
-        ...options,
-        page: data.nextPage
-      }
-      const newParams = new URLSearchParams([
-        ...Object.entries(newOptions)
-      ]).toString()
-
-      links.nextLink = `${SERVER_CONFIG.BASE_URL}${ROUTES.PRODUCTS_ROUTE}?${newParams}`
-    }
-    return links
-  }
-
-  async getProducts (options) {
+  async getMany (options) {
     const { pageOptions, pageQuery } = this.#handleQueries(options)
 
     const data = await this.#model.paginate(pageQuery, pageOptions)
-    if (data.docs.length < 1) throw new Error()
-
-    // Genero los links de la paginas anterios y siguiente
-    const links = this.#generateLinks(options, data)
 
     return {
       payload: data.docs,
@@ -99,33 +63,16 @@ class DB_PRODUCT_MANAGER {
       nextPage: data.nextPage,
       page: data.page,
       hasPrevPage: data.hasPrevPage,
-      hasNextPage: data.hasNextPage,
-      prevLink: links.prevLink,
-      nextLink: links.nextLink
+      hasNextPage: data.hasNextPage
     }
   }
 
-  async getLastID () {
-    const data = await this.#model.paginate({}, {
-      limit: 1,
-      sort: { id: -1 },
-      projection: { _id: 0 },
-      lean: true
-    })
-    let id = 0
-    data.docs?.length !== 0
-      ? id = ++data.docs.at(0).id
-      : id = 1
-
-    return id
-  }
-
-  async findProducts (query) {
+  async getOne (query) {
     const response = await this.#model.find(query).lean()
     return response
   }
 
-  async createProduct (item) {
+  async createOne (item) {
     try {
       const response = await this.#model.create(item)
       const data = this.#toPOJO(response)
@@ -135,13 +82,13 @@ class DB_PRODUCT_MANAGER {
     }
   }
 
-  async updateProduct ({ id }, updates) {
-    const data = await this.#model.updateOne({ id }, updates)
+  async updateOne (query, updates) {
+    const data = await this.#model.updateOne(query, updates)
     return data
   }
 
-  async deleteProduct ({ id }) {
-    const response = await this.#model.deleteOne(id)
+  async deleteOne (query) {
+    const response = await this.#model.deleteOne(query)
     return response
   }
 }

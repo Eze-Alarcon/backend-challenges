@@ -76,6 +76,11 @@ const TICKET_MANAGER_ERRORS = {
     STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
     TYPE: 'Ticket not created'
   },
+  EMPTY_TICKET_ERROR: {
+    CAUSE: '[ERROR]: No products to buy',
+    STATUS: STATUS_CODE.CLIENT_ERROR.CONFLICT,
+    TYPE: 'Ticket invalid'
+  },
   TICKET_NOT_FOUND: {
     CAUSE: '[ERROR]: Ticket not found',
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
@@ -92,14 +97,14 @@ const AUTH_ERROR = {
     TYPE: 'User not logged'
   },
   HAS_ACCOUNT: {
-    CAUSE: '[ERROR]: Authentication error. If you already have an account, please try to log in or register with another email',
+    CAUSE: '[ERROR]: Authentication error. If you already have an account, go to log in page',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     TYPE: 'User has account'
   },
   WRONG_CREDENTIALS: {
     CAUSE: '[ERROR]: Authentication error.',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
-    TYPE: 'Invalid username and password'
+    TYPE: 'Invalid username or password'
   },
   FORBIDDEN: {
     CAUSE: '[ERROR]: Autorization error',

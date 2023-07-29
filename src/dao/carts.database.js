@@ -15,13 +15,13 @@ class DB_CART_MANAGER {
     return JSON.parse(JSON.stringify(item))
   }
 
-  async getCarts () {
+  async getMany () {
     const response = await this.#model.find({}, { _id: 0, products: { _id: 0 } })
     const carts = this.#toPOJO(response)
     return carts
   }
 
-  async findCartByID ({ id }) {
+  async getOne ({ id }) {
     const response = await this.#model
       .find(
         { id },
@@ -37,10 +37,10 @@ class DB_CART_MANAGER {
     if (carts.length === 0) throw new Error()
 
     // me trae un array, de esta forma obtengo el valor que busco
-    return carts[0]
+    return { cart: carts[0] }
   }
 
-  async createCart (item) {
+  async createOne (item) {
     try {
       const response = await this.#model.create(item)
       const data = this.#toPOJO(response)
@@ -50,7 +50,7 @@ class DB_CART_MANAGER {
     }
   }
 
-  async addProductToCart ({ id, productID }) {
+  async createCartProduct ({ id, productID }) {
     await this.#model.updateOne(
       { id },
       {
@@ -65,13 +65,13 @@ class DB_CART_MANAGER {
       }
     )
     return {
-      productAdded: true,
-      productModified: false,
-      quantityValue: 1
+      product_added: true,
+      product_modified: false,
+      product_quantity: 1
     }
   }
 
-  async updateCartProductQuantity ({ cartID, productID, quantity }) {
+  async updateCartProduct ({ cartID, productID, quantity }) {
     const data = await this.#model.updateOne(
       { cartID, 'products.product': productID },
       { $set: { 'products.$[elem].quantity': quantity } },
@@ -80,13 +80,13 @@ class DB_CART_MANAGER {
     const dataWasModified = data.modifiedCount > 0
 
     return {
-      productAdded: false,
-      productModified: dataWasModified,
-      quantityValue: quantity
+      product_added: false,
+      product_modified: dataWasModified,
+      product_quantity: quantity
     }
   }
 
-  async deleteAllCartProducts ({ id }) {
+  async deleteManyCartProducts ({ id }) {
     const response = await this.#model.updateOne(
       { id },
       { $set: { products: [] } }
@@ -94,15 +94,13 @@ class DB_CART_MANAGER {
     return response
   }
 
-  async deleteCartProduct ({ id, productID }) {
+  async deleteOneCartProduct ({ id, productID }) {
     const data = await this.#model.updateOne(
       { id },
       { $pull: { products: { product: productID } } }
     )
     const dataWasModified = data.modifiedCount > 0
-    return {
-      productRemoved: dataWasModified
-    }
+    return { product_removed: dataWasModified }
   }
 }
 

@@ -46,43 +46,25 @@ class UserService {
     }
   }
 
-  async createUser ({
-    email,
-    password,
-    first_name,
-    last_name,
-    age,
-    role
-  }) {
-    const { error } = userValidation({
-      email,
-      password,
-      first_name,
-      last_name,
-      age,
-      role
-    })
+  async createUser (userInfo) {
+    const { error } = userValidation({ data: userInfo })
     if (error !== undefined) CustomError.userError(error)
 
-    const { userExist } = await this.searchUser({ email })
+    const { userExist } = await this.searchUser({ email: userInfo.email })
     if (userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
 
-    const newPassword = await hashPassword(password)
+    const newPassword = await hashPassword(userInfo.password)
 
     let cartID = null
-    if (role === ROLES.USER) {
-      const { cart } = await cartService.createCart()
+    if (userInfo.role === ROLES.USER) {
+      const { cart } = await cartService.createOne()
       cartID = cart.id
     }
 
     const newUser = new UserPassport({
-      email,
-      cartID,
+      ...userInfo,
       password: newPassword,
-      first_name,
-      last_name,
-      age,
-      role
+      cartID
     })
 
     await this.#daoUsers.createUser(newUser.getUser())
@@ -107,7 +89,7 @@ class UserService {
     const { userExist } = await this.searchUser({ email })
     if (userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
 
-    const { cart } = await cartService.createCart()
+    const { cart } = await cartService.createOne()
 
     const newUser = new UserGithub({ email, cartID: cart.id })
 

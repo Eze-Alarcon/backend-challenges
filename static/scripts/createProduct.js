@@ -1,4 +1,16 @@
 const form = document.getElementById('createProductForm')
+const toastElement = document.getElementById('liveToast')
+let toast
+if (toastElement) {
+  // eslint-disable-next-line no-undef
+  toast = bootstrap.Toast.getOrCreateInstance(toastElement)
+}
+
+function useToast () {
+  toast.show()
+  setTimeout(() => toast.hide(), 2500)
+  setTimeout(() => window.location.assign('/products'), 3000)
+}
 
 // eslint-disable-next-line no-unused-vars
 async function updateProduct (event) {
@@ -12,5 +24,6 @@ async function updateProduct (event) {
       body: JSON.stringify(data),
       headers: { 'Content-type': 'application/json; charset=UTF-8' }
     }
-  ).then(console.log('completado'))
+  )
+  useToast()
 }

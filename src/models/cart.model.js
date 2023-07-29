@@ -2,17 +2,17 @@
 import { generateID } from '../utils/hash.js'
 
 class Cart {
-  #id
+  #code
   #products
 
   constructor () {
-    this.#id = generateID()
+    this.#code = generateID()
     this.#products = []
   }
 
-  getCartData () {
+  DTO () {
     return {
-      id: this.#id,
+      code: this.#code,
       products: this.#products
     }
   }

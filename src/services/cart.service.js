@@ -10,7 +10,7 @@ import { DAO_CARTS } from '../dao/carts.database.js'
 
 // Utils
 import { validateQuantity } from '../utils/validations.js'
-import { STATUS_CODE, CART_MANAGER_ERRORS } from '../utils/errors.messages.js'
+import { CART_MANAGER_ERRORS } from '../utils/errors.messages.js'
 
 /* -------------------------------------------- */
 
@@ -37,118 +37,93 @@ class CartService {
   }
 
   async checkCart ({ cartID }) {
-    const { cart } = await this.getCartById(cartID)
+    const { cart } = await this.getOne(cartID)
     const productsAvailables = []
     for (const item of cart.products) {
-      const { item: storeProduct } = await productService.getProductById({ id: item.product.id })
-      if (item.quantity > storeProduct.stock) continue
+      const { product } = await productService.getOne({ id: item.product.id })
+      if (item.quantity > product.stock) continue
       productsAvailables.push({ ...item.product, quantity: item.quantity })
     }
     return { cart, productsAvailables }
   }
 
-  async getCarts () {
+  async getMany () {
     try {
-      const carts = await this.#dao.getCarts()
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        carts
-      }
+      const carts = await this.#dao.getMany()
+      return { carts }
     } catch (err) {
       throw new CustomError(CART_MANAGER_ERRORS.CART_NOT_FOUND)
     }
   }
 
-  async createCart () {
+  async getOne ({ id }) {
     try {
-      const newCart = new Cart()
+      const { cart } = await this.#dao.getOne({ id })
+      const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
+      return { total_products: totalProducts, cart }
+    } catch (err) {
+      throw new CustomError(CART_MANAGER_ERRORS.CART_NOT_FOUND)
+    }
+  }
 
-      await this.#dao.createCart(newCart.getCartData())
-
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        cart: newCart.getCartData()
-      }
+  async createOne () {
+    try {
+      const cartModel = new Cart()
+      const newCart = await this.#dao.createOne(cartModel.DTO())
+      return { cart: newCart }
     } catch (err) {
       throw new CustomError(CART_MANAGER_ERRORS.CREATE_CARTS)
     }
   }
 
-  async getCartById (query) {
-    try {
-      const cart = await this.#dao.findCartByID({ id: query })
-      const totalProducts = cart.products.reduce((acc, el) => acc + el.quantity, 0)
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        totalProducts,
-        cart
-      }
-    } catch (err) {
-      throw new CustomError(CART_MANAGER_ERRORS.CART_NOT_FOUND)
-    }
-  }
-
-  async addProductToCart ({ cartID, productID, quantityValue = null }) {
+  async createCartProduct ({ cartID, productID, quantityValue = null }) {
     try {
       const { error } = validateQuantity(quantityValue)
       if (error !== undefined) CustomError.userError(error)
 
-      const cart = await this.#dao.findCartByID({ id: cartID })
-      const { item: product } = await productService.getProductById({ id: productID })
-      let response
+      const { cart } = await this.#dao.getOne({ id: cartID })
+      const { product } = await productService.getOne({ id: productID })
 
       const parsedID = this.#toPOJO(product._id)
       const { exist, index } = this.#findIndex(cart, parsedID)
 
       if (!exist) {
-        response = await this.#dao.addProductToCart({ id: cartID, productID: product._id })
+        const details = await this.#dao.createCartProduct({ id: cartID, productID: product._id })
+        return { details }
+      }
+      const newValue = quantityValue ?? ++cart.products[index].quantity
+
+      const updateInfo = {
+        id: cartID,
+        productID: parsedID,
+        quantity: newValue
       }
 
-      if (exist) {
-        const newValue = quantityValue ?? ++cart.products[index].quantity
-
-        const updateInfo = {
-          id: cartID,
-          productID: parsedID,
-          quantity: newValue
-        }
-
-        response = await this.#dao.updateCartProductQuantity(updateInfo)
-      }
-
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        operationDetails: response
-      }
+      const details = await this.#dao.updateCartProduct(updateInfo)
+      return { details }
     } catch (err) {
       throw new CustomError(CART_MANAGER_ERRORS.ADD_PRODUCT_TO_CART)
     }
   }
 
-  async deleteAllCartProducts (query) {
+  async deleteManyCartProducts ({ id }) {
     try {
-      const cartUpdated = await this.#dao.deleteAllCartProducts({ id: query })
+      const cartUpdated = await this.#dao.deleteManyCartProducts({ id })
 
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        cartUpdated
-      }
+      return { cart_updated: cartUpdated }
     } catch (err) {
       throw new CustomError(CART_MANAGER_ERRORS.CART_NOT_FOUND)
     }
   }
 
-  async deleteCartProduct ({ cartID, productID }) {
+  async deleteOneCartProduct ({ cartID, productID }) {
     try {
-      const { item: product } = await productService.getProductById({ id: productID })
+      const { product } = await productService.getOne({ id: productID })
       const parsedID = this.#toPOJO(product._id)
 
-      const details = await this.#dao.deleteCartProduct({ id: cartID, productID: parsedID })
+      const { product_removed } = await this.#dao.deleteOneCartProduct({ id: cartID, productID: parsedID })
 
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        details
-      }
+      return { product_removed }
     } catch (err) {
       throw new CustomError(CART_MANAGER_ERRORS.CART_NOT_FOUND)
     }

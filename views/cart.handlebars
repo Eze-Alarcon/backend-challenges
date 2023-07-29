@@ -1,15 +1,16 @@
-<h2>{{mainTitle}}</h2>
-<button class="btn">
-  <a href={{urlToProducts}} class="btn btn-primary" role="button">Go to products</a>
+<main class="p-3">
+  <h2>{{mainTitle}}</h2>
+<button class="btn btn-secondary mb-3">
+  <a href="/products" class="text-white text-decoration-none">Go to products</a>
 </button>
-<button class="btn btn-danger" onclick="clearCart()">Clear cart</button>
-<br>
-<br>
 
 {{#if listExist}}
-  <button class="btn btn-primary" id="btn-buy" onclick="generateTicket()" data-cart={{userCart}}>Buy products</button>
+  <div class="d-flex gap-3 mb-3">
+    <button class="btn btn-danger" onclick="clearCart()">Clear cart</button>
+    <button class="btn btn-primary" id="btn-buy" onclick="generateTicket(event)" data-cart={{userCart}}>Buy products</button>
+  </div>
   <h4>My products:</h4>
-  <div class='container text-center mb-5'>
+  <div class='container-full text-center mb-5'>
     <div class='row row-gap-5' id="cart-products-container">
       {{#each info}}
         <div class='col-3'>
@@ -62,5 +63,6 @@
     </div>
   </div>
 </div>
+</main>
 
 <script src="/static/scripts/cart.js"></script>
