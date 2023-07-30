@@ -1,5 +1,5 @@
 // Libraries
-import express, { Router } from 'express'
+import { Router } from 'express'
 
 // Controller
 import {
@@ -12,17 +12,16 @@ import {
 } from '../../controllers/cart.controller.js'
 
 import {
-  createTicket,
-  deleteTicket,
-  getTicket
+  createTicket
+  // deleteTicket,
+  // getTicket
 } from '../../controllers/ticket.controller.js'
 
 // Middleware
-import { hasSession } from '../../middleware/autentication.js'
+// import { hasSession } from '../../middleware/autentication.js'
 
 export const cartsRouter = Router()
 
-cartsRouter.use(express.json())
 // cartsRouter.use(hasSession)
 
 cartsRouter

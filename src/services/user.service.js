@@ -23,6 +23,15 @@ class UserService {
     this.#daoGH = DAO_GH
   }
 
+  async getMany () {
+    const users = await this.#daoUsers.findUser({}, { password: 0, cartID: 0, age: 0 })
+    return { users }
+  }
+
+  async deleteMany () {
+    await this.#daoUsers.deleteInactiveUsers()
+  }
+
   async searchUser ({ email }) {
     const data = await this.#daoUsers.findUser({ email })
     const user = data.length > 0 ? data[0] : []
@@ -39,6 +48,8 @@ class UserService {
 
     const samePassword = await comparePassword({ password, hashPassword: user.password })
     if (!samePassword) throw new CustomError(AUTH_ERROR.WRONG_CREDENTIALS)
+
+    this.#daoUsers.updateLastConnection(email)
 
     return {
       user,
@@ -99,6 +110,10 @@ class UserService {
       status: STATUS_CODE.SUCCESS.CREATED,
       user: newUser.getUserGithub()
     }
+  }
+
+  async logout ({ email }) {
+    await this.#daoUsers.updateLastConnection(email)
   }
 }
 

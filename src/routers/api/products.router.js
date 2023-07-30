@@ -1,5 +1,5 @@
 // Libraries
-import express, { Router } from 'express'
+import { Router } from 'express'
 
 // Controller
 import { isAdmin } from '../../controllers/session.controller.js'
@@ -14,8 +14,6 @@ import {
 } from '../../controllers/product.controller.js'
 
 export const productsRouter = Router()
-
-productsRouter.use(express.json())
 
 productsRouter
   .route('/mockingproducts')

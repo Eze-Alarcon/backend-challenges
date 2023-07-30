@@ -1,5 +1,5 @@
 // Libraries
-import express, { Router } from 'express'
+import { Router } from 'express'
 
 // Controller
 import {
@@ -20,8 +20,6 @@ import {
 } from '../../middleware/passport.config.js'
 
 export const sessionRouter = Router()
-
-sessionRouter.use(express.json())
 
 sessionRouter
   .route('/login')

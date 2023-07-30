@@ -4,7 +4,10 @@ import { generateToken, verifyToken } from '../middleware/jwt.config.js'
 // Config
 import { COOKIE_NAME } from '../config/config.js'
 
-// Contans
+// Services
+import { userService } from '../services/user.service.js'
+
+// Utils
 import { ROLES } from '../utils/contans.js'
 import { AUTH_ERROR } from '../utils/errors.messages.js'
 
@@ -16,7 +19,10 @@ async function registerResponse (req, res, next) {
   res.json({ message: 'login success', isLog: true })
 }
 
-function logout (req, res) {
+async function logout (req, res, next) {
+  const token = req.signedCookies[COOKIE_NAME]
+  const { email } = await verifyToken(token)
+  userService.logout({ email })
   res.clearCookie(COOKIE_NAME, {
     signed: true,
     httpOnly: true
@@ -48,7 +54,8 @@ async function getCurrentUser (req, res, next) {
     role: user.role,
     first_name: user.first_name,
     last_name: user.last_name,
-    age: user.age
+    age: user.age,
+    last_connection: user.last_connection
   }
 
   res.json({ user: userData })

@@ -5,6 +5,7 @@ class User {
   #email
   #cartID
   #role
+  #last_connection
 
   constructor ({
     email,
@@ -14,13 +15,15 @@ class User {
     this.#email = email
     this.#cartID = cartID
     this.#role = role
+    this.#last_connection = new Date().getTime()
   }
 
   getUser () {
     return {
       email: this.#email,
       cartID: this.#cartID,
-      role: this.#role
+      role: this.#role,
+      last_connection: this.#last_connection
     }
   }
 }

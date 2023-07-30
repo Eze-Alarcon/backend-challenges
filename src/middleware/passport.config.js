@@ -99,7 +99,6 @@ passport.use('github', new GithubStrategy({
 // estos son para cargar en express como middlewares a nivel aplicacion
 export const passportInitialize = passport.initialize()
 
-// estos son para cargar como middlewares antes de los controladores correspondientes
 export const autenticacionUserRegister = passport.authenticate('register', { failWithError: true, session: false })
 export const autenticacionUserLogin = passport.authenticate('local', { failWithError: true, session: false })
 export const autenticacionUserGithub = passport.authenticate('github', { scope: ['user:email'], session: false })
