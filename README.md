@@ -16,10 +16,10 @@ Desafios del curso de coderhouse
 
 ## Aspectos a incluir
 
-- Realizar un sistema de recuperación de contraseña, la cual envíe por medio de un correo un botón que redireccione a una página para restablecer la contraseña (no recuperarla).
-    * link del correo debe expirar después de 1 hora de enviado.
-    * No se puede colocar la misma contraseña de antes
-    * Si el link expiró, debe redirigir a una vista que le permita generar nuevamente el correo de restablecimiento, el cual contará con una nueva duración de 1 hora.
+- Realizar un sistema de recuperación de contraseña, la cual envíe por medio de un correo un botón que redireccione a una página para restablecer la contraseña (no recuperarla). 👍
+    * link del correo debe expirar después de 1 hora de enviado. 👍
+    * No se puede colocar la misma contraseña de antes 👍
+    * Si el link expiró, debe redirigir a una vista que le permita generar nuevamente el correo de restablecimiento, el cual contará con una nueva duración de 1 hora. 👍
 
 - Establecer un nuevo rol para el schema del usuario llamado “premium” el cual estará habilitado también para crear productos
 

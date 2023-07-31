@@ -3,6 +3,7 @@ import Handlebars from 'handlebars'
 
 // Config
 import { COOKIE_NAME } from '../config/config.js'
+import { ROUTES } from '../config/server.config.js'
 
 // Utils
 import { ROLES, RENDER_PATHS } from '../utils/contans.js'
@@ -142,16 +143,19 @@ async function recoveryPass (req, res, next) {
 }
 
 async function setPassword (req, res, next) {
-  const token = req.params.tid
-  console.log(token)
-  const status = await verifyToken(token)
-  console.log(status)
-  res
-    .status(STATUS_CODE.SUCCESS.OK)
-    .render(RENDER_PATHS.SET_PASSWORD, {
-      headerTitle: 'Recover password',
-      email: status.email
-    })
+  try {
+    const token = req.params.tid
+    const status = await verifyToken(token)
+    console.log(status)
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .render(RENDER_PATHS.SET_PASSWORD, {
+        headerTitle: 'Recover password',
+        email: status.email
+      })
+  } catch (error) {
+    return res.redirect(ROUTES.RECOVER)
+  }
 }
 
 export {

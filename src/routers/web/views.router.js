@@ -33,10 +33,6 @@ viewsRouter
   .get(alreadyHasSession, register)
 
 viewsRouter
-  .route(ROUTES.RECOVER)
-  .get(alreadyHasSession, recoveryPass)
-
-viewsRouter
   .route(ROUTES.PROFILE)
   .get(hasSession, profile)
 
@@ -63,6 +59,10 @@ viewsRouter
 viewsRouter
   .route(ROUTES.CHAT)
   .get(hasSession, usersChat)
+
+viewsRouter
+  .route(ROUTES.RECOVER)
+  .get(alreadyHasSession, recoveryPass)
 
 viewsRouter
   .route(`${ROUTES.SET_PASSWORD}/:tid`)
