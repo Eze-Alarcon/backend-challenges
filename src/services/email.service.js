@@ -38,7 +38,7 @@ class EmailServiceMock {
 }
 
 export let emailService
-if (process.env.NODE_ENV === 'PROD') {
+if (process.env.NODE_ENV === 'production') {
   emailService = new EmailService(EMAIL_CONFIG)
 } else {
   emailService = new EmailServiceMock()

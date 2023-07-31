@@ -1,3 +1,19 @@
+const toastElement = document.getElementById('liveToast')
+const toastBodyMessage = document.getElementById('toast-body-message')
+
+let toast
+if (toastElement) {
+  // eslint-disable-next-line no-undef
+  toast = bootstrap.Toast.getOrCreateInstance(toastElement)
+}
+
+function useToast (message) {
+  toast.show()
+  setTimeout(() => toast.hide(), 2500)
+  toastBodyMessage.innerText = message
+  // setTimeout(() => window.location.assign('/login'), 3000)
+}
+
 const loginForm = document.getElementById('setpassword_form')
 
 const email = loginForm.dataset.email
@@ -20,5 +36,5 @@ async function postData (data) {
   )
   console.log(sendForm)
   const response = await sendForm.json()
-  console.log('response: ', response)
+  useToast(response.message)
 }

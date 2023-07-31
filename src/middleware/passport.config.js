@@ -100,6 +100,8 @@ passport.use('github', new GithubStrategy({
 export const passportInitialize = passport.initialize()
 
 export const autenticacionUserRegister = passport.authenticate('register', { failWithError: true, session: false })
+
 export const autenticacionUserLogin = passport.authenticate('local', { failWithError: true, session: false })
+
 export const autenticacionUserGithub = passport.authenticate('github', { scope: ['user:email'], session: false })
 export const antenticacionUserGithub_CB = passport.authenticate('github', { failWithError: true, session: false })

@@ -31,7 +31,7 @@ async function updatePass (req, res, next) {
     await userService.updatePassword({ email: req.body.email, password: req.body.password })
     res
       .status(STATUS_CODE.SUCCESS.OK)
-      .json({ completed: true })
+      .json({ message: 'Password updated succesfully' })
   } catch (error) {
     next(error)
   }

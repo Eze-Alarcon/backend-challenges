@@ -77,7 +77,7 @@ async function isAdmin (req, res, next) {
 async function passwordRecovery (req, res, next) {
   try {
     await userService.passwordRecovery({ email: req.body.email })
-    res.json({ message: 'login success' })
+    res.json({ message: 'Email sent, please check your inbox' })
   } catch (error) {
     next(error)
   }

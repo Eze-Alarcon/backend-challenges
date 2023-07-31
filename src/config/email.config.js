@@ -18,7 +18,7 @@ const TEST_EMAIL_CONFIG = {
 
 let EMAIL_CONFIG
 
-if (process.env.NODE_ENV === 'PROD') {
+if (process.env.NODE_ENV === 'production') {
   EMAIL_CONFIG = PROD_EMAIL_CONFIG
 } else {
   EMAIL_CONFIG = TEST_EMAIL_CONFIG
