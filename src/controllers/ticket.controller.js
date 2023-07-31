@@ -4,10 +4,8 @@ import { ticketService } from '../services/ticket.service.js'
 // config
 import { COOKIE_NAME } from '../config/config.js'
 
-// Middleware
-import { verifyToken } from '../middleware/jwt.config.js'
-
 // Utils
+import { verifyToken } from '../utils/jwt.config.js'
 import { STATUS_CODE } from '../utils/errors.messages.js'
 
 async function createTicket (req, res, next) {

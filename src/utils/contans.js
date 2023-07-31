@@ -12,7 +12,9 @@ const RENDER_PATHS = {
   REGISTER: 'register',
   PRODUCTS: 'products',
   UPDATE_PRODUCT: 'update',
-  CRATE_PRODUCT: 'createProduct'
+  CRATE_PRODUCT: 'createProduct',
+  RECOVERY_PASSWORD: 'passwordRecovery',
+  SET_PASSWORD: 'setpassword'
 }
 
 export {

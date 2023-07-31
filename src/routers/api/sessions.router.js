@@ -7,7 +7,8 @@ import {
   loginReponse,
   logout,
   registerResponse,
-  saveJwtCookie
+  saveJwtCookie,
+  passwordRecovery
 } from '../../controllers/session.controller.js'
 
 // Middlewares
@@ -44,3 +45,7 @@ sessionRouter
 sessionRouter
   .route('/current')
   .get(hasSession, getCurrentUser)
+
+sessionRouter
+  .route('/recovery')
+  .post(passwordRecovery)

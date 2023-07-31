@@ -13,7 +13,9 @@ import {
   register,
   usersChat,
   uptProducts,
-  createNewProduct
+  createNewProduct,
+  recoveryPass,
+  setPassword
 } from '../../controllers/views.controller.js'
 
 // Middleware
@@ -29,6 +31,10 @@ viewsRouter
 viewsRouter
   .route(ROUTES.REGISTER)
   .get(alreadyHasSession, register)
+
+viewsRouter
+  .route(ROUTES.RECOVER)
+  .get(alreadyHasSession, recoveryPass)
 
 viewsRouter
   .route(ROUTES.PROFILE)
@@ -53,3 +59,11 @@ viewsRouter
 viewsRouter
   .route(ROUTES.CHAT)
   .get(hasSession, usersChat)
+
+viewsRouter
+  .route(ROUTES.CHAT)
+  .get(hasSession, usersChat)
+
+viewsRouter
+  .route(`${ROUTES.SET_PASSWORD}/:tid`)
+  .get(setPassword) // hasSession,

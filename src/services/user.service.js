@@ -7,10 +7,12 @@ import { DAO_USERS, DAO_GITHUB_USERS } from '../dao/users.database.js'
 
 // Services
 import { cartService } from './cart.service.js'
+import { emailService } from './email.service.js'
 
 // Utils
 import { AUTH_ERROR, STATUS_CODE } from '../utils/errors.messages.js'
 import { comparePassword, hashPassword } from '../utils/hash.js'
+import { generateRecoveryLink } from '../utils/jwt.config.js'
 
 // Joi
 import { validation as userValidation } from '../schemas/joi/users.joi.schema.js'
@@ -32,7 +34,7 @@ class UserService {
     await this.#daoUsers.deleteInactiveUsers()
   }
 
-  async searchUser ({ email }) {
+  async getOne ({ email }) {
     const data = await this.#daoUsers.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
@@ -43,13 +45,14 @@ class UserService {
   }
 
   async logUser ({ email, password }) {
-    const { user, userExist } = await this.searchUser({ email })
+    const { user, userExist } = await this.getOne({ email })
     if (!userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
 
     const samePassword = await comparePassword({ password, hashPassword: user.password })
     if (!samePassword) throw new CustomError(AUTH_ERROR.WRONG_CREDENTIALS)
 
-    this.#daoUsers.updateLastConnection(email)
+    const currentTime = new Date().getTime()
+    this.#daoUsers.updateOne({ email }, { last_connection: currentTime })
 
     return {
       user,
@@ -57,11 +60,11 @@ class UserService {
     }
   }
 
-  async createUser (userInfo) {
+  async createOne (userInfo) {
     const { error } = userValidation({ data: userInfo })
     if (error !== undefined) CustomError.userError(error)
 
-    const { userExist } = await this.searchUser({ email: userInfo.email })
+    const { userExist } = await this.getOne({ email: userInfo.email })
     if (userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
 
     const newPassword = await hashPassword(userInfo.password)
@@ -78,7 +81,7 @@ class UserService {
       cartID
     })
 
-    await this.#daoUsers.createUser(newUser.getUser())
+    await this.#daoUsers.createOne(newUser.getUser())
 
     return {
       status: STATUS_CODE.SUCCESS.CREATED,
@@ -86,7 +89,7 @@ class UserService {
     }
   }
 
-  async searchGithubUser ({ email }) {
+  async getOneGithubUser ({ email }) {
     const data = await this.#daoGH.findUser({ email })
     const user = data.length > 0 ? data[0] : []
 
@@ -97,14 +100,14 @@ class UserService {
   }
 
   async createGithubUser ({ email }) {
-    const { userExist } = await this.searchUser({ email })
+    const { userExist } = await this.getOne({ email })
     if (userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
 
     const { cart } = await cartService.createOne()
 
     const newUser = new UserGithub({ email, cartID: cart.id })
 
-    await this.#daoGH.createUser(newUser.getUserGithub())
+    await this.#daoGH.createOne(newUser.getUserGithub())
 
     return {
       status: STATUS_CODE.SUCCESS.CREATED,
@@ -112,8 +115,22 @@ class UserService {
     }
   }
 
-  async logout ({ email }) {
-    await this.#daoUsers.updateLastConnection(email)
+  async passwordRecovery ({ email }) {
+    const { userExist } = await this.getOne({ email })
+    if (!userExist) throw new CustomError(AUTH_ERROR.NO_ACCOUNT)
+    const link = generateRecoveryLink({ email })
+    await emailService.send({ dest: email, message: link })
+  }
+
+  async updateOne (query, fields) {
+    await this.#daoUsers.updateOne(query, fields)
+  }
+
+  async updatePassword ({ email, password }) {
+    password.length <= 3 && CustomError.userError('Password is too short')
+    const oldUser = await this.#daoUsers.findUser({ email }, { password: 1 })
+    oldUser.at(0).password === password && CustomError.userError('New password cannot be the same as the old one')
+    await this.updateOne({ email }, { password })
   }
 }
 

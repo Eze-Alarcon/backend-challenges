@@ -7,13 +7,11 @@ import { COOKIE_NAME } from '../config/config.js'
 // Utils
 import { ROLES, RENDER_PATHS } from '../utils/contans.js'
 import { STATUS_CODE } from '../utils/errors.messages.js'
+import { verifyToken } from '../utils/jwt.config.js'
 
 // Services
 import { productService } from '../services/product.service.js'
 import { cartService } from '../services/cart.service.js'
-
-// Middlewares
-import { verifyToken } from '../middleware/jwt.config.js'
 
 Handlebars.registerHelper('eq', function (a, b) { return a === b })
 
@@ -135,6 +133,27 @@ async function usersChat (req, res, next) {
     })
 }
 
+async function recoveryPass (req, res, next) {
+  res
+    .status(STATUS_CODE.SUCCESS.OK)
+    .render(RENDER_PATHS.RECOVERY_PASSWORD, {
+      headerTitle: 'Recover password'
+    })
+}
+
+async function setPassword (req, res, next) {
+  const token = req.params.tid
+  console.log(token)
+  const status = await verifyToken(token)
+  console.log(status)
+  res
+    .status(STATUS_CODE.SUCCESS.OK)
+    .render(RENDER_PATHS.SET_PASSWORD, {
+      headerTitle: 'Recover password',
+      email: status.email
+    })
+}
+
 export {
   productsPaginate,
   uptProducts,
@@ -143,5 +162,7 @@ export {
   usersChat,
   profile,
   register,
-  createNewProduct
+  createNewProduct,
+  recoveryPass,
+  setPassword
 }

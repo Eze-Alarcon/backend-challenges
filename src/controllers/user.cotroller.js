@@ -19,7 +19,18 @@ async function deleteInactiveUsers (req, res, next) {
   try {
     await userService.deleteMany()
     res
-      .status(STATUS_CODE.SUCCESS.NO_CONTENT)
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json({ completed: true })
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function updatePass (req, res, next) {
+  try {
+    await userService.updatePassword({ email: req.body.email, password: req.body.password })
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
       .json({ completed: true })
   } catch (error) {
     next(error)
@@ -28,5 +39,6 @@ async function deleteInactiveUsers (req, res, next) {
 
 export {
   getUsers,
-  deleteInactiveUsers
+  deleteInactiveUsers,
+  updatePass
 }

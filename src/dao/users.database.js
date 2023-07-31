@@ -1,3 +1,8 @@
+// Models
+import { CustomError } from '../models/error.model.js'
+
+import { AUTH_ERROR } from '../utils/errors.messages.js'
+
 // Schemas
 import { userModel, githubUserModel } from '../schemas/mongoose/users.schema.js'
 
@@ -11,19 +16,24 @@ class DB_USER_MANAGER {
     return JSON.parse(JSON.stringify(item))
   }
 
-  async findUser (query, options) {
+  async findUser (query, options = {}) {
+    console.log(query)
+    console.log({ _id: 0, ...options })
     const response = await this.#model.find(query, { _id: 0, ...options })
     const user = this.#toPOJO(response)
     return [...user]
   }
 
-  async createUser (user) {
+  async createOne (user) {
     await this.#model.create(user)
   }
 
-  async updateLastConnection (email) {
-    const currentTime = new Date().getTime()
-    await this.#model.updateOne({ email }, { last_connection: currentTime })
+  async updateOne (query, fields) {
+    try {
+      await this.#model.updateOne(query, fields)
+    } catch (error) {
+      throw new CustomError(AUTH_ERROR.NO_ACCOUNT)
+    }
   }
 
   async deleteInactiveUsers () {

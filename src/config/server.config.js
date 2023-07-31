@@ -6,13 +6,13 @@ dotenv.config({
 })
 
 // Server
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 8080
 const NODE_ENV = process.env.NODE_ENV || 'development'
 const LOG_LEVEL = parseInt(process.env.LOG_LEVEL || '10')
 
 const SERVER_CONFIG = {
   BASE_URL: `http://localhost:${PORT}`,
-  PORT,
+  PORT: parseInt(PORT),
   NODE_ENV,
   LOG_LEVEL
 }
@@ -32,7 +32,9 @@ const WEB_ROUTES = {
   STATIC_ROUTE: '/static',
   REGISTER: '/register',
   PROFILE: '/profile',
-  CHAT: '/chat'
+  CHAT: '/chat',
+  RECOVER: '/recoverPassword',
+  SET_PASSWORD: '/newpassword'
 }
 
 const ROUTES = {

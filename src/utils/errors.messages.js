@@ -101,6 +101,11 @@ const AUTH_ERROR = {
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     TYPE: 'User has account'
   },
+  NO_ACCOUNT: {
+    CAUSE: '[ERROR]: Authentication error.',
+    STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
+    TYPE: 'Invalid email'
+  },
   WRONG_CREDENTIALS: {
     CAUSE: '[ERROR]: Authentication error.',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,

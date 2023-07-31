@@ -1,5 +1,5 @@
 // Middlewares
-import { generateToken, verifyToken } from '../middleware/jwt.config.js'
+import { generateToken, verifyToken } from '../utils/jwt.config.js'
 
 // Config
 import { COOKIE_NAME } from '../config/config.js'
@@ -22,7 +22,7 @@ async function registerResponse (req, res, next) {
 async function logout (req, res, next) {
   const token = req.signedCookies[COOKIE_NAME]
   const { email } = await verifyToken(token)
-  userService.logout({ email })
+  await userService.updateOne({ email }, { last_connection: new Date().getTime() })
   res.clearCookie(COOKIE_NAME, {
     signed: true,
     httpOnly: true
@@ -74,11 +74,21 @@ async function isAdmin (req, res, next) {
   }
 }
 
+async function passwordRecovery (req, res, next) {
+  try {
+    await userService.passwordRecovery({ email: req.body.email })
+    res.json({ message: 'login success' })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export {
   logout,
   loginReponse,
   registerResponse,
   saveJwtCookie,
   getCurrentUser,
-  isAdmin
+  isAdmin,
+  passwordRecovery
 }

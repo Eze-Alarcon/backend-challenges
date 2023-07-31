@@ -58,7 +58,7 @@ passport.use('register', new LocalStrategy(
         role: req.body.role
       }
 
-      const { user } = await userService.createUser(userInfo)
+      const { user } = await userService.createOne(userInfo)
       done(null, user)
     } catch (err) {
       done(err)
@@ -86,7 +86,7 @@ passport.use('github', new GithubStrategy({
 }, async (_a, _r, profile, done) => {
   let user
 
-  const search = await userService.searchGithubUser({ email: profile.username })
+  const search = await userService.getOneGithubUser({ email: profile.username })
   if (search.userExist) {
     user = search.user
   } else {

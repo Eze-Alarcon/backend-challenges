@@ -10,7 +10,7 @@ class EmailService {
     this.#clienteNodemailer = createTransport(config)
   }
 
-  async send (dest, message) {
+  async send ({ dest, message }) {
     const mailOptions = {
       from: 'Servidor Node.js',
       to: dest,
@@ -31,9 +31,9 @@ class EmailService {
 // TODO: Delete this 👇
 
 class EmailServiceMock {
-  async send (destinatario, mensaje) {
-    console.log(`${destinatario}:  ${mensaje}`)
-    return { destinatario, mensaje }
+  async send ({ dest, message }) {
+    console.log(`[email.service.js] - ${dest}: ${message}`)
+    return { dest, message }
   }
 }
 
