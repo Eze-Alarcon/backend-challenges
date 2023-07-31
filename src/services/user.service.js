@@ -129,8 +129,11 @@ class UserService {
   async updatePassword ({ email, password }) {
     password.length <= 3 && CustomError.userError('Password is too short')
     const oldUser = await this.#daoUsers.findUser({ email }, { password: 1 })
-    oldUser.at(0).password === password && CustomError.userError('New password cannot be the same as the old one')
-    await this.updateOne({ email }, { password })
+    const samePassword = await comparePassword({ password, hashPassword: oldUser.at(0).password })
+    console.log(samePassword)
+    samePassword && CustomError.userError('New password cannot be the same as the old one')
+    const newPassword = await hashPassword(password)
+    await this.updateOne({ email }, { password: newPassword })
   }
 }
 
