@@ -146,7 +146,6 @@ async function setPassword (req, res, next) {
   try {
     const token = req.params.tid
     const status = await verifyToken(token)
-    console.log(status)
     res
       .status(STATUS_CODE.SUCCESS.OK)
       .render(RENDER_PATHS.SET_PASSWORD, {

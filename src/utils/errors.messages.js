@@ -32,6 +32,16 @@ const SERVER_ERROR = {
   }
 }
 
+/* ========== Errores del email ========== */
+
+const EMAIL_ERROR = {
+  EMAIL_NOT_SEND: {
+    CAUSE: '[ERROR]: Email service not working.',
+    STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
+    TYPE: 'Server Error'
+  }
+}
+
 /* ========== Errores de los managers ========== */
 
 const PRODUCT_MANAGER_ERRORS = {
@@ -132,5 +142,6 @@ export {
   TICKET_MANAGER_ERRORS,
   SERVER_ERROR,
   STATUS_CODE,
-  USER_ERROR
+  USER_ERROR,
+  EMAIL_ERROR
 }

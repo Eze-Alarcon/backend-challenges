@@ -4,6 +4,11 @@ import { createTransport } from 'nodemailer'
 // Config
 import { EMAIL_CONFIG } from '../config/email.config.js'
 
+// Models
+import { CustomError } from '../models/error.model.js'
+
+import { EMAIL_ERROR } from '../utils/errors.messages.js'
+
 class EmailService {
   #clienteNodemailer
   constructor (config) {
@@ -19,11 +24,9 @@ class EmailService {
     }
     try {
       const info = await this.#clienteNodemailer.sendMail(mailOptions)
-      console.log(info)
       return info
     } catch (error) {
-      console.log(error)
-      throw error
+      throw new CustomError(EMAIL_ERROR.EMAIL_NOT_SEND)
     }
   }
 }

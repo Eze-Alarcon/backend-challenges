@@ -8,7 +8,6 @@ import { createMockProducts } from '../mocks/product.mock.js'
 
 async function getProduct (req, res, next) {
   try {
-    console.log('product.controller.js req.params.pid:', req.params.pid)
     const { product } = await productService.getOne({ id: req.params.pid })
     res.status(STATUS_CODE.SUCCESS.OK).json({ product })
   } catch (error) {

@@ -16,7 +16,7 @@ async function loginReponse (req, res, next) {
 }
 
 async function registerResponse (req, res, next) {
-  res.json({ message: 'login success', isLog: true })
+  res.json({ message: 'Register success', isLog: true })
 }
 
 async function logout (req, res, next) {
@@ -61,13 +61,13 @@ async function getCurrentUser (req, res, next) {
   res.json({ user: userData })
 }
 
-async function isAdmin (req, res, next) {
+async function isAuthorized (req, res, next) {
   try {
     const token = req.signedCookies[COOKIE_NAME]
 
     const { role } = await verifyToken(token)
 
-    if (role !== ROLES.ADMIN) throw new Error(AUTH_ERROR.FORBIDDEN.ERROR_CODE)
+    if (role === ROLES.USER) throw new Error(AUTH_ERROR.FORBIDDEN.ERROR_CODE)
     next()
   } catch (error) {
     next(error)
@@ -89,6 +89,6 @@ export {
   registerResponse,
   saveJwtCookie,
   getCurrentUser,
-  isAdmin,
+  isAuthorized,
   passwordRecovery
 }

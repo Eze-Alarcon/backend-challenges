@@ -1,21 +1,17 @@
-<main class="px-3">
+<main class="p-3">
   <h2>{{mainTitle}}</h2>
 
   <h3>Welcome {{name}}</h3>
-  {{#if (eq role 'admin')}}
-    <p>Access level: Admin</p>
-  {{else}}
-    <p>Access level: User</p>
-  {{/if}}
+    <p>Access level: {{role}}</p>
 
   {{#if (eq role 'user')}}
     <a href="/carts/{{userCart}}" data-cart={{userCart}} id="linkToCart" class="btn btn-primary" role="button">Go to my cart</a>
   {{/if}}
 
-  {{#if (eq role 'admin')}}
-    <a href="/products/new" class="btn btn-secondary" role="button">Add new Product</a>
-  {{else}}
+  {{#if (eq role 'user')}}
     <a href="/chat" class="btn btn-secondary" role="button">General Chat</a>
+  {{else}}
+    <a href="/products/new" class="btn btn-secondary" role="button">Add new Product</a>
   {{/if}}
   <a href="/profile" class="btn btn-primary" role="button">Check my profile</a>
 
@@ -39,7 +35,17 @@
                 <li class='list-group-item'>Description: {{this.description}}</li>
                 <li class='list-group-item'>Price: ${{this.price}}</li>
                 <li class='list-group-item'>Stock: {{this.stock}}</li>
-                {{#if (eq ../role 'admin')}}
+                {{#if (eq ../role 'user')}}
+                  <button
+                      type="button"
+                      class="list-group-item list-group-item-action active"
+                      onclick="addProductToCart(this.dataset.productid)"
+                      data-productid={{this.id}}
+                      aria-current="true"
+                    >
+                      Add product to cart
+                    </button>
+                  {{else}}
                   <li
                     class="list-group-item"
                   >
@@ -57,16 +63,6 @@
                       </a>
                     </button>
                   </li>
-                  {{else}}
-                    <button
-                      type="button"
-                      class="list-group-item list-group-item-action active"
-                      onclick="addProductToCart(this.dataset.productid)"
-                      data-productid={{this.id}}
-                      aria-current="true"
-                    >
-                      Add product to cart
-                    </button>
                   {{/if}}
               </ul>
             </div>

@@ -33,6 +33,5 @@ async function postData (data) {
       body: JSON.stringify(data)
     })
   const response = await sendForm.json()
-  console.log(response)
   useToast(response.message)
 }

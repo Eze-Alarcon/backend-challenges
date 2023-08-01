@@ -17,8 +17,6 @@ class DB_USER_MANAGER {
   }
 
   async findUser (query, options = {}) {
-    console.log(query)
-    console.log({ _id: 0, ...options })
     const response = await this.#model.find(query, { _id: 0, ...options })
     const user = this.#toPOJO(response)
     return [...user]

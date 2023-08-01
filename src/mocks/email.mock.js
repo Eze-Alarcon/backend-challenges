@@ -3,8 +3,6 @@ import { createTransport } from 'nodemailer'
 
 import { USER, PASS } from '../config/config.js'
 
-console.log(USER, PASS)
-
 const clienteNodemailer = createTransport({
   service: 'gmail',
   port: 587,

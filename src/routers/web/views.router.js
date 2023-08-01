@@ -20,9 +20,11 @@ import {
 
 // Middleware
 import { hasSession, alreadyHasSession } from '../../middleware/autentication.js'
-import { isAdmin } from '../../controllers/session.controller.js'
+import { isAuthorized } from '../../controllers/session.controller.js'
 
 export const viewsRouter = Router()
+
+/* ============ Before authentication ============ */
 
 viewsRouter
   .route(ROUTES.HOME_ROUTES)
@@ -33,16 +35,26 @@ viewsRouter
   .get(alreadyHasSession, register)
 
 viewsRouter
+  .route(ROUTES.RECOVER)
+  .get(alreadyHasSession, recoveryPass)
+
+viewsRouter
+  .route(`${ROUTES.SET_PASSWORD}/:tid`)
+  .get(alreadyHasSession, setPassword)
+
+/* ============ After authentication ============ */
+
+viewsRouter
   .route(ROUTES.PROFILE)
   .get(hasSession, profile)
 
 viewsRouter
   .route(`${ROUTES.PRODUCTS_ROUTE}new`)
-  .get(hasSession, isAdmin, createNewProduct)
+  .get(hasSession, isAuthorized, createNewProduct)
 
 viewsRouter
   .route(`${ROUTES.PRODUCTS_ROUTE}:pid`)
-  .get(hasSession, isAdmin, uptProducts)
+  .get(hasSession, isAuthorized, uptProducts)
 
 viewsRouter
   .route(ROUTES.PRODUCTS_ROUTE)
@@ -59,11 +71,3 @@ viewsRouter
 viewsRouter
   .route(ROUTES.CHAT)
   .get(hasSession, usersChat)
-
-viewsRouter
-  .route(ROUTES.RECOVER)
-  .get(alreadyHasSession, recoveryPass)
-
-viewsRouter
-  .route(`${ROUTES.SET_PASSWORD}/:tid`)
-  .get(setPassword) // hasSession,

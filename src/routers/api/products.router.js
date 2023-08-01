@@ -2,8 +2,7 @@
 import { Router } from 'express'
 
 // Controller
-import { isAdmin } from '../../controllers/session.controller.js'
-
+import { isAuthorized } from '../../controllers/session.controller.js'
 import {
   getProduct,
   updateProduct,
@@ -23,10 +22,10 @@ productsRouter
 productsRouter
   .route('/:pid')
   .get(getProduct)
-  .put(isAdmin, updateProduct)
-  .delete(isAdmin, deleteProduct)
+  .put(isAuthorized, updateProduct)
+  .delete(isAuthorized, deleteProduct)
 
 productsRouter
   .route('/')
   .get(getProducts)
-  .post(createProduct)
+  .post(isAuthorized, createProduct)
