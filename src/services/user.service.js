@@ -30,40 +30,12 @@ class UserService {
     return { users }
   }
 
-  async deleteMany () {
-    const minutes = 30
-    const inactiveTime = new Date().getTime() - (minutes * 60 * 1000) // Restamos 30 minutos al tiempo actual
-    const { users } = await this.getMany({ last_connection: { $lt: inactiveTime } }, { email: 1, first_name: 1 })
-    if (users.lenght === 0) return
-    users.forEach(async (user) => {
-      await emailService.send({ dest: user.email, message: user.first_name, emailType: 'delete' })
-    })
-    await this.#daoUsers.deleteInactiveUsers()
-  }
-
   async getOne ({ email }) {
     const data = await this.#daoUsers.findUser({ email })
     const user = data.length > 0 ? data[0] : []
-
     return {
       user,
       userExist: data.length > 0
-    }
-  }
-
-  async logUser ({ email, password }) {
-    const { user, userExist } = await this.getOne({ email })
-    if (!userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
-
-    const samePassword = await comparePassword({ password, hashPassword: user.password })
-    if (!samePassword) throw new CustomError(AUTH_ERROR.WRONG_CREDENTIALS)
-
-    const currentTime = new Date().getTime()
-    this.#daoUsers.updateOne({ email }, { last_connection: currentTime })
-
-    return {
-      user,
-      status: STATUS_CODE.SUCCESS.OK
     }
   }
 
@@ -96,6 +68,53 @@ class UserService {
     }
   }
 
+  async updateOne (query, fields) {
+    await this.#daoUsers.updateOne(query, fields)
+  }
+
+  async deleteMany () {
+    const minutes = 30
+    const inactiveTime = new Date().getTime() - (minutes * 60 * 1000) // Restamos 30 minutos al tiempo actual
+    const { users } = await this.getMany({ last_connection: { $lt: inactiveTime } }, { email: 1, first_name: 1 })
+    if (users.lenght === 0) return
+    users.forEach(async (user) => {
+      await emailService.send({ dest: user.email, message: user.first_name, emailType: 'delete' })
+    })
+    await this.#daoUsers.deleteInactiveUsers()
+  }
+
+  async logUser ({ email, password }) {
+    const { user, userExist } = await this.getOne({ email })
+    if (!userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
+
+    const samePassword = await comparePassword({ password, hashPassword: user.password })
+    if (!samePassword) throw new CustomError(AUTH_ERROR.WRONG_CREDENTIALS)
+
+    const currentTime = new Date().getTime()
+    this.#daoUsers.updateOne({ email }, { last_connection: currentTime })
+
+    return {
+      user,
+      status: STATUS_CODE.SUCCESS.OK
+    }
+  }
+
+  async passwordRecovery ({ email }) {
+    const { userExist } = await this.getOne({ email })
+    if (!userExist) throw new CustomError(AUTH_ERROR.NO_ACCOUNT)
+    const link = generateRecoveryLink({ email })
+    await emailService.send({ dest: email, message: link, emailType: 'recovery' })
+  }
+
+  async updatePassword ({ email, password }) {
+    password.length <= 3 && CustomError.userError('Password is too short')
+    const oldUser = await this.#daoUsers.findUser({ email }, { password: 1 })
+    const samePassword = await comparePassword({ password, hashPassword: oldUser.at(0).password })
+    samePassword && CustomError.userError('New password cannot be the same as the old one')
+    const newPassword = await hashPassword(password)
+    await this.updateOne({ email }, { password: newPassword })
+  }
+
   async getOneGithubUser ({ email }) {
     const data = await this.#daoGH.findUser({ email })
     const user = data.length > 0 ? data[0] : []
@@ -120,26 +139,6 @@ class UserService {
       status: STATUS_CODE.SUCCESS.CREATED,
       user: newUser.getUserGithub()
     }
-  }
-
-  async passwordRecovery ({ email }) {
-    const { userExist } = await this.getOne({ email })
-    if (!userExist) throw new CustomError(AUTH_ERROR.NO_ACCOUNT)
-    const link = generateRecoveryLink({ email })
-    await emailService.send({ dest: email, message: link, emailType: 'recovery' })
-  }
-
-  async updateOne (query, fields) {
-    await this.#daoUsers.updateOne(query, fields)
-  }
-
-  async updatePassword ({ email, password }) {
-    password.length <= 3 && CustomError.userError('Password is too short')
-    const oldUser = await this.#daoUsers.findUser({ email }, { password: 1 })
-    const samePassword = await comparePassword({ password, hashPassword: oldUser.at(0).password })
-    samePassword && CustomError.userError('New password cannot be the same as the old one')
-    const newPassword = await hashPassword(password)
-    await this.updateOne({ email }, { password: newPassword })
   }
 }
 

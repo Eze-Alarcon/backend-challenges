@@ -65,9 +65,22 @@ async function updateRole (req, res, next) {
   }
 }
 
+async function updateUser (req, res, next) {
+  try {
+    const newRole = req.body.role === 'user' ? 'premium' : 'user'
+    await userService.updateOne({ email: req.body.email }, { role: newRole })
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json({ message: 'Password updated succesfully' })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export {
   getUsers,
   deleteInactiveUsers,
   updatePass,
-  updateRole
+  updateRole,
+  updateUser
 }

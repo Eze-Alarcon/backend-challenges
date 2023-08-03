@@ -20,8 +20,7 @@ async function updateProduct (event) {
   event.preventDefault()
   const data = Object.fromEntries(new FormData(form))
 
-  const FETCH_URL = `http://localhost:8080/api/products/${productID}`
-  await fetch(FETCH_URL,
+  await fetch(`http://localhost:8080/api/products/${productID}`,
     {
       method: 'PUT',
       body: JSON.stringify(data),

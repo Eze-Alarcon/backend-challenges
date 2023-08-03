@@ -6,7 +6,8 @@ import {
   getUsers,
   deleteInactiveUsers,
   updatePass,
-  updateRole
+  updateRole,
+  updateUser
 } from '../../controllers/user.cotroller.js'
 
 export const userRouter = express.Router()
@@ -14,6 +15,10 @@ export const userRouter = express.Router()
 userRouter
   .route('/premium')
   .put(updateRole)
+
+userRouter
+  .route('/user')
+  .put(updateUser)
 
 userRouter
   .route('/password')
