@@ -45,9 +45,7 @@ function saveJwtCookie (req, res, next) {
 
 async function getCurrentUser (req, res, next) {
   const token = req.signedCookies[COOKIE_NAME]
-
   const user = await verifyToken(token)
-
   const userData = {
     email: user.email,
     cartID: user.cartID,
@@ -57,17 +55,17 @@ async function getCurrentUser (req, res, next) {
     age: user.age,
     last_connection: user.last_connection
   }
-
   res.json({ user: userData })
 }
 
 async function isAuthorized (req, res, next) {
   try {
     const token = req.signedCookies[COOKIE_NAME]
-
-    const { role } = await verifyToken(token)
-
+    const { role, email } = await verifyToken(token)
     if (role === ROLES.USER) throw new Error(AUTH_ERROR.FORBIDDEN.ERROR_CODE)
+    role === ROLES.PREMIUM
+      ? res.locals.owner = email
+      : res.locals.owner = 'admin'
     next()
   } catch (error) {
     next(error)

@@ -9,6 +9,7 @@ export class Product {
   #thumbnail
   #stock
   #code
+  #owner
 
   constructor ({
     title,
@@ -16,7 +17,8 @@ export class Product {
     price,
     status = true,
     stock = 0,
-    thumbnail = []
+    thumbnail = [],
+    owner = 'admin'
   }) {
     this.#code = generateID()
     this.#title = title
@@ -25,6 +27,7 @@ export class Product {
     this.#status = status
     this.#thumbnail = thumbnail
     this.#stock = stock
+    this.#owner = owner
   }
 
   DTO () {
@@ -35,7 +38,8 @@ export class Product {
       status: this.#status,
       thumbnail: this.#thumbnail,
       stock: this.#stock,
-      code: this.#code
+      code: this.#code,
+      owner: this.#owner
     }
   }
 }

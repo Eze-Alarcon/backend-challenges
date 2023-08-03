@@ -9,8 +9,8 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   status: { type: Boolean, required: true },
   stock: { type: Number, required: true },
-  thumbnail: { type: [String], default: [] },
-  category: { type: String }
+  owner: { type: String, required: true, default: 'admin' },
+  thumbnail: { type: [String], default: [] }
 }, { versionKey: false })
 
 productSchema.add({ id: mongoose.Types.ObjectId })

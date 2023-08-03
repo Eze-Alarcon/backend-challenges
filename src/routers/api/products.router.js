@@ -14,10 +14,10 @@ import {
 
 export const productsRouter = Router()
 
+// TODO: Borrar esto
 productsRouter
   .route('/mockingproducts')
   .get(productsMock)
-  .post(productsMock)
 
 productsRouter
   .route('/:pid')

@@ -37,7 +37,6 @@ class ProductService {
 
   async createOne (fields) {
     const { error, value: validFields } = validProduct({ data: fields })
-
     if (error !== undefined) CustomError.userError(error)
 
     try {

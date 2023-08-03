@@ -23,12 +23,16 @@ async function addProductToCart (productID) {
 }
 
 async function deleteProduct (event, productID) {
-  const btnDelete = event.srcElement
-  const btnUpdate = btnDelete.nextElementSibling
-  btnUpdate.disabled = true
+  const btnDelete = event.currentTarget
+  const btnUpdate = btnDelete.offsetParent.nextElementSibling.children[0]
   btnDelete.disabled = true
+  btnUpdate.disabled = true
   const FETCH_URL = `http://localhost:8080/api/products/${productID}`
   await fetch(FETCH_URL, { method: 'DELETE' })
-  const card = event.srcElement.offsetParent.offsetParent.parentElement
+  const card = btnDelete.offsetParent.offsetParent.parentElement
   card.remove()
+}
+
+function updateProduct (id) {
+  window.location.assign(`/products/${id}`)
 }

@@ -31,7 +31,8 @@ async function createProduct (req, res, next) {
       thumbnail: req.body.thumbnail ?? [],
       title: req.body.title,
       price: parseFloat(req.body.price),
-      stock: parseInt(req.body.stock)
+      stock: parseInt(req.body.stock),
+      owner: res.locals.owner
     }
     const { product } = await productService.createOne(fields)
     res.status(STATUS_CODE.SUCCESS.CREATED).json({ product })
@@ -58,8 +59,8 @@ async function deleteProduct (req, res, next) {
   }
 }
 
-// // ! testing
-// // TODO: ELIMNAR ESTO
+// ! testing
+// TODO: ELIMNAR ESTO
 
 async function productsMock (req, res, next) {
   try {

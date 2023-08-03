@@ -3,7 +3,7 @@ import { CustomError } from '../models/error.model.js'
 import { SERVER_ERROR, AUTH_ERROR } from '../utils/errors.messages.js'
 
 export function handleError (error, req, res, next) {
-  req.logger.info('========= [errorHandler.js] Error log =========')
+  req.logger.info(`[errorHandler.js] Error log: ${error}`)
 
   if (error instanceof CustomError) {
     const errorData = error.DTO()

@@ -14,7 +14,16 @@ import { verifyToken } from '../utils/jwt.config.js'
 import { productService } from '../services/product.service.js'
 import { cartService } from '../services/cart.service.js'
 
+// Handlebars helpers
 Handlebars.registerHelper('eq', function (a, b) { return a === b })
+
+Handlebars.registerHelper('if-or', function (exp1, exp2, options) {
+  if (exp1 || exp2) {
+    return options.fn(this)
+  } else {
+    return options.inverse(this)
+  }
+})
 
 async function productsPaginate (req, res, next) {
   try {
@@ -31,7 +40,8 @@ async function productsPaginate (req, res, next) {
         listExist: products.payload.length > 0,
         userCart: userInfo.cartID,
         name: `${userInfo.first_name} ${userInfo.last_name}`,
-        role: userInfo.role
+        role: userInfo.role,
+        userEmail: userInfo.email
       })
   } catch (error) {
     return next(error)

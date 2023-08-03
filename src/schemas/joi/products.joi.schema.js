@@ -16,18 +16,21 @@ const productSchema = Joi.object({
 
   stock: Joi.number()
     .required()
-    // .positive()
     .min(0),
 
   thumbnail: Joi.array()
-    .min(0)
+    .min(0),
+
+  owner: Joi.string()
+    .email()
 })
 
 function validation ({ data }) {
   const { error, value } = productSchema.validate(data)
 
   if (error !== undefined) {
-    return { error: error.details.at(0).message, value }
+    if (error.details !== undefined) return { error: error.details.at(0).message, value }
+    return { error: error.message, value }
   }
   return { error: undefined, value }
 }
