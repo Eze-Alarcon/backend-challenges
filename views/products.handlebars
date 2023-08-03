@@ -4,12 +4,14 @@
   <h3>Welcome {{name}}</h3>
     <p>Access level: {{role}}</p>
 
-  {{#if (eq role 'user')}}
-    <a href="/carts/{{userCart}}" data-cart={{userCart}} id="linkToCart" class="btn btn-primary" role="button">Go to my cart</a>
+  {{#if-or (eq ./role 'user') (eq ./role 'premium')}}
+    <a href="/carts/{{userCart}}"  id="linkToCart" class="btn btn-primary" role="button" data-cart={{userCart}}>Go to my cart</a>
     <a href="/chat" class="btn btn-secondary" role="button">General Chat</a>
-  {{else}}
+  {{/if-or}}
+
+  {{#if-or (eq ./role 'admin') (eq ./role 'premium')}}
     <a href="/products/new" class="btn btn-secondary" role="button">Add new Product</a>
-  {{/if}}
+  {{/if-or}}
   <a href="/profile" class="btn btn-primary" role="button">Check my profile</a>
 
   <div class="d-flex my-3">

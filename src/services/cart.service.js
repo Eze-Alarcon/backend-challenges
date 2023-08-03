@@ -66,9 +66,9 @@ class CartService {
     }
   }
 
-  async createOne () {
+  async createOne ({ email }) {
     try {
-      const cartModel = new Cart()
+      const cartModel = new Cart({ email })
       const newCart = await this.#dao.createOne(cartModel.DTO())
       return { cart: newCart }
     } catch (err) {
@@ -83,6 +83,8 @@ class CartService {
 
       const { cart } = await this.#dao.getOne({ id: cartID })
       const { product } = await productService.getOne({ id: productID })
+
+      if (cart.cartOwner === product.owner) throw new CustomError(CART_MANAGER_ERRORS.SAME_OWNER)
 
       const parsedID = this.#toPOJO(product._id)
       const { exist, index } = this.#findIndex(cart, parsedID)

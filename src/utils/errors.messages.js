@@ -77,6 +77,11 @@ const CART_MANAGER_ERRORS = {
     CAUSE: '[ERROR]: Cart not found',
     STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
     TYPE: 'Cart not found'
+  },
+  SAME_OWNER: {
+    CAUSE: '[ERROR]: Product owner cannot buy his own product',
+    STATUS: STATUS_CODE.CLIENT_ERROR.NOT_FOUND,
+    TYPE: 'User is the product owner'
   }
 }
 

@@ -31,9 +31,9 @@ Desafios del curso de coderhouse
     * Un usuario premium sólo pueda borrar los productos que le pertenecen. 👍
     * El admin pueda borrar cualquier producto, aún si es de un owner. 👍
 
-- Además, modificar la lógica de carrito para que un usuario premium NO pueda agregar a su carrito un producto que le pertenece
+- Además, modificar la lógica de carrito para que un usuario premium NO pueda agregar a su carrito un producto que le pertenece 👍
 
-- Implementar una nueva ruta en el router de api/users, la cual será /api/users/premium/:uid  la cual permitirá cambiar el rol de un usuario, de “user” a “premium” y viceversa.
+- Implementar una nueva ruta en el router de api/users, la cual será /api/users/premium/:uid  la cual permitirá cambiar el rol de un usuario, de “user” a “premium” y viceversa. 👍
 
 # Módulos de testing para proyecto final
 
@@ -54,7 +54,7 @@ Con base en el proyecto que venimos desarrollando, toca solidificar algunos proc
 
 ## Aspectos a incluir
 
-- Mover la ruta suelta /api/users/premium/:uid a un router específico para usuarios en /api/users/
+- Mover la ruta suelta /api/users/premium/:uid a un router específico para usuarios en /api/users/ 👍
 
 - Modificar el modelo de User para que cuente con una nueva propiedad “documents” el cual será un array que contenga los objetos con las siguientes propiedades
     * name: String (Nombre del documento).

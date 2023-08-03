@@ -1,8 +1,10 @@
 // Services
+import { COOKIE_NAME } from '../config/config.js'
 import { userService } from '../services/user.service.js'
 
 // Utils
 import { STATUS_CODE } from '../utils/errors.messages.js'
+import { generateToken, verifyToken } from '../utils/jwt.config.js'
 
 async function getUsers (req, res, next) {
   try {
@@ -37,8 +39,35 @@ async function updatePass (req, res, next) {
   }
 }
 
+async function updateRole (req, res, next) {
+  try {
+    const token = req.signedCookies[COOKIE_NAME]
+    const user = await verifyToken(token)
+    const newRole = user.role === 'user' ? 'premium' : 'user'
+    await userService.updateOne({ email: req.body.email }, { role: newRole })
+
+    const now = new Date()
+    const minutes = 60 // Tiempo de expiración de la cookie en minutos
+    now.setTime(now.getTime() + minutes * 60 * 1000)
+
+    delete user.iat
+    delete user.exp
+    res
+      .cookie(COOKIE_NAME, generateToken({ ...user, role: newRole }), {
+        signed: true,
+        httpOnly: true,
+        expires: now
+      })
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json({ message: 'Role updated succesfully' })
+  } catch (error) {
+    next(error)
+  }
+}
+
 export {
   getUsers,
   deleteInactiveUsers,
-  updatePass
+  updatePass,
+  updateRole
 }

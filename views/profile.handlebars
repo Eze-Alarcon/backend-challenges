@@ -3,15 +3,20 @@
 
   <a href="/products" class="btn btn-primary" role="button">Go to products</a> 
   <a href="/api/sessions/current" class="btn btn-secondary" role="button">Current user info </a> 
+
+  <button id="btn_update_role" type="button" class="btn btn-warning" data-role={{userInfo.role}}>
+    {{#if (eq userInfo.role 'user')}}
+      upgrade to premium
+    {{else}}
+      downgrade to user
+    {{/if}}
+  </button>
+
   <button id="btn_logout" type="button" class="btn btn-danger">Logout</button>
 
   <ul class="list-group mt-3">
 
-    {{#if (eq userInfo.role 'user')}}
-      <li class="list-group-item" aria-current="true">User</li>
-    {{else}}
-      <li class="list-group-item active" aria-current="true">Access: {{userInfo.role}}</li>
-    {{/if}}
+    <li class="list-group-item" id="li-role" aria-current="true">Access: {{userInfo.role}}</li>
     <li class="list-group-item">Email: {{userInfo.user}}</li>
     <li class="list-group-item">Name: {{userInfo.name}}</li>
     <li class="list-group-item">Age: {{userInfo.age}}</li>

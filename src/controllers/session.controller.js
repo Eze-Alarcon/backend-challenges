@@ -23,11 +23,12 @@ async function logout (req, res, next) {
   const token = req.signedCookies[COOKIE_NAME]
   const { email } = await verifyToken(token)
   await userService.updateOne({ email }, { last_connection: new Date().getTime() })
-  res.clearCookie(COOKIE_NAME, {
-    signed: true,
-    httpOnly: true
-  })
-  res.send({ status: 'Logout Error' })
+  res
+    .clearCookie(COOKIE_NAME, {
+      signed: true,
+      httpOnly: true
+    })
+    .send({ status: 'Logout Error' })
 }
 
 function saveJwtCookie (req, res, next) {

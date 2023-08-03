@@ -6,7 +6,6 @@ import {
   updateCartProducts,
   getCart,
   clearCartProducts,
-  createNewCart,
   getAllCarts,
   deleteCartProduct
 } from '../../controllers/cart.controller.js'
@@ -42,5 +41,4 @@ cartsRouter
 
 cartsRouter
   .route('/')
-  .post(createNewCart)
   .get(getAllCarts)

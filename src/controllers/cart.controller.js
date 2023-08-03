@@ -26,17 +26,6 @@ const getCart = async (req, res, next) => {
   }
 }
 
-const createNewCart = async (req, res, next) => {
-  try {
-    const { cart } = await cartService.createOne()
-    res
-      .status(STATUS_CODE.SUCCESS.CREATED)
-      .json(cart)
-  } catch (error) {
-    next(error)
-  }
-}
-
 const updateCartProducts = async (req, res, next) => {
   try {
     const query = {
@@ -83,7 +72,6 @@ export {
   updateCartProducts,
   getCart,
   clearCartProducts,
-  createNewCart,
   getAllCarts,
   deleteCartProduct
 }

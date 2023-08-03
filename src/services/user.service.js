@@ -70,8 +70,8 @@ class UserService {
     const newPassword = await hashPassword(userInfo.password)
 
     let cartID = null
-    if (userInfo.role === ROLES.USER) {
-      const { cart } = await cartService.createOne()
+    if (userInfo.role !== ROLES.ADMIN) {
+      const { cart } = await cartService.createOne({ email: userInfo.email })
       cartID = cart.id
     }
 
@@ -103,7 +103,7 @@ class UserService {
     const { userExist } = await this.getOne({ email })
     if (userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)
 
-    const { cart } = await cartService.createOne()
+    const { cart } = await cartService.createOne({ email })
 
     const newUser = new UserGithub({ email, cartID: cart.id })
 
