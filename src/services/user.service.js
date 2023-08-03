@@ -83,6 +83,10 @@ class UserService {
     await this.#daoUsers.deleteInactiveUsers()
   }
 
+  async deleteOne (query) {
+    await this.#daoUsers.deleteOne(query)
+  }
+
   async logUser ({ email, password }) {
     const { user, userExist } = await this.getOne({ email })
     if (!userExist) throw new CustomError(AUTH_ERROR.HAS_ACCOUNT)

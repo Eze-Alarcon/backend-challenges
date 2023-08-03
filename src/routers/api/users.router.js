@@ -7,7 +7,8 @@ import {
   deleteInactiveUsers,
   updatePass,
   updateRole,
-  updateUser
+  updateUser,
+  deleteUser
 } from '../../controllers/user.cotroller.js'
 
 export const userRouter = express.Router()
@@ -19,6 +20,7 @@ userRouter
 userRouter
   .route('/user')
   .put(updateUser)
+  .delete(deleteUser)
 
 userRouter
   .route('/password')

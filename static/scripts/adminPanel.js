@@ -21,3 +21,19 @@ async function updateUserRole (event, email, role) {
   liText.unshift(newUserRole)
   btnUpdate.offsetParent.children[0].innerText = liText.join(' - ')
 }
+
+// eslint-disable-next-line no-unused-vars
+async function deleteUser (event, email) {
+  const btnDelete = event.currentTarget
+  const btnUpdate = btnDelete.previousElementSibling
+  btnDelete.disabled = true
+  btnUpdate.disabled = true
+  await fetch('http://localhost:8080/api/users/user',
+    {
+      method: 'DELETE',
+      body: JSON.stringify({ email }),
+      headers: { 'Content-type': 'application/json; charset=UTF-8' }
+    }
+  )
+  btnDelete.offsetParent.remove()
+}

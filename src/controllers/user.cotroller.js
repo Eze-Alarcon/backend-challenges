@@ -71,7 +71,18 @@ async function updateUser (req, res, next) {
     await userService.updateOne({ email: req.body.email }, { role: newRole })
     res
       .status(STATUS_CODE.SUCCESS.OK)
-      .json({ message: 'Password updated succesfully' })
+      .json({ message: 'Role updated succesfully' })
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function deleteUser (req, res, next) {
+  try {
+    await userService.deleteOne({ email: req.body.email })
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json({ message: 'User deleted succesfully' })
   } catch (error) {
     next(error)
   }
@@ -82,5 +93,6 @@ export {
   deleteInactiveUsers,
   updatePass,
   updateRole,
-  updateUser
+  updateUser,
+  deleteUser
 }

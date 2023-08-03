@@ -53,6 +53,11 @@ class DB_USER_MANAGER {
     const data = this.#toPOJO(response)
     return data
   }
+
+  async deleteOne (query) {
+    const response = await this.#model.deleteOne(query)
+    return response
+  }
 }
 
 // ===== Local DB Manager =====

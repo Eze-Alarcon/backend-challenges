@@ -85,7 +85,7 @@ Backend de una aplicación ecommerce
     * DELETE / deberá limpiar a todos los usuarios que no hayan tenido conexión en los últimos 2 días. (puedes hacer pruebas con los últimos 30 minutos, por ejemplo). 👍
     *Deberá enviarse un correo indicando al usuario que su cuenta ha sido eliminada por inactividad* 👍
 
-- Crear una vista para poder visualizar, modificar el rol y eliminar un usuario. Esta vista únicamente será accesible para el administrador del ecommerce
+- Crear una vista para poder visualizar, modificar el rol y eliminar un usuario. Esta vista únicamente será accesible para el administrador del ecommerce 👍
 
 - Modificar el endpoint que elimina productos, para que, en caso de que el producto pertenezca a un usuario, le envíe un correo indicándole que el producto fue eliminado. 👍
 
