@@ -5,6 +5,9 @@ import { DAO_PRODUCTS } from '../dao/products.database.js'
 import { Product } from '../models/product.model.js'
 import { CustomError } from '../models/error.model.js'
 
+// Services
+import { emailService } from './email.service.js'
+
 // Joi
 import { validation as validProduct } from '../schemas/joi/products.joi.schema.js'
 
@@ -78,6 +81,10 @@ class ProductService {
 
   async deleteOne (query) {
     try {
+      const { product } = await this.getOne(query)
+      if (product.owner !== 'admin') {
+        await emailService.send({ dest: product.owner, message: product.title, emailType: 'productDeleted' })
+      }
       const itemDeleted = await this.#dao.deleteOne(query)
 
       return { product_deleted: itemDeleted }

@@ -7,6 +7,7 @@ import { EMAIL_CONFIG } from '../config/email.config.js'
 // Models
 import { CustomError } from '../models/error.model.js'
 
+// Utils
 import { EMAIL_ERROR } from '../utils/errors.messages.js'
 
 class EmailService {
@@ -27,10 +28,18 @@ class EmailService {
     `
   }
 
+  #deleteProduct (message) {
+    return `<p>Hi</p>
+    <br/>
+    <p>Your Product (${message}) was deleted</p>
+    `
+  }
+
   async send ({ dest, message, emailType }) {
     let template
     if (emailType === 'recovery') this.#passwordTemplate(message)
     if (emailType === 'delete') this.#deleteAccount(message)
+    if (emailType === 'productDeleted') this.#deleteProduct(message)
 
     const mailOptions = {
       from: 'Servidor Node.js',
