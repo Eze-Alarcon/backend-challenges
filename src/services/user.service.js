@@ -25,12 +25,19 @@ class UserService {
     this.#daoGH = DAO_GH
   }
 
-  async getMany () {
-    const users = await this.#daoUsers.findUser({}, { password: 0, cartID: 0, age: 0 })
+  async getMany (query = {}, options = { password: 0, cartID: 0, age: 0 }) {
+    const users = await this.#daoUsers.findUser(query, options)
     return { users }
   }
 
   async deleteMany () {
+    const minutes = 30
+    const inactiveTime = new Date().getTime() - (minutes * 60 * 1000) // Restamos 30 minutos al tiempo actual
+    const { users } = await this.getMany({ last_connection: { $lt: inactiveTime } }, { email: 1, first_name: 1 })
+    if (users.lenght === 0) return
+    users.forEach(async (user) => {
+      await emailService.send({ dest: user.email, message: user.first_name, emailType: 'delete' })
+    })
     await this.#daoUsers.deleteInactiveUsers()
   }
 
@@ -119,7 +126,7 @@ class UserService {
     const { userExist } = await this.getOne({ email })
     if (!userExist) throw new CustomError(AUTH_ERROR.NO_ACCOUNT)
     const link = generateRecoveryLink({ email })
-    await emailService.send({ dest: email, message: link })
+    await emailService.send({ dest: email, message: link, emailType: 'recovery' })
   }
 
   async updateOne (query, fields) {

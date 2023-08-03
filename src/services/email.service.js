@@ -15,12 +15,28 @@ class EmailService {
     this.#clienteNodemailer = createTransport(config)
   }
 
-  async send ({ dest, message }) {
+  #passwordTemplate (message) {
+    return `<button><a></a>${message}</a></button>
+    <p>If the button doesn't work, here is the link: <span style="color: blue;">${message}</span></p>`
+  }
+
+  #deleteAccount (message) {
+    return `<p>Hi ${message}</p>
+    <br/>
+    <p>Your account was deleted due to inactivity</p>
+    `
+  }
+
+  async send ({ dest, message, emailType }) {
+    let template
+    if (emailType === 'recovery') this.#passwordTemplate(message)
+    if (emailType === 'delete') this.#deleteAccount(message)
+
     const mailOptions = {
       from: 'Servidor Node.js',
       to: dest,
       subject: 'Mail de prueba desde Node.js',
-      html: `<p style="color: blue;">${message}</p>`
+      html: template
     }
     try {
       const info = await this.#clienteNodemailer.sendMail(mailOptions)

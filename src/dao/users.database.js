@@ -34,10 +34,22 @@ class DB_USER_MANAGER {
     }
   }
 
+  async getInactiveUsers () {
+    const minutes = 1
+    const inactiveTime = new Date().getTime() - (minutes * 60 * 1000) // Restamos 30 minutos al tiempo actual
+    const response = await this.#model.find({ last_connection: { $lt: inactiveTime } })
+    const data = this.#toPOJO(response)
+    return data
+  }
+
   async deleteInactiveUsers () {
     const minutes = 30
     const inactiveTime = new Date().getTime() - (minutes * 60 * 1000) // Restamos 30 minutos al tiempo actual
-    await this.#model.deleteMany({ last_connection: { $lt: inactiveTime } })
+    const response = await this.#model.deleteMany({ last_connection: { $lt: inactiveTime } })
+    console.log(response)
+    console.log('======================')
+    const data = this.#toPOJO(response)
+    return data
   }
 }
 
