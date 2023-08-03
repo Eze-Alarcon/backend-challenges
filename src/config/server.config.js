@@ -34,7 +34,8 @@ const WEB_ROUTES = {
   PROFILE: '/profile',
   CHAT: '/chat',
   RECOVER: '/recoverPassword',
-  SET_PASSWORD: '/newpassword'
+  SET_PASSWORD: '/newpassword',
+  ADMIN_PANEL: '/adminpanel'
 }
 
 const ROUTES = {

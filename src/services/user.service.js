@@ -25,8 +25,8 @@ class UserService {
     this.#daoGH = DAO_GH
   }
 
-  async getMany (query = {}, options = { password: 0, cartID: 0, age: 0 }) {
-    const users = await this.#daoUsers.findUser(query, options)
+  async getMany (query = {}, options = { password: 0, cartID: 0, age: 0 }, sort = false) {
+    const users = await this.#daoUsers.findUser(query, options, sort)
     return { users }
   }
 

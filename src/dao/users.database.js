@@ -16,8 +16,10 @@ class DB_USER_MANAGER {
     return JSON.parse(JSON.stringify(item))
   }
 
-  async findUser (query, options = {}) {
-    const response = await this.#model.find(query, { _id: 0, ...options })
+  async findUser (query, options = {}, sort = false) {
+    let response
+    if (sort) response = await this.#model.find(query, { _id: 0, ...options }).sort({ role: 1 })
+    else response = await this.#model.find(query, { _id: 0, ...options })
     const user = this.#toPOJO(response)
     return [...user]
   }

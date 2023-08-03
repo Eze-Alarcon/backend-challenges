@@ -14,7 +14,8 @@ const RENDER_PATHS = {
   UPDATE_PRODUCT: 'update',
   CRATE_PRODUCT: 'createProduct',
   RECOVERY_PASSWORD: 'passwordRecovery',
-  SET_PASSWORD: 'setpassword'
+  SET_PASSWORD: 'setpassword',
+  ADMIN_PANEL: 'adminPanel'
 }
 
 export {

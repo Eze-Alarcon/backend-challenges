@@ -11,6 +11,7 @@ import { STATUS_CODE } from '../utils/errors.messages.js'
 import { verifyToken } from '../utils/jwt.config.js'
 
 // Services
+import { userService } from '../services/user.service.js'
 import { productService } from '../services/product.service.js'
 import { cartService } from '../services/cart.service.js'
 
@@ -167,6 +168,23 @@ async function setPassword (req, res, next) {
   }
 }
 
+async function adminPanel (req, res, next) {
+  try {
+    const token = req.signedCookies[COOKIE_NAME]
+    const { email } = await verifyToken(token)
+    const { users } = await userService.getMany({ email: { $ne: email } }, { email: 1, role: 1, first_name: 1 }, true)
+
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .render(RENDER_PATHS.ADMIN_PANEL, {
+        headerTitle: 'HOME | Admin panel',
+        users
+      })
+  } catch (error) {
+    return res.redirect(ROUTES.RECOVER)
+  }
+}
+
 export {
   productsPaginate,
   uptProducts,
@@ -177,5 +195,6 @@ export {
   register,
   createNewProduct,
   recoveryPass,
-  setPassword
+  setPassword,
+  adminPanel
 }

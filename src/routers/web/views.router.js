@@ -15,12 +15,13 @@ import {
   uptProducts,
   createNewProduct,
   recoveryPass,
-  setPassword
+  setPassword,
+  adminPanel
 } from '../../controllers/views.controller.js'
 
 // Middleware
 import { hasSession, alreadyHasSession } from '../../middleware/autentication.js'
-import { isAuthorized } from '../../controllers/session.controller.js'
+import { isAuthorized, isAdmin } from '../../controllers/session.controller.js'
 
 export const viewsRouter = Router()
 
@@ -71,3 +72,7 @@ viewsRouter
 viewsRouter
   .route(ROUTES.CHAT)
   .get(hasSession, usersChat)
+
+viewsRouter
+  .route(ROUTES.ADMIN_PANEL)
+  .get(hasSession, isAdmin, adminPanel)

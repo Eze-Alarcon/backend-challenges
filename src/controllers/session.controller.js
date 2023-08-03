@@ -73,6 +73,17 @@ async function isAuthorized (req, res, next) {
   }
 }
 
+async function isAdmin (req, res, next) {
+  try {
+    const token = req.signedCookies[COOKIE_NAME]
+    const { role } = await verifyToken(token)
+    if (role !== ROLES.ADMIN) throw new Error(AUTH_ERROR.FORBIDDEN.ERROR_CODE)
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
+
 async function passwordRecovery (req, res, next) {
   try {
     await userService.passwordRecovery({ email: req.body.email })
@@ -89,5 +100,6 @@ export {
   saveJwtCookie,
   getCurrentUser,
   isAuthorized,
-  passwordRecovery
+  passwordRecovery,
+  isAdmin
 }
