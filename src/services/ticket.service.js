@@ -8,7 +8,7 @@ import { CustomError } from '../models/error.model.js'
 
 // Utils
 import { TICKET_MANAGER_ERRORS } from '../utils/errors.messages.js'
-import { winstonLogger as logger } from '../utils/logger.js'
+import { winstonLogger as logger } from '../utils/winston.logger.js'
 
 // DAO
 import { DAO_TICKET } from '../dao/tickets.database.js'

@@ -22,7 +22,7 @@ import { webRouter } from './routers/web.router.js'
 import { newMessage, getAllMessages } from './controllers/chat.controller.js'
 
 // Utils
-import { winstonLogger as log } from './utils/logger.js'
+import { winstonLogger as log } from './utils/winston.logger.js'
 
 export const app = express()
 

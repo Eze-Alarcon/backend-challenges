@@ -1,4 +1,4 @@
-import { winstonLogger } from '../utils/logger.js'
+import { winstonLogger } from '../utils/winston.logger.js'
 
 export const logger = (req, res, next) => {
   req.logger = winstonLogger

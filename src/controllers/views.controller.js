@@ -26,6 +26,22 @@ Handlebars.registerHelper('if-or', function (exp1, exp2, options) {
   }
 })
 
+Handlebars.registerHelper('if-and', function (exp1, exp2, options) {
+  if (exp1 && exp2) {
+    return options.fn(this)
+  } else {
+    return options.inverse(this)
+  }
+})
+
+Handlebars.registerHelper('if-NotAndNot', function (exp1, exp2, options) {
+  if (!exp1 && !exp2) {
+    return options.fn(this)
+  } else {
+    return options.inverse(this)
+  }
+})
+
 async function productsPaginate (req, res, next) {
   try {
     const { products } = await productService.getMany(req.query ?? {})
@@ -68,57 +84,93 @@ async function cartItems (req, res, next) {
 }
 
 function login (req, res, next) {
-  res
-    .status(STATUS_CODE.SUCCESS.OK)
-    .render(RENDER_PATHS.LOGIN, {
-      headerTitle: 'Log in',
-      mainTitle: 'Log in'
-    })
+  try {
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .render(RENDER_PATHS.LOGIN, {
+        headerTitle: 'Log in',
+        mainTitle: 'Log in'
+      })
+  } catch (error) {
+    res
+      .status(STATUS_CODE.CLIENT_ERROR.NOT_FOUND)
+      .render(RENDER_PATHS.NOT_EXIST, {
+        cause: error.type,
+        message: 'An error occurred during the log, try reloading the page and try again.'
+      })
+  }
 }
 
 function register (req, res, next) {
-  res
-    .status(STATUS_CODE.SUCCESS.OK)
-    .render(RENDER_PATHS.REGISTER, {
-      headerTitle: 'Register',
-      mainTitle: 'Register',
-      roles: Object.values(ROLES)
-    })
+  try {
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .render(RENDER_PATHS.REGISTER, {
+        headerTitle: 'Register',
+        mainTitle: 'Register',
+        roles: Object.values(ROLES)
+      })
+  } catch (error) {
+    res
+      .status(STATUS_CODE.CLIENT_ERROR.NOT_FOUND)
+      .render(RENDER_PATHS.NOT_EXIST, {
+        cause: error.type,
+        message: 'An error occurred during the registration process, try reloading the page and try again.'
+      })
+  }
 }
 
 async function profile (req, res, next) {
-  const token = req.signedCookies[COOKIE_NAME]
-  const userInfo = await verifyToken(token)
+  try {
+    const token = req.signedCookies[COOKIE_NAME]
+    const userInfo = await verifyToken(token)
 
-  res
-    .status(STATUS_CODE.SUCCESS.OK)
-    .render(RENDER_PATHS.PROFILE, {
-      headerTitle: 'HOME | Profile',
-      mainTitle: 'My Profile',
-      userInfo: {
-        user: userInfo.email,
-        name: `${userInfo.first_name} ${userInfo.last_name}`,
-        age: userInfo.age,
-        role: userInfo.role
-      }
-    })
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .render(RENDER_PATHS.PROFILE, {
+        headerTitle: 'HOME | Profile',
+        mainTitle: 'My Profile',
+        userInfo: {
+          user: userInfo.email,
+          name: `${userInfo.first_name} ${userInfo.last_name}`,
+          age: userInfo.age,
+          role: userInfo.role
+        }
+      })
+  } catch (error) {
+    res
+      .status(STATUS_CODE.CLIENT_ERROR.NOT_FOUND)
+      .render(RENDER_PATHS.NOT_EXIST, {
+        cause: error.type,
+        message: 'An error occurred while accessing your profile, try reloading the page and try again.'
+      })
+  }
 }
 
 async function uptProducts (req, res, next) {
-  const { product } = await productService.getOne({ id: req.params.pid })
+  try {
+    const { product } = await productService.getOne({ id: req.params.pid })
 
-  res
-    .status(STATUS_CODE.SUCCESS.OK)
-    .render(RENDER_PATHS.UPDATE_PRODUCT, {
-      headerTitle: 'HOME | Products',
-      mainTitle: 'Update Product',
-      product: {
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        stock: product.stock
-      }
-    })
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .render(RENDER_PATHS.UPDATE_PRODUCT, {
+        headerTitle: 'HOME | Products',
+        mainTitle: 'Update Product',
+        product: {
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          stock: product.stock
+        }
+      })
+  } catch (error) {
+    res
+      .status(STATUS_CODE.CLIENT_ERROR.NOT_FOUND)
+      .render(RENDER_PATHS.NOT_EXIST, {
+        cause: error.type,
+        message: 'We have not found any match for the product you are looking for.'
+      })
+  }
 }
 
 async function createNewProduct (req, res, next) {
@@ -183,6 +235,19 @@ async function adminPanel (req, res, next) {
   }
 }
 
+async function routeNotExist (req, res, next) {
+  try {
+    res
+      .status(STATUS_CODE.CLIENT_ERROR.NOT_FOUND)
+      .render(RENDER_PATHS.NOT_EXIST, {
+        cause: 'The route you are looking for is not available',
+        message: 'Check that the url is well written, if it is well written there is a possibility that the endpoint does not exist.'
+      })
+  } catch (error) {
+    return res.redirect(ROUTES.RECOVER)
+  }
+}
+
 export {
   productsPaginate,
   uptProducts,
@@ -194,5 +259,6 @@ export {
   createNewProduct,
   recoveryPass,
   setPassword,
-  adminPanel
+  adminPanel,
+  routeNotExist
 }

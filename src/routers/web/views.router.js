@@ -16,7 +16,8 @@ import {
   createNewProduct,
   recoveryPass,
   setPassword,
-  adminPanel
+  adminPanel,
+  routeNotExist
 } from '../../controllers/views.controller.js'
 
 // Middleware
@@ -76,3 +77,9 @@ viewsRouter
 viewsRouter
   .route(ROUTES.ADMIN_PANEL)
   .get(hasSession, isAdmin, adminPanel)
+
+/* ============ NOT FOUND ============ */
+
+viewsRouter
+  .route('*')
+  .all(routeNotExist)

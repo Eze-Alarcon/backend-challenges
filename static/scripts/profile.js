@@ -1,5 +1,5 @@
-const btnLogout = document.getElementById('btn_logout')
-const btnUptRole = document.getElementById('btn_update_role')
+const btnLogout = document.getElementById('btn_logout') || null
+const btnUptRole = document.getElementById('btn_update_role') || null
 const liRole = document.getElementById('li-role')
 
 const TEXTS = {
@@ -9,8 +9,8 @@ const TEXTS = {
   LI_PREMIUM: 'Acess: Premium'
 }
 
-btnLogout.addEventListener('click', logout)
-btnUptRole.addEventListener('click', updateRole)
+if (btnLogout !== null) btnLogout.addEventListener('click', logout)
+if (btnUptRole !== null) btnUptRole.addEventListener('click', updateRole)
 
 async function logout (event) {
   event.preventDefault()

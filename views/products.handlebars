@@ -21,33 +21,59 @@
         {{#each info.payload}}
           <div class='col-6 col-md-4 col-xl-3'>
             <div class='card position-relative'>
-              {{#if-or (eq ../role 'admin') (eq this.owner ../userEmail)}}
-                <div class="position-absolute m-1">
-                  {{!-- delete btn --}}
-                  <button type="button" class="btn btn-outline-danger btn-sm" data-productid={{this.id}} onclick="deleteProduct(event, this.dataset.productid)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                      <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-                    </svg>
-                  </button>
-                </div>
-                {{!-- update btn --}}
-                <div class="position-absolute end-0 m-1">
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="updateProduct(this.dataset.productid)" data-productid={{this.id}}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
-                      </svg>
-                  </button>
-                </div>
-              {{else}}
-              {{!-- shop btn --}}
-                <div class="position-absolute end-0 m-1">
-                  <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addProductToCart(this.dataset.productid)" data-productid={{this.id}}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
-                      <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
-                    </svg>
-                  </button>
-                </div>
-              {{/if-or}}
+
+
+                  {{#if (eq ../role 'admin')}}
+                    <div class="position-absolute m-1">
+                      {{!-- delete btn --}}
+                      <button type="button" class="btn btn-outline-danger btn-sm" data-productid={{this.id}} onclick="deleteProduct(event, this.dataset.productid)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                        </svg>
+                      </button>
+                    </div>
+                    {{!-- update btn --}}
+                    <div class="position-absolute end-0 m-1">
+                      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="updateProduct(this.dataset.productid)" data-productid={{this.id}}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                          </svg>
+                      </button>
+                    </div>
+                  {{/if}}
+
+                  {{#if-and (eq ../role 'premium') (eq this.owner ../userEmail)}}
+                    <div class="position-absolute m-1">
+                      {{!-- delete btn --}}
+                      <button type="button" class="btn btn-outline-danger btn-sm" data-productid={{this.id}} onclick="deleteProduct(event, this.dataset.productid)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                        </svg>
+                      </button>
+                    </div>
+                    {{!-- update btn --}}
+                    <div class="position-absolute end-0 m-1">
+                      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="updateProduct(this.dataset.productid)" data-productid={{this.id}}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                          </svg>
+                      </button>
+                    </div>
+                  {{/if-and}}
+
+
+                  {{#if-NotAndNot (eq ../role 'admin') (eq this.owner ../userEmail)}}
+                    {{!-- shop btn --}}
+                    <div class="position-absolute end-0 m-1">
+                      <button type="button" class="btn btn-outline-secondary btn-sm" onclick="addProductToCart(this.dataset.productid)" data-productid={{this.id}}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                          <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  {{/if-NotAndNot}}
+
+
               <div class='card-body'>
                 <h5 class='card-title text-truncate'>{{this.title}}</h5>
                 <p class='card-text'>{{this.description}}</p>
@@ -55,7 +81,13 @@
               <ul class='list-group list-group-flush'>
                 <li class='list-group-item'>Price: ${{this.price}}</li>
                 <li class='list-group-item'>Stock: {{this.stock}}</li>
-                <li class='list-group-item'>Owner: {{this.owner}}</li>
+                <li class='list-group-item'>Owner:
+                  {{#if (eq this.owner ../userEmail)}}
+                    You
+                  {{else}}
+                    {{this.owner}}
+                  {{/if}}
+                </li>
               </ul>
             </div>
           </div>

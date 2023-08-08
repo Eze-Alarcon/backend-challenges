@@ -21,8 +21,11 @@ const productSchema = Joi.object({
   thumbnail: Joi.array()
     .min(0),
 
-  owner: Joi.string()
-    .email()
+  owner: Joi.alternatives()
+    .try(
+      Joi.string().email(),
+      Joi.string().valid('admin')
+    )
 })
 
 function validation ({ data }) {

@@ -54,6 +54,7 @@ async function generateTicket (event) {
   const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/ticket`
   const response = await fetch(FETCH_URL, { method: 'POST' })
   if (response.status !== 201) {
+    btnClear.disabled = false
     errorContainer.classList.remove('d-none')
     setTimeout(() => {
       errorContainer.classList.add('d-none')
