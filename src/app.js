@@ -24,7 +24,6 @@ import { newMessage, getAllMessages } from './controllers/chat.controller.js'
 // Utils
 import { winstonLogger as log } from './utils/logger.js'
 
-// --> Server
 export const app = express()
 
 app.use(express.json())

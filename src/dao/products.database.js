@@ -4,8 +4,6 @@ import { STATUS_CODE } from '../utils/errors.messages.js'
 // Schemas
 import { productModel } from '../schemas/mongoose/products.schema.js'
 
-// TODO: eliminar comentarios
-
 class DB_PRODUCT_MANAGER {
   #model
   constructor (model) {
@@ -16,7 +14,6 @@ class DB_PRODUCT_MANAGER {
     return JSON.parse(JSON.stringify(item))
   }
 
-  // TODO: ver como cambiar esto
   #handleQueries (options) {
     const pageOptions = {
       limit: options.limit || 10,

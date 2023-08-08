@@ -48,8 +48,6 @@ class DB_USER_MANAGER {
     const minutes = 30
     const inactiveTime = new Date().getTime() - (minutes * 60 * 1000) // Restamos 30 minutos al tiempo actual
     const response = await this.#model.deleteMany({ last_connection: { $lt: inactiveTime } })
-    console.log(response)
-    console.log('======================')
     const data = this.#toPOJO(response)
     return data
   }

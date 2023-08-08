@@ -11,7 +11,7 @@ function useToast (message) {
   toast.show()
   setTimeout(() => toast.hide(), 3000)
   toastBodyMessage.innerText = message
-  // setTimeout(() => window.location.assign('/login'), 3000)
+  setTimeout(() => window.location.assign('/login'), 4000)
 }
 
 const loginForm = document.getElementById('recovery_form')

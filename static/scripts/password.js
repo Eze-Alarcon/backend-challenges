@@ -11,7 +11,6 @@ function useToast (message) {
   toast.show()
   setTimeout(() => toast.hide(), 2500)
   toastBodyMessage.innerText = message
-  // setTimeout(() => window.location.assign('/login'), 3000)
 }
 
 const loginForm = document.getElementById('setpassword_form')

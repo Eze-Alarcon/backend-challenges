@@ -8,16 +8,10 @@ import {
   updateProduct,
   deleteProduct,
   getProducts,
-  createProduct,
-  productsMock
+  createProduct
 } from '../../controllers/product.controller.js'
 
 export const productsRouter = Router()
-
-// TODO: Borrar esto
-productsRouter
-  .route('/mockingproducts')
-  .get(productsMock)
 
 productsRouter
   .route('/:pid')

@@ -90,8 +90,6 @@ async function profile (req, res, next) {
   const token = req.signedCookies[COOKIE_NAME]
   const userInfo = await verifyToken(token)
 
-  // TODO: ver que muestra el req.session si el usuario se logea con github
-
   res
     .status(STATUS_CODE.SUCCESS.OK)
     .render(RENDER_PATHS.PROFILE, {

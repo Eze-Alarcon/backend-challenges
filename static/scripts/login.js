@@ -5,9 +5,7 @@ loginForm.addEventListener('submit', handleSubmit)
 
 async function handleSubmit (e) {
   e.preventDefault()
-
   const data = Object.fromEntries(new FormData(e.target))
-
   await postData(data)
 }
 

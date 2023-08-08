@@ -56,18 +56,5 @@ class EmailService {
   }
 }
 
-// TODO: Delete this 👇
-
-class EmailServiceMock {
-  async send ({ dest, message }) {
-    console.log(`[email.service.js] - ${dest}: ${message}`)
-    return { dest, message }
-  }
-}
-
-export let emailService
-if (process.env.NODE_ENV === 'production') {
-  emailService = new EmailService(EMAIL_CONFIG)
-} else {
-  emailService = new EmailServiceMock()
-}
+const emailService = new EmailService(EMAIL_CONFIG)
+export { emailService }
