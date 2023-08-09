@@ -24,7 +24,7 @@ const productSchema = Joi.object({
   owner: Joi.alternatives()
     .try(
       Joi.string().email(),
-      Joi.string().valid('admin')
+      Joi.string()
     )
 })
 

@@ -1,96 +1,114 @@
 # Curso de Backend en Coderhouse
 
-Desafios del curso de coderhouse
+Proyecto final del curso de backend con Node.js en Coderhouse
 
 - [Curso de Backend en Coderhouse](#curso-de-backend-en-coderhouse)
-- [Tercera práctica de integración](#tercera-práctica-de-integración)
-  - [Aspectos a incluir](#aspectos-a-incluir)
-- [Módulos de testing para proyecto final](#módulos-de-testing-para-proyecto-final)
-  - [Aspectos a incluir](#aspectos-a-incluir-1)
-- [Cuarta práctica integradora](#cuarta-práctica-integradora)
-  - [Aspectos a incluir](#aspectos-a-incluir-2)
-- [Proyecto final](#proyecto-final)
-  - [Aspectos a incluir](#aspectos-a-incluir-3)
+- [Descripcion del proyecto](#descripcion-del-proyecto)
+  - [Herramientas implementadas](#herramientas-implementadas)
+  - [Documentacion de los endpoints](#documentacion-de-los-endpoints)
+- [Consideraciones](#consideraciones)
+  - [Scrips](#scrips)
+  - [Formato del .env](#formato-del-env)
+    - [Salt](#salt)
 
-# Tercera práctica de integración
+# Descripcion del proyecto
 
-## Aspectos a incluir
+El proyecto consiste en la implementacion de Node.js junto con API REST para crear el backend de una ecommerce.
 
-- Realizar un sistema de recuperación de contraseña, la cual envíe por medio de un correo un botón que redireccione a una página para restablecer la contraseña (no recuperarla). 👍
-    * link del correo debe expirar después de 1 hora de enviado. 👍
-    * No se puede colocar la misma contraseña de antes 👍
-    * Si el link expiró, debe redirigir a una vista que le permita generar nuevamente el correo de restablecimiento, el cual contará con una nueva duración de 1 hora. 👍
+Por razones de practicidad no se ha desarrollado una pasarela de pago.
 
-- Establecer un nuevo rol para el schema del usuario llamado “premium” el cual estará habilitado también para crear productos 👍
+## Herramientas implementadas
 
-- Modificar el schema de producto para contar con un campo “owner”, el cual haga referencia a la persona que creó el producto 👍
-    * Si un producto se crea sin owner, se debe colocar por defecto “admin”. 👍
-    * El campo owner deberá guardar sólo el correo electrónico del usuario (premium) que lo haya creado 👍
+Server:
+* express
+* handlebars
+* dotenv
 
-- Modificar los permisos de modificación y eliminación de productos para que:
-    * Un usuario premium sólo pueda borrar los productos que le pertenecen. 👍
-    * El admin pueda borrar cualquier producto, aún si es de un owner. 👍
+Loggin:
+* passport
+* cookie-parser
+* jsonwebtoken
 
-- Además, modificar la lógica de carrito para que un usuario premium NO pueda agregar a su carrito un producto que le pertenece 👍
+Base de datos:
+* mongoose
+* mongoose-paginate-v2
 
-- Implementar una nueva ruta en el router de api/users, la cual será /api/users/premium/:uid  la cual permitirá cambiar el rol de un usuario, de “user” a “premium” y viceversa. 👍
+Validaciones y encriptado:
+* joi
+* bcrypt
 
-# Módulos de testing para proyecto final
+Documentacion:
+* swagger
 
-Realizar módulos de testing para tu proyecto principal, utilizando los módulos de mocha + chai + supertest
+Servicios de Email:
+* nodemailer
 
-## Aspectos a incluir
+Utilidades:
+* socket.io
+* nodemon
+* winston
 
-- Se deben incluir por lo menos 3 tests desarrollados para
-    * Router de products.
-    * Router de carts.
-    * Router de sessions.
+## Documentacion de los endpoints
 
-- NO desarrollar únicamente tests de status, la idea es trabajar lo mejor desarrollado posible las validaciones de testing
+Una vez revisada la seccion de consideraciones, y de tener todo en condiciones para que funcione el programa, se encuentra una ruta en /api/docs para revisar los endpoint disponibles
 
-# Cuarta práctica integradora
+# Consideraciones
 
-Con base en el proyecto que venimos desarrollando, toca solidificar algunos procesos
+## Scrips
 
-## Aspectos a incluir
+npm run start:
+  * Execute: node .
+  * Description: Inicia el servidor usando node
 
-- Mover la ruta suelta /api/users/premium/:uid a un router específico para usuarios en /api/users/ 👍
+npm run dev:
+  * Execute: NODE_ENV=development nodemon -e 'js,handlebars,yaml' .
+  * Description: Implementa nodemon para iniciar el servidor en modo de desarrollo
 
-- Modificar el modelo de User para que cuente con una nueva propiedad “documents” el cual será un array que contenga los objetos con las siguientes propiedades
-    * name: String (Nombre del documento).
-    * reference: String (link al documento).
-    **No es necesario crear un nuevo modelo de Mongoose para éste.**
+npm run lint:
+  * Execute: standard . --fix
+  * Description: Implementa eslint con standard para revisar los estilos del codigo
 
-- Además, agregar una propiedad al usuario llamada “last_connection”, la cual deberá modificarse cada vez que el usuario realice un proceso de login y logout 👍
- 
-- Crear un endpoint en el router de usuarios api/users/:uid/documents con el método POST que permita subir uno o múltiples archivos. Utilizar el middleware de Multer para poder recibir los documentos que se carguen y actualizar en el usuario su status para hacer saber que ya subió algún documento en particular.
+npm run commit:
+  * Execute: sh -c 'git add .' && cz
+  * Description: Implementa commitizen para agilizar el proceso de commits
 
-- El middleware de multer deberá estar modificado para que pueda guardar en diferentes carpetas los diferentes archivos que se suban.
-    * Si se sube una imagen de perfil, deberá guardarlo en una carpeta profiles, en caso de recibir la imagen de un producto, deberá guardarlo en una carpeta products, mientras que ahora al cargar un documento, multer los guardará en una carpeta documents.
+[Eslint.org](https://eslint.org/)
 
-- Modificar el endpoint /api/users/premium/:uid   para que sólo actualice al usuario a premium si ya ha cargado los siguientes documentos:
-    * Identificación, Comprobante de domicilio, Comprobante de estado de cuenta
+[Commitizen](https://www.npmjs.com/package/commitizen)
 
-**En caso de llamar al endpoint, si no se ha terminado de cargar la documentación, devolver un error indicando que el usuario no ha terminado de procesar su documentación. (Sólo si quiere pasar de user a premium, no al revés)**
+## Formato del .env
 
-# Proyecto final
+Para que el programa funcione correctamente debe existir un archivo .env en la carpeta src/config.
+El formato de dicho archivo es el siguiente:
 
-Backend de una aplicación ecommerce
+```
+  URL_DB = url a la base de datos de produccion de mongo
+  URL_DB_TEST = url a la base de datos de desarrollo de mongo
 
-## Aspectos a incluir
+  PORT = puerto de la aplicacion
 
-- Desde el router de /api/users, crear tres rutas:
-    * GET  /  deberá obtener todos los usuarios, éste sólo debe devolver los datos principales como nombre, correo, tipo de cuenta (rol) 👍
+  SALT = un salt aleatorio para que funcione el encriptado de la contraseña
 
-    * DELETE / deberá limpiar a todos los usuarios que no hayan tenido conexión en los últimos 2 días. (puedes hacer pruebas con los últimos 30 minutos, por ejemplo). 👍
-    *Deberá enviarse un correo indicando al usuario que su cuenta ha sido eliminada por inactividad* 👍
+  COOKIE_SECRET = palabra secreta para encriptar cookies
+  JWT_SECRET = palabra secreta para encriptar el JWT
 
-- Crear una vista para poder visualizar, modificar el rol y eliminar un usuario. Esta vista únicamente será accesible para el administrador del ecommerce 👍
+  CLIENT_ID_GITHUB = credenciales de github para el funcionamiento del login co GitHub
+  CLIENT_GITHUB_SECRET = credenciales de github para el funcionamiento del login co GitHub
 
-- Modificar el endpoint que elimina productos, para que, en caso de que el producto pertenezca a un usuario, le envíe un correo indicándole que el producto fue eliminado. 👍
+  EMAIL_USER = email desde el cual se enviaran los correos (esto es para que funcione el email service)
+  EMAIL_PASS = contraseña del email
+  TEST_EMAIL_USER = email mock para realizar tests
+  TEST_EMAIL_PASS = contraseña del email mock para realizar tests
+```
 
-- Finalizar las vistas pendientes para la realización de flujo completo de compra. NO ES NECESARIO tener una estructura específica de vistas, sólo las que tú consideres necesarias para poder llevar a cabo el proceso de compra.
+### Salt 
 
-- No es necesario desarrollar vistas para módulos que no influyan en el proceso de compra (Como vistas de usuarios premium para crear productos, o vistas de panel de admin para updates de productos, etc)
+Puedes crear un salt usando la siguiente funcion de bcrypt:
 
-- Realizar el despliegue de tu aplicativo en la plataforma de tu elección (Preferentemente Railway.app, pues es la abarcada en el curso) y corroborar que se puede llevar a cabo un proceso de compra completo.
+
+
+```JavaScript:
+  bcrypt.genSalt(saltRounds, function(err, salt) {
+    returns salt
+  });
+```
