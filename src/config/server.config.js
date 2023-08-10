@@ -12,7 +12,7 @@ const LOG_LEVEL = parseInt(process.env.LOG_LEVEL || '10')
 
 const SERVER_CONFIG = {
   BASE_URL: `http://localhost:${PORT}`,
-  PORT: parseInt(PORT),
+  PORT,
   NODE_ENV,
   LOG_LEVEL
 }
