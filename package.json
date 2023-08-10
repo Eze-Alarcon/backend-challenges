@@ -3,9 +3,9 @@
   "name": "desafios",
   "version": "1.0.0",
   "description": "desafios de coderhouse",
-  "main": "./src/app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node .",
+    "start": "node src/app.js",
     "dev": "nodemon -e 'js,handlebars,yaml' .",
     "lint": "standard . --fix",
     "git-add": "sh -c 'git add .'",
