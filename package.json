@@ -4,11 +4,6 @@
   "version": "1.0.0",
   "description": "desafios de coderhouse",
   "main": "src/app.js",
-  "engines": {
-    "node": ">=14.x",
-    "npm": "7.x",
-    "yarn": ">=1.19.0 < 2.0.0"
-   },
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon -e 'js,handlebars,yaml' .",
@@ -58,7 +53,7 @@
     "handlebars": "4.7.7",
     "joi": "17.9.2",
     "jsonwebtoken": "9.0.0",
-    "mongoose": "7.0.3",
+    "mongoose": "^7.4.2",
     "mongoose-paginate-v2": "1.7.1",
     "nodemailer": "6.9.4",
     "nodemon": "3.0.1",
