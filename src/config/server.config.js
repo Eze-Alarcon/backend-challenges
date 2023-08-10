@@ -11,7 +11,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development'
 const LOG_LEVEL = parseInt(process.env.LOG_LEVEL || '10')
 
 const SERVER_CONFIG = {
-  BASE_URL: `https://backend-challenges-production.up.railway.app/`,
+  BASE_URL: `https://backend-challenges-production.up.railway.app`,
   PORT,
   NODE_ENV,
   LOG_LEVEL
