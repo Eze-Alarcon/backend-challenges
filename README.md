@@ -6,6 +6,7 @@ Proyecto final del curso de backend con Node.js en Coderhouse
 - [Descripcion del proyecto](#descripcion-del-proyecto)
   - [Herramientas implementadas](#herramientas-implementadas)
   - [Documentacion de los endpoints](#documentacion-de-los-endpoints)
+    - [Seguridad](#seguridad)
 - [Consideraciones](#consideraciones)
   - [Scrips](#scrips)
   - [Formato del .env](#formato-del-env)
@@ -51,6 +52,14 @@ Utilidades:
 ## Documentacion de los endpoints
 
 Una vez revisada la seccion de consideraciones, y de tener todo en condiciones para que funcione el programa, se encuentra una ruta en /api/docs para revisar los endpoint disponibles
+
+### Seguridad
+
+Dadas las medidas de seguridad para proteger las diferentes rutas de la API, han quedado invalido el realizar test mediante herramientas como Postman o Thunder Client.
+
+Esto se debe a que el backend espera que se reciba un JWT por medio de signed cookies y ocasiona problemas al momento de realizar las validaciones con otras herramientas que no sean el front para el cual fue diseñado. 
+
+Este error se corregira al implementar JWT de una manera diferente pero a fines practicos del curso considero que es valida la implementacion realizada.
 
 # Consideraciones
 
