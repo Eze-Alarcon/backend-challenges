@@ -17,7 +17,8 @@ class EmailService {
   }
 
   #passwordTemplate (message) {
-    return `<button><a></a>${message}</a></button>
+    return `<button><a href=${message}>Link</a></button>
+    <br/>
     <p>If the button doesn't work, here is the link: <span style="color: blue;">${message}</span></p>`
   }
 
