@@ -24,7 +24,7 @@ function verifyToken (token) {
 }
 
 function generateRecoveryLink ({ email }) {
-  const URL = `${SERVER_CONFIG.BASE_URL}${ROUTES.SET_PASSWORD}`
+  const URL = `${SERVER_CONFIG.BASE_URL}${ROUTES.SET_PASSWORD}/`
   const date = new Date().getTime()
   const token = generateToken({ email, date })
   return URL.concat(token)
