@@ -37,9 +37,9 @@ class EmailService {
 
   async send ({ dest, message, emailType }) {
     let template
-    if (emailType === 'recovery') this.template = this.#passwordTemplate(message)
-    if (emailType === 'delete') this.template = this.#deleteAccount(message)
-    if (emailType === 'productDeleted') this.template = this.#deleteProduct(message)
+    if (emailType === 'recovery') template = this.#passwordTemplate(message)
+    if (emailType === 'delete') template = this.#deleteAccount(message)
+    if (emailType === 'productDeleted') template = this.#deleteProduct(message)
 
     const mailOptions = {
       from: 'Servidor Node.js',
