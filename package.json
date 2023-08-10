@@ -4,6 +4,11 @@
   "version": "1.0.0",
   "description": "desafios de coderhouse",
   "main": "src/app.js",
+  "engines": {
+    "node": ">=14.x",
+    "npm": "7.x",
+    "yarn": ">=1.19.0 < 2.0.0"
+   },
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon -e 'js,handlebars,yaml' .",
