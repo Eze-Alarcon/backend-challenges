@@ -23,7 +23,7 @@ const GH_CLIENT_ID = process.env.CLIENT_ID_GITHUB
 
 const GH_CLIENT_SECRET = process.env.CLIENT_GITHUB_SECRET
 
-const GH_CB_URL = 'http://localhost:8080/api/sessions/githubcallback'
+const GH_CB_URL = 'https://backend-challenges-production.up.railway.app/api/sessions/githubcallback'
 
 export {
   COOKIE_SECRET,

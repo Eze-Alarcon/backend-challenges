@@ -7,7 +7,7 @@ const ROLES = {
 async function updateUserRole (event, email, role) {
   const btnUpdate = event.currentTarget
   btnUpdate.disabled = true
-  await fetch('http://localhost:8080/api/users/user',
+  await fetch('https://backend-challenges-production.up.railway.app/api/users/user',
     {
       method: 'PUT',
       body: JSON.stringify({ email, role }),
@@ -28,7 +28,7 @@ async function deleteUser (event, email) {
   const btnUpdate = btnDelete.previousElementSibling
   btnDelete.disabled = true
   btnUpdate.disabled = true
-  await fetch('http://localhost:8080/api/users/user',
+  await fetch('https://backend-challenges-production.up.railway.app/api/users/user',
     {
       method: 'DELETE',
       body: JSON.stringify({ email }),

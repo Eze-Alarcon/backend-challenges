@@ -20,7 +20,7 @@ async function updateProduct (event) {
   event.preventDefault()
   const data = Object.fromEntries(new FormData(form))
 
-  await fetch(`http://localhost:8080/api/products/${productID}`,
+  await fetch(`https://backend-challenges-production.up.railway.app/api/products/${productID}`,
     {
       method: 'PUT',
       body: JSON.stringify(data),

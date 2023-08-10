@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-undef
-const serverSocket = io('http://localhost:8080')
+const serverSocket = io('https://backend-challenges-production.up.railway.app/')
 const list = document.getElementById('message-list')
 const sendBtn = document.getElementById('send-button')
 const inputMessage = document.getElementById('input-message')

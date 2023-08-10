@@ -51,7 +51,7 @@ async function generateTicket (event) {
   const btnClear = btnBuy.previousElementSibling
   btnBuy.disabled = true
   btnClear.disabled = true
-  const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/ticket`
+  const FETCH_URL = `https://backend-challenges-production.up.railway.app/api/carts/${cartID}/ticket`
   const response = await fetch(FETCH_URL, { method: 'POST' })
   if (response.status !== 201) {
     btnClear.disabled = false
@@ -73,7 +73,7 @@ async function generateTicket (event) {
 
 // eslint-disable-next-line no-unused-vars
 async function clearCart () {
-  const FETCH_URL = `http://localhost:8080/api/carts/${cartID}`
+  const FETCH_URL = `https://backend-challenges-production.up.railway.app/api/carts/${cartID}`
   await fetch(FETCH_URL, { method: 'DELETE' })
   window.location.reload()
 }

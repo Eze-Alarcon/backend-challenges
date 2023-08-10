@@ -17,7 +17,7 @@ let cartID = null
 if (link !== null) cartID = link.dataset.cart
 
 async function addProductToCart (productID) {
-  const FETCH_URL = `http://localhost:8080/api/carts/${cartID}/product/${productID}`
+  const FETCH_URL = `https://backend-challenges-production.up.railway.app/api/carts/${cartID}/product/${productID}`
   await fetch(FETCH_URL, { method: 'PUT' })
   useToast()
 }
@@ -27,7 +27,7 @@ async function deleteProduct (event, productID) {
   const btnUpdate = btnDelete.offsetParent.nextElementSibling.children[0]
   btnDelete.disabled = true
   btnUpdate.disabled = true
-  const FETCH_URL = `http://localhost:8080/api/products/${productID}`
+  const FETCH_URL = `https://backend-challenges-production.up.railway.app/api/products/${productID}`
   await fetch(FETCH_URL, { method: 'DELETE' })
   const card = btnDelete.offsetParent.offsetParent.parentElement
   card.remove()
