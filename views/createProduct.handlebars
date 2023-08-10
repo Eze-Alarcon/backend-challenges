@@ -1,0 +1,47 @@
+<main class="p-3">
+  <h2>{{mainTitle}}</h2>
+
+  <button class="btn btn-primary mb-3">
+    <a href="/products" class="text-decoration-none text-white">Go to products</a>
+  </button>
+
+  <form id="createProductForm" onsubmit="updateProduct(event)">
+    {{!-- title --}}
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="inputGroup-sizing-sm">Title</span>
+      <input type="text" name="title" required class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+    </div>
+
+    {{!-- stock --}}
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="inputGroup-sizing-sm">Stock</span>
+      <input type="number" name="stock" value="0" class="form-control" min="0" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+    </div>
+
+    {{!-- Price --}}
+    <div class="input-group mb-3">
+      <span class="input-group-text">$</span>
+      <input type="number" name="price" required value="0" class="form-control" min="1" aria-label="Dollar amount (with dot and two decimal places)">
+    </div>
+
+    {{!-- Description --}}
+    <div class="input-group">
+      <span class="input-group-text">Description</span>
+      <textarea class="form-control" required name="description" aria-label="With textarea"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+  </form>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast align-items-center text-bg-secondary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          <p id="toast-body-message">Product created.</p>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+</main>
+
+<script src="/static/scripts/createProduct.js"></script>

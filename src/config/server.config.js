@@ -6,11 +6,15 @@ dotenv.config({
 })
 
 // Server
-const PORT = process.env.PORT
+const PORT = process.env.PORT || '8080'
+const NODE_ENV = process.env.NODE_ENV || 'development'
+const LOG_LEVEL = parseInt(process.env.LOG_LEVEL || '10')
 
-const SERVER = {
+const SERVER_CONFIG = {
   BASE_URL: `http://localhost:${PORT}`,
-  PORT
+  PORT: parseInt(PORT),
+  NODE_ENV,
+  LOG_LEVEL
 }
 
 const API_ROUTES = {
@@ -18,14 +22,20 @@ const API_ROUTES = {
   PRODUCTS_ROUTE: '/products/',
   SESSION_ROUTE: '/sessions',
   USER_ROUTE: '/users',
-  CARTS_ROUTE: '/carts'
+  CARTS_ROUTE: '/carts',
+  CHAT_ROUTE: '/chat',
+  DOCS_ROUTE: '/docs'
 }
 
 const WEB_ROUTES = {
   HOME_ROUTES: '/',
   STATIC_ROUTE: '/static',
   REGISTER: '/register',
-  PROFILE: '/profile'
+  PROFILE: '/profile',
+  CHAT: '/chat',
+  RECOVER: '/recoverPassword',
+  SET_PASSWORD: '/newpassword',
+  ADMIN_PANEL: '/adminpanel'
 }
 
 const ROUTES = {
@@ -38,4 +48,4 @@ const FOLDERS = {
   VIEWS_FOLDER: './views'
 }
 
-export { SERVER, ROUTES, FOLDERS }
+export { SERVER_CONFIG, ROUTES, FOLDERS }

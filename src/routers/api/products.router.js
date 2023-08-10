@@ -1,26 +1,25 @@
 // Libraries
-import express, { Router } from 'express'
+import { Router } from 'express'
 
 // Controller
+import { isAuthorized } from '../../controllers/session.controller.js'
 import {
-  getProducts,
+  getProduct,
   updateProduct,
   deleteProduct,
-  getAllProducts,
+  getProducts,
   createProduct
 } from '../../controllers/product.controller.js'
 
 export const productsRouter = Router()
 
-productsRouter.use(express.json())
-
 productsRouter
   .route('/:pid')
-  .get(getProducts)
-  .put(updateProduct)
-  .delete(deleteProduct)
+  .get(getProduct)
+  .put(isAuthorized, updateProduct)
+  .delete(isAuthorized, deleteProduct)
 
 productsRouter
   .route('/')
-  .get(getAllProducts)
-  .post(createProduct)
+  .get(getProducts)
+  .post(isAuthorized, createProduct)

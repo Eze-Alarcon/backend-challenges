@@ -1,0 +1,34 @@
+paths:
+  /api/products/:
+    get:
+      summary: Get all products
+      tags:
+        - Productos
+      responses:
+        "200":
+          description: All products.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllProducts'
+    post:
+      summary: Creates a new product (authorization may be required)
+      tags:
+        - Productos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/NewProduct'
+      responses:
+        "201":
+          description: The created product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: Error - User try to send wrong data types (more info in error response)
+        "409":
+          description: Error - Product already exists in the database

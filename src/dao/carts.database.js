@@ -3,7 +3,7 @@
 import mongoose from 'mongoose'
 
 // Schemas
-import { cartModel } from '../schemas/cart.schema.js'
+import { cartModel } from '../schemas/mongoose/cart.schema.js'
 
 class DB_CART_MANAGER {
   #model
@@ -11,29 +11,17 @@ class DB_CART_MANAGER {
     this.#model = model
   }
 
-  #parseResponse (item) {
+  #toPOJO (item) {
     return JSON.parse(JSON.stringify(item))
   }
 
-  async getLastID () {
-    const data = await this.#model
-      .find()
-      .sort({ id: 'desc' })
-      .limit(1)
-      .lean()
-
-    // Si no tiene la propiedad es porque no existe ningun carrito
-    if (data.length === 0 || !data[0].hasOwnProperty('id')) { return 1 }
-
-    return Number(data[0].id) + 1
+  async getMany () {
+    const response = await this.#model.find({}, { _id: 0, products: { _id: 0 } })
+    const carts = this.#toPOJO(response)
+    return carts
   }
 
-  async getCarts () {
-    const response = await this.#model.find({}, { _id: 0, products: { _id: 0 } }).lean()
-    return response
-  }
-
-  async findCartByID ({ id }) {
+  async getOne ({ id }) {
     const response = await this.#model
       .find(
         { id },
@@ -43,21 +31,26 @@ class DB_CART_MANAGER {
           path: 'products.product',
           select: '-stock'
         })
-      .lean()
 
-    if (response.length === 0) throw new Error()
+    const carts = this.#toPOJO(response)
+
+    if (carts.length === 0) throw new Error()
 
     // me trae un array, de esta forma obtengo el valor que busco
-    return response[0]
+    return { cart: carts[0] }
   }
 
-  async createCart (item) {
-    const response = await this.#model.create(item)
-    const data = this.#parseResponse(response)
-    return data
+  async createOne (item) {
+    try {
+      const response = await this.#model.create(item)
+      const data = this.#toPOJO(response)
+      return data
+    } catch (error) {
+      throw new Error()
+    }
   }
 
-  async addProductToCart ({ id, productID }) {
+  async createCartProduct ({ id, productID }) {
     await this.#model.updateOne(
       { id },
       {
@@ -72,13 +65,13 @@ class DB_CART_MANAGER {
       }
     )
     return {
-      productAdded: true,
-      productModified: false,
-      quantityValue: 1
+      product_added: true,
+      product_modified: false,
+      product_quantity: 1
     }
   }
 
-  async updateCartProductQuantity ({ cartID, productID, quantity }) {
+  async updateCartProduct ({ cartID, productID, quantity }) {
     const data = await this.#model.updateOne(
       { cartID, 'products.product': productID },
       { $set: { 'products.$[elem].quantity': quantity } },
@@ -87,13 +80,13 @@ class DB_CART_MANAGER {
     const dataWasModified = data.modifiedCount > 0
 
     return {
-      productAdded: false,
-      productModified: dataWasModified,
-      quantityValue: quantity
+      product_added: false,
+      product_modified: dataWasModified,
+      product_quantity: quantity
     }
   }
 
-  async deleteAllCartProducts ({ id }) {
+  async deleteManyCartProducts ({ id }) {
     const response = await this.#model.updateOne(
       { id },
       { $set: { products: [] } }
@@ -101,18 +94,16 @@ class DB_CART_MANAGER {
     return response
   }
 
-  async deleteCartProduct ({ id, productID }) {
+  async deleteOneCartProduct ({ id, productID }) {
     const data = await this.#model.updateOne(
       { id },
       { $pull: { products: { product: productID } } }
     )
     const dataWasModified = data.modifiedCount > 0
-    return {
-      productRemoved: dataWasModified
-    }
+    return { product_removed: dataWasModified }
   }
 }
 
-const DB_CARTS = new DB_CART_MANAGER(cartModel)
+const DAO_CARTS = new DB_CART_MANAGER(cartModel)
 
-export { DB_CARTS }
+export { DAO_CARTS }

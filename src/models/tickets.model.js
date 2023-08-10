@@ -1,27 +1,24 @@
+// Utils
+import { generateID } from '../utils/hash.js'
+
 class Ticket {
-  #Id
   #code
   #purchase_datetime
   #amount
   #purchaser
 
   constructor ({
-    Id,
-    code,
-    purchase_datetime,
     amount,
     purchaser
   }) {
-    this.#Id = Id
-    this.#code = code
-    this.#purchase_datetime = purchase_datetime
+    this.#code = generateID()
+    this.#purchase_datetime = new Intl.DateTimeFormat('en', { dateStyle: 'full', timeStyle: 'long' }).format()
     this.#amount = amount
     this.#purchaser = purchaser
   }
 
   DTO () {
     return {
-      Id: this.#Id,
       code: this.#code,
       amount: this.#amount,
       purchaser: this.#purchaser,

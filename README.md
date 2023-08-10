@@ -1,414 +1,112 @@
-# Curso de Backend en Coderhouse - Modulo 2 - Desafios
+# Curso de Backend en Coderhouse
 
-Desafios del curso de coderhouse
+Proyecto final del curso de backend con Node.js en Coderhouse
 
-- [Curso de Backend en Coderhouse - Modulo 2 - Desafios](#curso-de-backend-en-coderhouse---modulo-2---desafios)
-- [Documentacion del proyecto](#documentacion-del-proyecto)
-  - [Mejoras](#mejoras)
-    - [Roles](#roles)
-    - [Vistas](#vistas)
-    - [Seguridad](#seguridad)
-  - [Consideraciones](#consideraciones)
-  - [API Endpoints:](#api-endpoints)
-  - [Detalles de los Endpoints](#detalles-de-los-endpoints)
-    - [Endpoints de productos](#endpoints-de-productos)
-      - [products/](#products)
-      - [Products/:pid](#productspid)
-    - [Endpoints de cart](#endpoints-de-cart)
-      - [cart/](#cart)
-      - [cart/:cid](#cartcid)
-      - [cart/:cid/product/:pid](#cartcidproductpid)
-    - [Endpoints con vistas (HTML)](#endpoints-con-vistas-html)
-      - [Products View](#products-view)
-      - [Cart View](#cart-view)
-- [Consigna: Práctica de integración](#consigna-práctica-de-integración)
-  - [Detalles del desafio](#detalles-del-desafio)
-    - [ruta current](#ruta-current)
-    - [modelo ticket](#modelo-ticket)
-    - [ruta ticket](#ruta-ticket)
-  - [Proceso de testing](#proceso-de-testing)
+- [Curso de Backend en Coderhouse](#curso-de-backend-en-coderhouse)
+- [Descripcion del proyecto](#descripcion-del-proyecto)
+  - [Herramientas implementadas](#herramientas-implementadas)
+  - [Documentacion de los endpoints](#documentacion-de-los-endpoints)
+- [Consideraciones](#consideraciones)
+  - [Scrips](#scrips)
+  - [Formato del .env](#formato-del-env)
+    - [Salt](#salt)
 
-# Documentacion del proyecto
+# Descripcion del proyecto
 
-## Mejoras
+El proyecto consiste en la implementacion de Node.js junto con API REST para crear el backend de una ecommerce.
 
-### Roles
+Por razones de practicidad no se ha desarrollado una pasarela de pago.
 
-Por el momentos los roles disponibles son:
+## Herramientas implementadas
 
-- User: para los usuarios que no disponen de privilegios
+Server:
+* express
+* handlebars
+* dotenv
 
-- Admin: para los usuarios con privilegios administrativos
+Loggin:
+* passport
+* cookie-parser
+* jsonwebtoken
 
-### Vistas
+Base de datos:
+* mongoose
+* mongoose-paginate-v2
 
-Tambien se han implementado 3 vistas nuevas y algunas modificaciones en las demas, detallaremos las vistas implementadas:
+Validaciones y encriptado:
+* joi
+* bcrypt
 
-- / -> esta vista nos llevara a la pestaña de login en donde colocaremos nuestras credenciales de acceso
-- /register -> en caso de no contar con credenciales, deberemos crear una cuenta
-- /profile -> aqui podremos ver informacion (no sensible) del usuario
+Documentacion:
+* swagger
 
-### Seguridad
+Servicios de Email:
+* nodemailer
 
-Como medida de seguridad, solo las vistas de login y register estaran disponibles sin iniciar sesion.
+Utilidades:
+* socket.io
+* nodemon
+* winston
 
-## Consideraciones
+## Documentacion de los endpoints
 
-Dado el tiempo de desarollo, no se lograron contemplar algunos extras con lo cual, se deben tener en cuenta algunos detalles para esta etapada:
+Una vez revisada la seccion de consideraciones, y de tener todo en condiciones para que funcione el programa, se encuentra una ruta en /api/docs para revisar los endpoint disponibles
 
-- Se debe contar con un carrito en la coleccion 'cart' de la base de datos dado que sino se pueden encontrar fallas inesperadas (estoy trabajando en ello), por favor crear un carrito con id 1.
+# Consideraciones
 
-- Al momento de escribir esta documentacion no se ha desarrollado un boton para crear un nuevo carrito, con lo cual, todos los productos que se guarden al carrito se guardaran en el carrito 1.
+## Scrips
 
-- La vista del carrito ('/cart/1') se puede editar manualmente.
+npm run start:
+  * Execute: node .
+  * Description: Inicia el servidor usando node
 
-## API Endpoints:
+npm run dev:
+  * Execute: NODE_ENV=development nodemon -e 'js,handlebars,yaml' .
+  * Description: Implementa nodemon para iniciar el servidor en modo de desarrollo
 
-Base URL: http://localhost:8080/
+npm run lint:
+  * Execute: standard . --fix
+  * Description: Implementa eslint con standard para revisar los estilos del codigo
 
-API URL: http://localhost:8080/api/
+npm run commit:
+  * Execute: sh -c 'git add .' && cz
+  * Description: Implementa commitizen para agilizar el proceso de commits
 
-Describire brevemente los endpoints y entrare en detalle mas adelante.
+[Eslint.org](https://eslint.org/)
 
-Endpoints de productos
+[Commitizen](https://www.npmjs.com/package/commitizen)
 
-- products/ - products/:pid ** ✅ **
+## Formato del .env
 
-:pid ==> productID
+Para que el programa funcione correctamente debe existir un archivo .env en la carpeta src/config.
+El formato de dicho archivo es el siguiente:
 
-Endpoints del carrito:
+```
+  URL_DB = url a la base de datos de produccion de mongo
+  URL_DB_TEST = url a la base de datos de desarrollo de mongo
 
-- cart/
-- cart/:cid
-- cart/:cid/product/:pid
+  PORT = puerto de la aplicacion
 
-:cid ==> cartID
-:pid ==> productID
+  SALT = un salt aleatorio para que funcione el encriptado de la contraseña
 
-Endpoints con vistas (HTML):
+  COOKIE_SECRET = palabra secreta para encriptar cookies
+  JWT_SECRET = palabra secreta para encriptar el JWT
 
-- /
-- /cart/:cid (:cid ==> cartID)
+  CLIENT_ID_GITHUB = credenciales de github para el funcionamiento del login co GitHub
+  CLIENT_GITHUB_SECRET = credenciales de github para el funcionamiento del login co GitHub
 
-## Detalles de los Endpoints
+  EMAIL_USER = email desde el cual se enviaran los correos (esto es para que funcione el email service)
+  EMAIL_PASS = contraseña del email
+  TEST_EMAIL_USER = email mock para realizar tests
+  TEST_EMAIL_PASS = contraseña del email mock para realizar tests
+```
 
-### Endpoints de productos
+### Salt 
 
-#### products/
+Puedes crear un salt usando la siguiente funcion de bcrypt:
 
-Este endpoint cuenta con 2 metodos disponibles:
-
-- GET
-- POST
-
-El metodo GET, hara un llamado para traernos los productos, cuenta con las siguientes caracteristicas:
-
-- limit
-- page
-- sort
-
-page y limit deben ser valores numericos
-
-sort ordenara segun el precio, puede tomar los siguientes valores: - asc o 1 => para ordenar de forma ascendente - desc o -1 => para ordenar de forma descendente
-
-En el caso de que se desee filtrar, contamos con 2 opciones: - price - other
-
-price debe ser un valor numerico pero other nos permite pasarle una clave y un valor para buscar, ejemplo:
-
-http://localhost:8080/api/products/?id=5
-
-Nos devuelve el producto con id: 5.
-
-http://localhost:8080/api/v1/products/?code=code-2
-
-Nos devuelve el producto con codigo: 'code-2'.
-
-El metodo POST nos permite crear un producto con la siguiente estructura:
-
-{
-id: Number
-title: String
-description: String
-category: String
-price: Number
-status: Boolean
-thumbnail: Array[]
-stock: Number
-code: String
-}
-
-Para crear el producto es necesario enviar los campos requeridos:
-
-{
-title
-description
-category
-price
-}
-
-aunque tambien tiene campos opcionales:
-{
-status -> opcionales, valor por defecto: true
-thumbnail -> opcionales, valor por defecto: []
-stock -> opcionales, valor por defecto: 0
-code -> opcionales, valor por defecto: code-UUID (UUID -> valor random)
-}
-
-Nos respondera con el objeto añadido a la base de datos.
-
-#### Products/:pid
-
-Este endpoint cuenta con 3 metodos disponibles:
-
-- GET
-- PUT
-- DELETE
-
-EL metodo GET nos devolvera el producto con el id que se encuentre en la url (:pid), este metodo no espera ningun otro dato.
-
-El metodo PUT nos permite actualizar los valores de un producto ya sea total o parcialmente; los valores perceptibles a cambiar son:
-
-{
-description
-thumbnail
-category
-title
-price
-stock
-}
-
-En caso de que los valores ingresados sean admitidos, se retornara el objeto con sus valores actualizados.
-
-El metodo Delete devolvera un objeto con el siguiente formato:
-
-{
-"product_deleted": {
-"acknowledged": boolean,
-"deletedCount": number
-}
-}
-
-- acknowledged: true si la db ha entendido bien la instruccion, false en caso contrario
-- deletedCount: 1 si ha borrado algun elemento, 0 en caso de que no se haya logrado borrar el elemento
-
-### Endpoints de cart
-
-#### cart/
-
-Este endpoint cuenta con 2 metodos disponibles:
-
-- GET
-- POST
-
-El metodo GET fue implementado con la finalidad de facilitar las operaciones de testear.
-
-Al llamar este metodo devuelve la coleccion completa de carritos.
-
-El metodo POST crea un carrito con la siguiente interfaz:
-
-{
-id: string,
-products: array[]
-}
-
-#### cart/:cid
-
-Este endpoint cuenta con 2 metodos disponibles:
-
-- GET
-- DELETE
-
-El metodo GET, buscara un carrito en particular.
-
-Devuelve el carrito que corresponda con el ID enviado bajo el valor ':cid', junto con el detalle de cada producto y un dato extra que corresponde al total de productos en el carrito.
-
-ejemplo: cart/1
-
-{
-cart: {
-id: "1",
-products: [
-{
-product: {
-\_id: "64388ce145c7207533a840c9",
-id: 2,
-code: "code-2",
-title: "titulo update",
-description: "Description 1",
-price: 100,
-status: true,
-thumbnail: []
-},
-quantity: 4
-},
-]
-},
-totalProducts: 4
-}
-
-El metodo DELETE borrara todos los elementos dentro de un carrito
-
-Ejemplo:
-
-Supongamos un carrito:
-
-{
-id: "1",
-products: [
-{
-product: "64388ce145c7207533a840c9",
-quantity: 4
-},
-{
-product: "64388d0c45c7207533a840d9",
-quantity: 1
-},
-{
-product: "64388ced45c7207533a840cd",
-quantity: 1
-}
-]
-}
-
-al aplicarle el metodo, obtendremos:
-
-{
-id: "1",
-products: []
-}
-
-#### cart/:cid/product/:pid
-
-Este endpoint cuenta con 2 metodos disponibles:
-
-- PUT
-- DELETE
-
-El metodo PUT ingresa un producto en el carrito o, en el caso de que exista el producto en el carrito, modificara la cantidad del mismo.
-
-En caso de que el producto no existe en el carrito, y le asignara 1 al campo "quantity" (cantidad) del producto.
-
-Caso contrario, sumara +1 a la cantidad del producto seleccionado. Opcionalmente, este metodo acepta que se le pase por el body, un json con el siguiente formato:
-
-{
-"quantity": number
-}
-
-Esto hara que el la cantidad del producto se vea modificado por el valor enviado.
-
-Al llamar a este metodo obtendremos la siguiente respuesta:
-
-{
-details: {
-response: {
-productAdded: boolean,
-productModified: boolean,
-quantityValue: number
-}
-}
-}
-
-- productAdded: indica si se ha agregado un nuevo producto al carrito,
-
-- productModified: indica si se ha modificado un producto,
-
-- quantityValue: indica el valor al cual ha cambiado la cantidad del producto
-
-El metodo DELETE elimina un producto del carrito
-
-Nos retorna el siguiente objeto:
-
-{
-"productRemoved": boolean
-}
-
-- productRemoved: indica si se ha eliminado un producto
-
-### Endpoints con vistas (HTML)
-
-#### Products View
-
-URL: [Link a products view -> http://localhost:8080/](http://localhost:8080/)
-
-En esta vista, se encontrara una lista de todos los productos existentes con su respectiva navegacion por paginas.
-
-#### Cart View
-
-URL: [Link a cart view (del carrito 1) -> http://localhost:8080/cart/1](http://localhost:8080/cart/1)
-
-En esta vista, se encontrara el desgloce de los productos de un carrito en particular.
-
-# Consigna: Práctica de integración
-
-## Detalles del desafio
-
-### ruta current
-* Modificar la ruta  /current Para evitar enviar información sensible, enviar un DTO del usuario sólo con la información necesaria.
-
-* Realizar un middleware que pueda trabajar en conjunto con la estrategia “current” para hacer un sistema de autorización y delimitar el acceso a dichos endpoints:
-
-  - Sólo el administrador puede crear, actualizar y eliminar productos.
-
-  - Sólo el usuario puede enviar mensajes al chat.
-
-  - Sólo el usuario puede agregar productos a su carrito.
-
-### modelo ticket
-
-* Crear un modelo Ticket el cual contará con todas las formalizaciones de la compra. Éste contará con los campos
-
-  - Id (autogenerado por mongo)
-
-  - code: String debe autogenerarse y ser único
-
-  - purchase_datetime: Deberá guardar la fecha y hora exacta en la cual se formalizó la compra (básicamente es un created_at)
-
-  - amount: Number, total de la compra.
-
-  - purchaser: String, contendrá el correo del usuario asociado al carrito.
-
-### ruta ticket
-**🚩 Esto lo haremos diferente 👇**
-
-* 🔴 Implementar, en el router de carts, la ruta /:cid/purchase, la cual permitirá finalizar el proceso de compra de dicho carrito.
-
-  - 🔴 La compra debe corroborar el stock del producto al momento de finalizarse
-    
-    1) 🔴 Si el producto tiene suficiente stock para la cantidad indicada en el producto del carrito, entonces restarlo del stock del producto y continuar.
-    
-    2) 🔴 Si el producto no tiene suficiente stock para la cantidad indicada en el producto del carrito, entonces no agregar el producto al proceso de compra. 
-
-**🤔 Porque?**
-
-El profesor no esta de acuerdo con la implementacion de /:cid/purchase, porque las API REST tienen recursos y pero no tienen acciones.
-
-La ruta /:cid/purchase involucra una accion entonces no recomienda hacer esto.
-
-Si podemos crear una ruta de tipo ticket y ahi generar el ticket
-Que diferencia tiene esto? 
-Basicamete que yo podria pensarlo de esta forma: un ticket es un recursos, yo puedo ver un ticket (una peticion GET) crear un ticket (una peticion POST) o borrar un ticket (un DELETE)
-
-En que se diferencia con purchase?
-Purchase es una accion (la traduccion es comprar), yo no puedo borrar una accion, la puedo deshacer pero estamos hablando de otra accion (la accion de deshacer) tampoco puedo actualizar una accion, podria reacerla pero estamos hablando nuevamente de otra accion
-
-En conclusion, vamos a actualizar los items de antes:
-
-**Lo haremos de esta forma 👇 ✅**
-
-* Implementar, en el router de carts, la ruta /:cid/ticket, la cual permitirá finalizar el proceso de compra de dicho carrito.
-
-  - Verificar que el producto exista
-
-  - Corroborar el stock del producto al momento de finalizarse
-    
-    1) Si el producto tiene suficiente stock para la cantidad indicada en el producto del carrito, entonces restarlo del stock del producto y continuar.
-    
-    2) Si el producto no tiene suficiente stock para la cantidad indicada en el producto del carrito, entonces no agregar el producto al proceso de compra. 
-
-  - Al final, utilizar el servicio de Tickets para poder generar un ticket con los datos de la compra.
-
-  - En caso de existir una compra no completada, devolver el arreglo con los ids de los productos que no pudieron procesarse.
-
-Una vez finalizada la compra, el carrito asociado al usuario que compró deberá contener sólo los productos que no pudieron comprarse. Es decir, se filtran los que sí se compraron y se quedan aquellos que no tenían disponibilidad.
-
-## Proceso de testing
+```JavaScript:
+  bcrypt.genSalt(saltRounds, function(err, salt) {
+    returns salt
+  });
+```

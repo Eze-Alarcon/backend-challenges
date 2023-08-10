@@ -1,0 +1,18 @@
+# Cart
+components:
+  schemas:
+    Carts:
+      type: object
+      required:
+        - id
+        - products
+      properties:
+        id:
+          type: number
+          description: The auto-generated id of the cart.
+        products:
+          type: array
+          description: Array of products in the cart.
+      example:
+        id: 1
+        products: []

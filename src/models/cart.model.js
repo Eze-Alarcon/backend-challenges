@@ -1,16 +1,22 @@
-class Cart {
-  #id
-  #products
+// Utils
+import { generateID } from '../utils/hash.js'
 
-  constructor ({ id }) {
-    this.#id = id
+class Cart {
+  #code
+  #products
+  #cartOwner
+
+  constructor ({ email }) {
+    this.#code = generateID()
     this.#products = []
+    this.#cartOwner = email
   }
 
-  getCartData () {
+  DTO () {
     return {
-      id: this.#id,
-      products: this.#products
+      code: this.#code,
+      products: this.#products,
+      cartOwner: this.#cartOwner
     }
   }
 }

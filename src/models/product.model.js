@@ -1,50 +1,45 @@
-// Libraries
-import crypto from 'crypto'
+// Utils
+import { generateID } from '../utils/hash.js'
 
 export class Product {
-  #id
   #title
   #description
-  #category
   #price
   #status
   #thumbnail
   #stock
   #code
+  #owner
 
   constructor ({
-    id,
     title,
     description,
-    category,
     price,
-    code,
     status = true,
     stock = 0,
-    thumbnail = []
+    thumbnail = [],
+    owner = 'admin'
   }) {
-    this.#id = id
+    this.#code = generateID()
     this.#title = title
     this.#description = description
-    this.#category = category
     this.#price = price
     this.#status = status
     this.#thumbnail = thumbnail
     this.#stock = stock
-    this.#code = code ?? `code-${crypto.randomUUID()}`
+    this.#owner = owner
   }
 
-  getProductData () {
+  DTO () {
     return {
-      id: this.#id,
       title: this.#title,
       description: this.#description,
-      category: this.#category,
       price: this.#price,
       status: this.#status,
       thumbnail: this.#thumbnail,
       stock: this.#stock,
-      code: this.#code
+      code: this.#code,
+      owner: this.#owner
     }
   }
 }

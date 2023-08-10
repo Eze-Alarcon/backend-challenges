@@ -1,13 +1,32 @@
 // Libraries
-import express, { Router } from 'express'
+import express from 'express'
 
-// Middlewares
-import { alreadyHasSession } from '../../middleware/session'
+// Controller
+import {
+  getUsers,
+  deleteInactiveUsers,
+  updatePass,
+  updateRole,
+  updateUser,
+  deleteUser
+} from '../../controllers/user.cotroller.js'
 
-export const usersRouter = Router()
+export const userRouter = express.Router()
 
-usersRouter.use(express.json())
+userRouter
+  .route('/premium')
+  .put(updateRole)
 
-usersRouter
+userRouter
+  .route('/user')
+  .put(updateUser)
+  .delete(deleteUser)
+
+userRouter
+  .route('/password')
+  .put(updatePass)
+
+userRouter
   .route('/')
-  .get(alreadyHasSession) // crear metodo para buscar el usuario actual segun el email y guardar la info en el front
+  .get(getUsers)
+  .delete(deleteInactiveUsers)

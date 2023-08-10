@@ -1,32 +1,39 @@
 // DAOs
-import { ticketManager } from '../dao/tickets.database.js'
+import { ticketService } from '../services/ticket.service.js'
 
-/*
-  * la idea de este controller es que sea un pasamanos, pasa la info a otros componentes y si otra cosa falla simplemente el controller pasa el error al middleware de error, para ello usar un try-catch y en el catch colocar next(error)
-*/
+// config
+import { COOKIE_NAME } from '../config/config.js'
 
-async function getTicket (req, res, next) {
-  try {
-    // TODO: Pendiente de implementar
-    // ! TODA VALIDACION NECESARIA SE HARA EN ticket.manager.js
-  } catch (error) {
-    next(error)
-  }
-}
+// Utils
+import { verifyToken } from '../utils/jwt.config.js'
+import { STATUS_CODE } from '../utils/errors.messages.js'
 
 async function createTicket (req, res, next) {
   try {
-    // TODO: Pendiente de implementar
-    // ! TODA VALIDACION NECESARIA SE HARA EN ticket.manager.js
+    const cartID = req.params.cid
+    const token = req.signedCookies[COOKIE_NAME]
+    const user = await verifyToken(token)
+
+    const { ticket, cart } = await ticketService.createTicket({ cartID, email: user.email })
+    res.status(STATUS_CODE.SUCCESS.CREATED).json({ ticket, cart })
   } catch (error) {
     next(error)
   }
 }
 
+// not implemented
+async function getTicket (req, res, next) {
+  try {
+    await ticketService.getTicket({ ticketID: req.body })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// not implemented
 async function deleteTicket (req, res, next) {
   try {
-    // TODO: Pendiente de implementar
-    // ! TODA VALIDACION NECESARIA SE HARA EN ticket.manager.js
+    await ticketService.deleteTicket()
   } catch (error) {
     next(error)
   }

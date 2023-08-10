@@ -1,104 +1,99 @@
 // DAOs
-import { DB_PRODUCTS } from '../dao/products.database.js'
+import { DAO_PRODUCTS } from '../dao/products.database.js'
 
 // Models
 import { Product } from '../models/product.model.js'
+import { CustomError } from '../models/error.model.js'
 
-// Utils
-import { validateInputs } from '../utils/validations.js'
-import { STATUS_CODE, PRODUCT_MANAGER_ERRORS } from '../utils/errors.messages.js'
+// Services
+import { emailService } from './email.service.js'
 
-class ProductManager {
-  #nextID
-  constructor () { this.#nextID = 0 }
+// Joi
+import { validation as validProduct } from '../schemas/joi/products.joi.schema.js'
 
-  async getProducts (options = {}) {
+// Error messages
+import { PRODUCT_MANAGER_ERRORS } from '../utils/errors.messages.js'
+
+class ProductService {
+  #dao
+  constructor ({ DAO }) {
+    this.#dao = DAO
+  }
+
+  async getMany (options) {
     try {
-      const products = await DB_PRODUCTS.getProducts(options)
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        products
-      }
+      const products = await this.#dao.getMany(options)
+      return { products }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.NO_PRODUCTS_PARAMETERS.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 
-  async getProductById (query) {
+  async getOne (query) {
     try {
-      const product = await DB_PRODUCTS.findProducts(query)
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        item: product[0]
-      }
+      const product = await this.#dao.getOne(query)
+      return { product: product[0] }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 
-  async addProduct (fields) {
+  async createOne (fields) {
+    const { error, value: validFields } = validProduct({ data: fields })
+    if (error !== undefined) CustomError.userError(error)
+
     try {
-      const strictValidation = true
-      validateInputs(fields, strictValidation)
-
-      const lastItem = await DB_PRODUCTS.getLastProduct()
-
-      lastItem.length > 0
-        ? this.#nextID = ++lastItem[0].id
-        : this.#nextID = 1
-
-      const newProduct = new Product({ ...fields, id: this.#nextID })
-      await DB_PRODUCTS.createProduct(newProduct.getProductData())
-
-      return {
-        status_code: STATUS_CODE.SUCCESS.CREATED,
-        productAdded: newProduct
-      }
+      const productModel = new Product({ ...validFields })
+      const newProduct = await this.#dao.createOne(productModel.DTO())
+      return { product: newProduct }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.CREATE_PRODUCT.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_EXIST)
     }
   }
 
-  async updateProduct (query, fields) {
+  async updateOne (query, fields) {
     try {
-      const { item } = await this.getProductById(query)
+      const { product } = await this.getOne(query)
 
-      validateInputs(fields)
+      const mappedFields = {
+        description: fields.description ?? product.description,
+        thumbnail: fields.thumbnail ?? product.thumbnail,
+        title: fields.title ?? product.title,
+        price: (!isNaN(parseFloat(fields.price))) ? parseFloat(fields.price) : product.price,
+        stock: (!isNaN(parseInt(fields.stock))) ? parseInt(fields.stock) : product.stock
+      }
+
+      const { error, value: validFields } = validProduct({ data: mappedFields })
+
+      if (error !== undefined) CustomError.userError(error)
 
       const newProduct = {
-        ...item,
-        description: fields.description ?? item.description,
-        thumbnail: fields.thumbnail ?? item.thumbnail,
-        category: fields.category ?? item.category,
-        title: fields.title ?? item.title,
-        price: fields.price ?? item.price,
-        stock: fields.stock ?? item.stock
+        ...product,
+        ...validFields
       }
 
-      await DB_PRODUCTS.updateProduct(query, newProduct)
-      return {
-        status_code: STATUS_CODE.SUCCESS.OK,
-        itemUpdated: newProduct
-      }
+      await this.#dao.updateOne(query, newProduct)
+      return { product_updated: newProduct }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 
-  async deleteProduct (query) {
+  async deleteOne (query) {
     try {
-      const itemDeleted = await DB_PRODUCTS.deleteProduct({ id: query })
-
-      return {
-        status_code: STATUS_CODE.SUCCESS.NO_CONTENT,
-        itemDeleted
+      const { product } = await this.getOne(query)
+      if (product.owner !== 'admin') {
+        await emailService.send({ dest: product.owner, message: product.title, emailType: 'productDeleted' })
       }
+      const itemDeleted = await this.#dao.deleteOne(query)
+
+      return { product_deleted: itemDeleted }
     } catch (error) {
-      throw new Error(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND.ERROR_CODE)
+      throw new CustomError(PRODUCT_MANAGER_ERRORS.PRODUCT_NOT_FOUND)
     }
   }
 }
 
-const productManager = new ProductManager()
+const productService = new ProductService({ DAO: DAO_PRODUCTS })
 
-export { productManager }
+export { productService, ProductService }

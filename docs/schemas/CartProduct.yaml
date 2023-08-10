@@ -1,0 +1,23 @@
+# Cart
+components:
+  schemas:
+    CartProductUpdate:
+      type: object
+      required:
+        - productAdded
+        - productModified
+        - quantityValue
+      properties:
+        productAdded:
+          type: boolean
+          description: True if the product was added to the cart, false if the product already exist in the cart.
+        productModified:
+          type: boolean
+          description: True if the product already exist in the cart, false if not.
+        quantityValue:
+          type: number
+          description: New value of the quantity of the product.
+      example:
+        productAdded: false
+        productModified: true
+        quantityValue: 3

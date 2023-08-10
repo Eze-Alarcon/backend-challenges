@@ -1,5 +1,30 @@
+// Utils
+import { STATUS_CODE } from '../utils/errors.messages.js'
+
 // Services
-import { cartManager } from '../services/cart.service.js'
+import { cartService } from '../services/cart.service.js'
+
+const getAllCarts = async (req, res, next) => {
+  try {
+    const { carts } = await cartService.getMany()
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json(carts)
+  } catch (error) {
+    next(error)
+  }
+}
+
+const getCart = async (req, res, next) => {
+  try {
+    const { cart, total_products } = await cartService.getOne({ id: req.params.cid })
+    res
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json({ cart, total: total_products })
+  } catch (error) {
+    next(error)
+  }
+}
 
 const updateCartProducts = async (req, res, next) => {
   try {
@@ -8,58 +33,23 @@ const updateCartProducts = async (req, res, next) => {
       productID: req.params.pid,
       quantityValue: req.body?.quantity ?? null
     }
-    const { operationDetails, status_code } = await cartManager.addProductToCart(query)
+    const { details } = await cartService.createCartProduct(query)
     res
-      .status(status_code)
-      .json({ details: operationDetails })
+      .status(STATUS_CODE.SUCCESS.OK)
+      .json({ details })
   } catch (error) {
-    next(error.message)
-  }
-}
-
-const getCart = async (req, res, next) => {
-  try {
-    const query = req.params.cid
-    const { cart, status_code, totalProducts } = await cartManager.getCartById(query)
-    res
-      .status(status_code)
-      .json({ cart, totalProducts })
-  } catch (error) {
-    next(error.message)
+    next(error)
   }
 }
 
 const clearCartProducts = async (req, res, next) => {
   try {
-    const query = req.params.cid
-    const { cartUpdated, status_code } = await cartManager.deleteAllCartProducts(query)
+    const { cart_updated } = await cartService.deleteManyCartProducts({ id: req.params.cid })
     res
-      .status(status_code)
-      .json(cartUpdated)
+      .status(STATUS_CODE.SUCCESS.NO_CONTENT)
+      .json(cart_updated)
   } catch (error) {
-    next(error.message)
-  }
-}
-
-const createNewCart = async (req, res, next) => {
-  try {
-    const { cart, status_code } = await cartManager.createCart()
-    res
-      .status(status_code)
-      .json(cart)
-  } catch (error) {
-    next(error.message)
-  }
-}
-
-const getAllCarts = async (req, res, next) => {
-  try {
-    const { carts, status_code } = await cartManager.getCarts()
-    res
-      .status(status_code)
-      .json(carts)
-  } catch (error) {
-    next(error.message)
+    next(error)
   }
 }
 
@@ -69,12 +59,12 @@ const deleteCartProduct = async (req, res, next) => {
       cartID: req.params.cid,
       productID: req.params.pid
     }
-    const { details, status_code } = await cartManager.deleteCartProduct(query)
+    const { product_removed } = await cartService.deleteOneCartProduct(query)
     res
-      .status(status_code)
-      .json(details)
+      .status(STATUS_CODE.SUCCESS.NO_CONTENT)
+      .json(product_removed)
   } catch (error) {
-    next(error.message)
+    next(error)
   }
 }
 
@@ -82,7 +72,6 @@ export {
   updateCartProducts,
   getCart,
   clearCartProducts,
-  createNewCart,
   getAllCarts,
   deleteCartProduct
 }

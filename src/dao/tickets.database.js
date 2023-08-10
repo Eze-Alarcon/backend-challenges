@@ -1,11 +1,6 @@
-// Libraries
-import mongoose from 'mongoose'
-
+/* eslint-disable no-prototype-builtins */
 // Schemas
-import { ticketModel } from '../schemas/ticket.schema.js'
-
-// guiarse con algun otro archivo similar
-// ejemplo: carts.database.js
+import { ticketModel } from '../schemas/mongoose/ticket.schema.js'
 
 class DB_TICKET_MANAGER {
   #model
@@ -13,19 +8,29 @@ class DB_TICKET_MANAGER {
     this.#model = model
   }
 
-  getTicket () {
-    // TODO: pendiente de implementar
+  #toPOJO (item) {
+    return JSON.parse(JSON.stringify(item))
   }
 
-  deleteTicket () {
-    // TODO: pendiente de implementar
+  async getOne (query) {
+    const response = await this.#model.find(query)
+    const data = this.#toPOJO(response)
+    return data
   }
 
-  createTicket () {
-    // TODO: pendiente de implementar
+  async deleteOne (query) {
+    const response = await this.#model.deleteOne(query)
+    const data = this.#toPOJO(response)
+    return data
+  }
+
+  async createOne (item) {
+    const response = await this.#model.create(item)
+    const data = this.#toPOJO(response)
+    return data
   }
 }
 
-const DB_TICKET = new DB_TICKET_MANAGER(ticketModel)
+const DAO_TICKET = new DB_TICKET_MANAGER(ticketModel)
 
-export { DB_TICKET }
+export { DAO_TICKET }

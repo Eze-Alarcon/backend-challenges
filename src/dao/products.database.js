@@ -1,11 +1,8 @@
-// Configs
-import { SERVER } from '../config/server.config.js'
-
 // Error messages
 import { STATUS_CODE } from '../utils/errors.messages.js'
 
 // Schemas
-import { productModel } from '../schemas/products.schema.js'
+import { productModel } from '../schemas/mongoose/products.schema.js'
 
 class DB_PRODUCT_MANAGER {
   #model
@@ -13,7 +10,7 @@ class DB_PRODUCT_MANAGER {
     this.#model = model
   }
 
-  #parseResponse (item) {
+  #toPOJO (item) {
     return JSON.parse(JSON.stringify(item))
   }
 
@@ -50,46 +47,10 @@ class DB_PRODUCT_MANAGER {
     return { pageOptions, pageQuery }
   }
 
-  #generateLinks (options, data) {
-    const links = {
-      prevLink: null,
-      nextLink: null
-    }
-
-    if (data.hasPrevPage) {
-      const newOptions = {
-        ...options,
-        page: data.prevPage
-      }
-      const newParams = new URLSearchParams([
-        ...Object.entries(newOptions)
-      ]).toString()
-
-      links.prevLink = `${SERVER.BASE_URL}/?${newParams}`
-    }
-
-    if (data.hasNextPage) {
-      const newOptions = {
-        ...options,
-        page: data.nextPage
-      }
-      const newParams = new URLSearchParams([
-        ...Object.entries(newOptions)
-      ]).toString()
-
-      links.nextLink = `${SERVER.BASE_URL}/?${newParams}`
-    }
-    return links
-  }
-
-  async getProducts (options) {
+  async getMany (options) {
     const { pageOptions, pageQuery } = this.#handleQueries(options)
 
     const data = await this.#model.paginate(pageQuery, pageOptions)
-    if (data.docs.length < 1) throw new Error()
-
-    // Genero los links de la paginas anterios y siguiente
-    const links = this.#generateLinks(options, data)
 
     return {
       payload: data.docs,
@@ -99,44 +60,36 @@ class DB_PRODUCT_MANAGER {
       nextPage: data.nextPage,
       page: data.page,
       hasPrevPage: data.hasPrevPage,
-      hasNextPage: data.hasNextPage,
-      prevLink: links.prevLink,
-      nextLink: links.nextLink
+      hasNextPage: data.hasNextPage
     }
   }
 
-  async getLastProduct () {
-    const data = await this.#model.paginate({}, {
-      limit: 1,
-      sort: { id: -1 },
-      projection: { _id: 0 },
-      lean: true
-    })
-    return data.docs
-  }
-
-  async findProducts (query) {
+  async getOne (query) {
     const response = await this.#model.find(query).lean()
     return response
   }
 
-  async createProduct (item) {
-    const response = await this.#model.create(item)
-    const data = this.#parseResponse(response)
+  async createOne (item) {
+    try {
+      const response = await this.#model.create(item)
+      const data = this.#toPOJO(response)
+      return data
+    } catch (error) {
+      throw new Error()
+    }
+  }
+
+  async updateOne (query, updates) {
+    const data = await this.#model.updateOne(query, updates)
     return data
   }
 
-  async updateProduct ({ id }, updates) {
-    const data = await this.#model.updateOne({ id }, updates)
-    return data
-  }
-
-  async deleteProduct ({ id }) {
-    const response = await this.#model.deleteOne(id)
+  async deleteOne (query) {
+    const response = await this.#model.deleteOne(query)
     return response
   }
 }
 
-const DB_PRODUCTS = new DB_PRODUCT_MANAGER(productModel)
+const DAO_PRODUCTS = new DB_PRODUCT_MANAGER(productModel)
 
-export { DB_PRODUCTS }
+export { DAO_PRODUCTS }

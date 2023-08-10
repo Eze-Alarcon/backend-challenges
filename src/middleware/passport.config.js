@@ -8,7 +8,7 @@ import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
 import { GH_CLIENT_ID, GH_CLIENT_SECRET, GH_CB_URL, SECRET_PASSWORD_JWT, COOKIE_NAME } from '../config/config.js'
 
 // Services
-import { userManager } from '../services/user.service.js'
+import { userService } from '../services/user.service.js'
 
 passport.use('jwt', new JwtStrategy({
   jwtFromRequest: ExtractJwt.fromExtractors([function (req) {
@@ -49,12 +49,19 @@ passport.use('register', new LocalStrategy(
   { passReqToCallback: true, usernameField: 'email' },
   async (req, _u, _p, done) => {
     try {
-      const { email, password, age, first_name, last_name, role } = req.body
+      const userInfo = {
+        email: req.body.email,
+        password: req.body.password,
+        age: req.body.age,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        role: req.body.role
+      }
 
-      const { user } = await userManager.createUser({ email, password, age, first_name, last_name, role })
+      const { user } = await userService.createOne(userInfo)
       done(null, user)
     } catch (err) {
-      done(err.message)
+      done(err)
     }
   }
 ))
@@ -63,7 +70,7 @@ passport.use('local', new LocalStrategy(
   { usernameField: 'email' },
   async (username, password, done) => {
     try {
-      const { user } = await userManager.logUser({ email: username, password })
+      const { user } = await userService.logUser({ email: username, password })
 
       done(null, user)
     } catch (err) {
@@ -79,11 +86,11 @@ passport.use('github', new GithubStrategy({
 }, async (_a, _r, profile, done) => {
   let user
 
-  const search = await userManager.searchGithubUser({ email: profile.username })
+  const search = await userService.getOneGithubUser({ email: profile.username })
   if (search.userExist) {
     user = search.user
   } else {
-    const newUser = await userManager.createGithubUser({ email: profile.username })
+    const newUser = await userService.createGithubUser({ email: profile.username })
     user = newUser.user
   }
   done(null, user)
@@ -92,8 +99,9 @@ passport.use('github', new GithubStrategy({
 // estos son para cargar en express como middlewares a nivel aplicacion
 export const passportInitialize = passport.initialize()
 
-// estos son para cargar como middlewares antes de los controladores correspondientes
 export const autenticacionUserRegister = passport.authenticate('register', { failWithError: true, session: false })
+
 export const autenticacionUserLogin = passport.authenticate('local', { failWithError: true, session: false })
+
 export const autenticacionUserGithub = passport.authenticate('github', { scope: ['user:email'], session: false })
 export const antenticacionUserGithub_CB = passport.authenticate('github', { failWithError: true, session: false })

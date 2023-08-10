@@ -1,0 +1,23 @@
+# NewProduct
+components:
+  requestBodies:
+    NewProduct:
+      type: object
+      required:
+        - title
+        - price
+        - description
+      properties:
+        title:
+          type: string
+          description: The title of the product.
+        price:
+          type: number
+          description: The price of the product.
+        description:
+          type: string
+          description: The description of the product.
+      example:
+         title: desktop computer
+         price: 123.78
+         description: lorem ipsum

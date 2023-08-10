@@ -1,0 +1,21 @@
+paths:
+  /api/carts/{cid}/ticket:
+    post:
+      summary: Gets the ticket with given id
+      tags:
+        - Carrito
+      parameters:
+      - name: cid
+        in: path
+        description: path parameter takes the cart id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: The ticket was generated succesfully
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Ticket'
+        "409":
+          description: Error - Ticket not created

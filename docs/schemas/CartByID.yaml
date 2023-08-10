@@ -1,0 +1,20 @@
+# Cart
+components:
+  schemas:
+    CartByID:
+      type: object
+      required:
+        - cart
+        - totalProducts
+      properties:
+        cart:
+          type: schema
+          description: Information of the cart.
+        totalProducts:
+          type: number
+          description: Total of products in the cart.
+      example:
+        cart:
+          id: 1
+          products: []
+        totalProducts: 0

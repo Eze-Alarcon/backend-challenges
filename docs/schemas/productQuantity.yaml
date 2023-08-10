@@ -1,0 +1,13 @@
+# Cart
+components:
+  requestBodies:
+    Quantity:
+      type: object
+      required:
+        - quantity
+      properties:
+        quantity:
+          type: number
+          description: Value of the quantity of the product.
+      example:
+        quantity: 1

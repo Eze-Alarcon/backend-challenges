@@ -1,0 +1,15 @@
+<main class="p-3">
+  <h2>Error :C</h2>
+  <p>Cause: {{cause}}</p>
+  <p>{{message}}</p>
+  <button class="btn btn-primary" type="button" id="btnRedirect">Go back</button>
+
+
+  <script>
+    const btn = document.getElementById('btnRedirect')
+    
+    btn.addEventListener('click', () => { 
+          window.history.back() 
+        })
+  </script>
+</main>
