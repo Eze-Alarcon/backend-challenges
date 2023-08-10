@@ -21,12 +21,12 @@ const STATUS_CODE = {
 
 const SERVER_ERROR = {
   SERVER_ERROR: {
-    CAUSE: 'Something fail, contact maintenance.',
+    CAUSE: 'Something fail, contact maintenance',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     TYPE: 'Server Error'
   },
   FEATURE_NOT_IMPLEMENTED: {
-    CAUSE: 'Feature not available at the moment, available in future releases.',
+    CAUSE: 'Feature not available at the moment, available in future releases',
     STATUS: STATUS_CODE.SERVER_ERROR.NOT_IMPLEMENTED,
     TYPE: 'Feature not available'
   }
@@ -36,7 +36,7 @@ const SERVER_ERROR = {
 
 const EMAIL_ERROR = {
   EMAIL_NOT_SEND: {
-    CAUSE: '[ERROR]: Email service not working.',
+    CAUSE: '[ERROR]: Email service not working',
     STATUS: STATUS_CODE.SERVER_ERROR.INTERNAL_ERROR,
     TYPE: 'Server Error'
   }
@@ -46,7 +46,7 @@ const EMAIL_ERROR = {
 
 const PRODUCT_MANAGER_ERRORS = {
   REQUIRED_OBJECT: {
-    CAUSE: '[ERROR]: Expected object.',
+    CAUSE: '[ERROR]: Expected object',
     STATUS: STATUS_CODE.CLIENT_ERROR.BAD_REQUEST,
     TYPE: 'Type error'
   },
@@ -117,12 +117,12 @@ const AUTH_ERROR = {
     TYPE: 'User has account'
   },
   NO_ACCOUNT: {
-    CAUSE: '[ERROR]: Authentication error.',
+    CAUSE: '[ERROR]: Authentication error',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     TYPE: 'Invalid email'
   },
   WRONG_CREDENTIALS: {
-    CAUSE: '[ERROR]: Authentication error.',
+    CAUSE: '[ERROR]: Authentication error',
     STATUS: STATUS_CODE.CLIENT_ERROR.UNAUTHORIZED,
     TYPE: 'Invalid username or password'
   },

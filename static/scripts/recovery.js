@@ -7,11 +7,11 @@ if (toastElement) {
   toast = bootstrap.Toast.getOrCreateInstance(toastElement)
 }
 
-function useToast (message) {
+function useToast (message, redirect = false) {
   toast.show()
   setTimeout(() => toast.hide(), 3000)
   toastBodyMessage.innerText = message
-  setTimeout(() => window.location.assign('/login'), 4000)
+  if (redirect) setTimeout(() => window.location.assign('/login'), 4000)
 }
 
 const loginForm = document.getElementById('recovery_form')
@@ -33,5 +33,10 @@ async function postData (data) {
       body: JSON.stringify(data)
     })
   const response = await sendForm.json()
-  useToast(response.message)
+  console.log(response)
+  if (sendForm.status !== 401) {
+    useToast(response.message, true)
+  } else {
+    useToast(`${response.cause} - ${response.type}`)
+  }
 }

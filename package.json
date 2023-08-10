@@ -5,7 +5,7 @@
   "description": "desafios de coderhouse",
   "main": "./src/app.js",
   "scripts": {
-    "start": "node .",
+    "start": "NODE_ENV=production node .",
     "dev": "NODE_ENV=development nodemon -e 'js,handlebars,yaml' .",
     "lint": "standard . --fix",
     "git-add": "sh -c 'git add .'",

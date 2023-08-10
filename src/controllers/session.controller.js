@@ -7,6 +7,9 @@ import { COOKIE_NAME } from '../config/config.js'
 // Services
 import { userService } from '../services/user.service.js'
 
+// Models
+import { CustomError } from '../models/error.model.js'
+
 // Utils
 import { ROLES } from '../utils/contans.js'
 import { AUTH_ERROR } from '../utils/errors.messages.js'
@@ -63,7 +66,7 @@ async function isAuthorized (req, res, next) {
   try {
     const token = req.signedCookies[COOKIE_NAME]
     const { role, email } = await verifyToken(token)
-    if (role === ROLES.USER) throw new Error(AUTH_ERROR.FORBIDDEN.ERROR_CODE)
+    if (role === ROLES.USER) throw new CustomError(AUTH_ERROR.FORBIDDEN)
     role === ROLES.PREMIUM
       ? res.locals.owner = email
       : res.locals.owner = 'admin'
@@ -77,7 +80,7 @@ async function isAdmin (req, res, next) {
   try {
     const token = req.signedCookies[COOKIE_NAME]
     const { role } = await verifyToken(token)
-    if (role !== ROLES.ADMIN) throw new Error(AUTH_ERROR.FORBIDDEN.ERROR_CODE)
+    if (role !== ROLES.ADMIN) throw new CustomError(AUTH_ERROR.FORBIDDEN)
     next()
   } catch (error) {
     next(error)
@@ -87,7 +90,7 @@ async function isAdmin (req, res, next) {
 async function passwordRecovery (req, res, next) {
   try {
     await userService.passwordRecovery({ email: req.body.email })
-    res.json({ message: 'Email sent, please check your inbox' })
+    res.status(200).json({ message: 'Email sent, please check your inbox' })
   } catch (error) {
     next(error)
   }
