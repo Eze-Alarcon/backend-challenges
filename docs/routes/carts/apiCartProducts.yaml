@@ -3,7 +3,7 @@ paths:
     put:
       summary: Update specific product in a cart
       tags:
-        - Carrito
+        - Carts
       requestBody:
         required: true
         content:
@@ -35,7 +35,7 @@ paths:
     delete:
       summary: Delete specific product in a cart
       tags:
-        - Carrito
+        - Carts
       parameters:
       - name: cid
         in: path

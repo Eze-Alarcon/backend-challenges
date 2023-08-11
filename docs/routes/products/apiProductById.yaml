@@ -3,7 +3,7 @@ paths:
     get:
       summary: Gets the product with given id
       tags:
-        - Productos
+        - Products
       parameters:
       - name: pid
         in: path
@@ -22,7 +22,7 @@ paths:
     put:
       summary: update a given product (authorization may be required)
       tags:
-        - Productos
+        - Products
       parameters:
       - name: pid
         in: path

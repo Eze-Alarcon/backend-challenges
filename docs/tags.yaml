@@ -1,6 +1,9 @@
 tags:
-  - name: Productos
+  - name: Products
     description: API to manage your products.
     
-  - name: Carrito
+  - name: Carts
     description: API to manage carts.
+  
+  - name: Users
+    description: API to manage users.

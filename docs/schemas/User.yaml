@@ -1,0 +1,43 @@
+# Ticket
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+        - last_connection
+        - first_name
+        - last_name
+        - role
+      properties:
+        email:
+          type: string
+          description: Email of the user
+        last_connection:
+          type: number
+          description: Time since the last connection of the user
+        first_name:
+          type: string 
+          description: First name of the user
+        last_name:
+          type: string
+          description: Last name of the user.
+        role:
+          type: string
+          description: Role of the current user (user, premium, admin)
+      example:
+        email: "admin@admin.com"
+        last_connection: 169176721913
+        first_name: "admin"
+        last_name: "admin"
+        role: "admin"
+    UsersDeleted:
+      type: object
+      required:
+        - completed
+      properties:
+        completed:
+          type: boolean
+          description: status of the response
+      example:
+        completed: true

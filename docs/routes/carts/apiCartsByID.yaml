@@ -3,7 +3,7 @@ paths:
     get:
       summary: Gets the cart with given id
       tags:
-        - Carrito
+        - Carts
       parameters:
       - name: cid
         in: path
@@ -22,7 +22,7 @@ paths:
     delete:
       summary: delete all products in a cart with the given id
       tags:
-        - Carrito
+        - Carts
       parameters:
       - name: cid
         in: path

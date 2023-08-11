@@ -1,0 +1,26 @@
+paths:
+  /api/users/:
+    get:
+      summary: Get all Users
+      tags:
+        - Users
+      responses:
+        "200":
+          description: All users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    delete:
+      summary: Deletes all users whose last connection was more than 30 minutes ago.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: status of the response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersDeleted'

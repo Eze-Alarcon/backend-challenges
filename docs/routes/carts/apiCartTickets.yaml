@@ -3,7 +3,7 @@ paths:
     post:
       summary: Gets the ticket with given id
       tags:
-        - Carrito
+        - Carts
       parameters:
       - name: cid
         in: path

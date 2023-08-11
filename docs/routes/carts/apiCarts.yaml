@@ -3,7 +3,7 @@ paths:
     get:
       summary: Get all carts
       tags:
-        - Carrito
+        - Carts
       responses:
         "200":
           description: All carts.
@@ -18,7 +18,7 @@ paths:
     post:
       summary: Creates a new cart
       tags:
-        - Carrito
+        - Carts
       responses:
         "201":
           description: The created cart.
